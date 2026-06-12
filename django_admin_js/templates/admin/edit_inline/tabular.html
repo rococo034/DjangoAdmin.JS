@@ -1,0 +1,94 @@
+{% load i18n admin_urls static admin_modify %}
+<div class="js-inline-admin-formset inline-group" id="{{ inline_admin_formset.formset.prefix }}-group"
+     data-inline-type="tabular"
+     data-inline-formset="{{ inline_admin_formset.inline_formset_data }}">
+  <div class="tabular inline-related {% if forloop.last %}last-related{% endif %}">
+{{ inline_admin_formset.formset.management_form }}
+<fieldset class="module {{ inline_admin_formset.classes }} !border-0 !p-0">
+   {% if inline_admin_formset.formset.max_num == 1 %}
+     <h2 class="text-lg font-bold tracking-tight text-slate-900 dark:text-white mb-4">{{ inline_admin_formset.opts.verbose_name|capfirst }}</h2>
+   {% else %}
+     <h2 class="text-lg font-bold tracking-tight text-slate-900 dark:text-white mb-4">{{ inline_admin_formset.opts.verbose_name_plural|capfirst }}</h2>
+   {% endif %}
+   {{ inline_admin_formset.formset.non_form_errors }}
+   <div class="overflow-x-auto rounded-xl border border-slate-100 dark:border-slate-800">
+     <table class="w-full text-left border-collapse bg-white/50 dark:bg-black/10">
+       <thead>
+         <tr class="bg-slate-50/75 dark:bg-zinc-800/40 border-b border-slate-100 dark:border-slate-800">
+           <th class="original w-4 p-4"></th>
+           {% for field in inline_admin_formset.fields %}
+             <th class="column-{{ field.name }} p-4 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-zinc-400{% if field.required %} required{% endif %}{% if field.widget.is_hidden %} hidden{% endif %}">
+               {{ field.label|capfirst }}
+               {% if field.help_text %}
+                 <span class="inline-block ml-1 cursor-help group relative">
+                   <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                   <span class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 hidden group-hover:block bg-slate-900 text-white text-xs p-2 rounded shadow-lg z-20 font-normal normal-case">{{ field.help_text|striptags }}</span>
+                 </span>
+               {% endif %}
+             </th>
+           {% endfor %}
+           {% if inline_admin_formset.formset.can_delete and inline_admin_formset.has_delete_permission %}
+             <th class="p-4 text-xs font-semibold uppercase tracking-wider text-red-500 text-center w-16">{% translate "Delete?" %}</th>
+           {% endif %}
+         </tr>
+       </thead>
+
+       <tbody>
+         {% for inline_admin_form in inline_admin_formset %}
+           {% if inline_admin_form.form.non_field_errors %}
+             <tr class="row-form-errors"><td colspan="{{ inline_admin_form|cell_count }}" class="p-4 text-xs text-red-500 font-medium bg-red-50/50 dark:bg-red-950/10">{{ inline_admin_form.form.non_field_errors }}</td></tr>
+           {% endif %}
+           <tr class="form-row border-b border-slate-100 dark:border-slate-800 last:border-0 hover:bg-slate-50/30 dark:hover:bg-zinc-850/10 transition-colors {% if inline_admin_form.original or inline_admin_form.show_url %}has_original{% endif %}{% if forloop.last and inline_admin_formset.has_add_permission %} empty-form{% endif %}"
+                id="{{ inline_admin_formset.formset.prefix }}-{% if forloop.last and inline_admin_formset.has_add_permission %}empty{% else %}{{ forloop.counter0 }}{% endif %}">
+             <td class="original p-4 vertical-middle">
+               {% if inline_admin_form.original or inline_admin_form.show_url %}
+                 <div class="flex items-center gap-2 text-xs text-slate-500 dark:text-zinc-400">
+                   {% if inline_admin_form.original %}
+                     <span class="font-medium">{{ inline_admin_form.original }}</span>
+                     {% if inline_admin_form.model_admin.show_change_link and inline_admin_form.model_admin.has_registered_model %}
+                       <a href="{% url inline_admin_form.model_admin.opts|admin_urlname:'change' inline_admin_form.original.pk|admin_urlquote %}" class="text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 font-semibold transition-colors">{% if inline_admin_formset.has_change_permission %}{% translate "Change" %}{% else %}{% translate "View" %}{% endif %}</a>
+                     {% endif %}
+                   {% endif %}
+                   {% if inline_admin_form.show_url %}
+                     <a href="{{ inline_admin_form.absolute_url }}" class="text-slate-400 hover:text-slate-600 dark:hover:text-zinc-200">{% translate "View on site" %}</a>
+                   {% endif %}
+                 </div>
+               {% endif %}
+               {% if inline_admin_form.needs_explicit_pk_field %}{{ inline_admin_form.pk_field.field }}{% endif %}
+               {% if inline_admin_form.fk_field %}{{ inline_admin_form.fk_field.field }}{% endif %}
+             </td>
+             {% for fieldset in inline_admin_form %}
+               {% for line in fieldset %}
+                 {% for field in line %}
+                   <td class="p-4 align-middle {% if field.field.name %}field-{{ field.field.name }}{% endif %}{% if field.field.is_hidden %} hidden{% endif %}">
+                     {% if field.is_readonly %}
+                       <p class="text-sm text-slate-700 dark:text-zinc-300 font-medium">{{ field.contents }}</p>
+                     {% else %}
+                       {{ field.field.errors.as_ul }}
+                       <div class="inline-field-wrapper">
+                         {{ field.field }}
+                       </div>
+                     {% endif %}
+                   </td>
+                 {% endfor %}
+               {% endfor %}
+             {% endfor %}
+             {% if inline_admin_formset.formset.can_delete and inline_admin_formset.has_delete_permission %}
+               <td class="delete p-4 text-center align-middle">
+                 {% if inline_admin_form.original %}
+                   <div class="inline-flex items-center justify-center">
+                     {{ inline_admin_form.deletion_field.field }}
+                   </div>
+                 {% endif %}
+               </td>
+             {% endif %}
+           </tr>
+         {% endfor %}
+       </tbody>
+     </table>
+   </div>
+</fieldset>
+  </div>
+</div>
+
+

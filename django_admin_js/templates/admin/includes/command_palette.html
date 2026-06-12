@@ -1,0 +1,217 @@
+{% load i18n %}
+<div id="command-palette" class="fixed inset-0 z-[100] hidden overflow-y-auto p-4 pt-[15vh] sm:p-6 sm:pt-[20vh]" role="dialog" aria-modal="true">
+    <!-- Backdrop -->
+    <div id="palette-backdrop" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity opacity-0"></div>
+
+    <!-- Palette Container -->
+    <div id="palette-container" class="relative mx-auto max-w-2xl transform divide-y divide-slate-100 dark:divide-zinc-800 overflow-hidden rounded-2xl bg-white dark:bg-[#111827] shadow-2xl ring-1 ring-black/5 transition-all scale-95 opacity-0">
+        <div class="relative">
+            <svg class="pointer-events-none absolute left-4 top-3.5 h-5 w-5 text-slate-400 dark:text-zinc-500" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z" clip-rule="evenodd" />
+            </svg>
+            <input type="text" id="palette-input" class="h-12 w-full border-0 bg-transparent pl-11 pr-4 text-slate-900 dark:text-zinc-100 placeholder:text-slate-400 dark:placeholder:text-zinc-500 focus:ring-0 sm:text-sm" placeholder="Search apps, models or actions..." role="combobox" aria-expanded="false" aria-controls="palette-options">
+        </div>
+
+        <!-- Results -->
+        <ul class="max-h-96 scroll-py-3 overflow-y-auto p-3" id="palette-options" role="listbox">
+            <!-- Items will be injected here -->
+        </ul>
+
+        <!-- Empty State -->
+        <div id="palette-empty" class="hidden px-6 py-14 text-center sm:px-14">
+            <svg class="mx-auto h-6 w-6 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+            </svg>
+            <p class="mt-4 text-sm text-slate-900 dark:text-zinc-300">No results found.</p>
+        </div>
+
+        <!-- Footer -->
+        <div class="flex items-center bg-slate-50 dark:bg-zinc-900/50 px-4 py-2.5 text-xs text-slate-500 dark:text-zinc-400">
+            <span class="flex items-center gap-1"><kbd class="font-sans border border-slate-300 dark:border-zinc-700 px-1 rounded bg-white dark:bg-zinc-800">↵</kbd> select</span>
+            <span class="mx-3 h-3 w-px bg-slate-300 dark:bg-zinc-700"></span>
+            <span class="flex items-center gap-1"><kbd class="font-sans border border-slate-300 dark:border-zinc-700 px-1 rounded bg-white dark:bg-zinc-800">↑↓</kbd> navigate</span>
+            <span class="mx-3 h-3 w-px bg-slate-300 dark:bg-zinc-700"></span>
+            <span class="flex items-center gap-1"><kbd class="font-sans border border-slate-300 dark:border-zinc-700 px-1 rounded bg-white dark:bg-zinc-800">esc</kbd> close</span>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const palette = document.getElementById('command-palette');
+    const backdrop = document.getElementById('palette-backdrop');
+    const container = document.getElementById('palette-container');
+    const input = document.getElementById('palette-input');
+    const options = document.getElementById('palette-options');
+    const emptyState = document.getElementById('palette-empty');
+    
+    let items = [];
+    let selectedIndex = 0;
+
+    // Collect data from sidebar/nav
+    function collectItems() {
+        items = [];
+        // Add navigation links from any app-list structure (dashboard or sidebar)
+        document.querySelectorAll('[class*="app-"]').forEach(module => {
+            const appName = module.querySelector('caption, h2, div > a')?.textContent.trim() || 'App';
+            module.querySelectorAll('[class*="model-"]').forEach(row => {
+                const links = row.querySelectorAll('a');
+                let mainLink = null;
+                let addLink = null;
+
+                links.forEach(l => {
+                    if (l.href.includes('/add/')) addLink = l.href;
+                    else if (l.href.includes('/change/') || l.href.endsWith('/') || l.href.includes('?')) {
+                        if (!mainLink) mainLink = l;
+                    }
+                });
+
+                if (mainLink) {
+                    items.push({
+                        type: 'model',
+                        name: mainLink.textContent.trim(),
+                        subtitle: appName,
+                        url: mainLink.href,
+                        icon: `<svg class="h-6 w-6 flex-none text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" /></svg>`
+                    });
+                }
+                
+                if (addLink) {
+                    items.push({
+                        type: 'action',
+                        name: `Add ${mainLink ? mainLink.textContent.trim() : 'New Item'}`,
+                        subtitle: appName,
+                        url: addLink,
+                        icon: `<svg class="h-6 w-6 flex-none text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>`
+                    });
+                }
+            });
+        });
+
+        // Add common actions
+        items.push({
+            type: 'action',
+            name: 'Go to Dashboard',
+            subtitle: 'Navigation',
+            url: '{% url "admin:index" %}',
+            icon: `<svg class="h-6 w-6 flex-none text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" /></svg>`
+        });
+        
+        {% if user.is_active and user.is_staff %}
+            {% url 'django-admindocs-docroot' as docsroot %}
+            {% if docsroot %}
+                items.push({
+                    type: 'action',
+                    name: 'View Documentation',
+                    subtitle: 'Help',
+                    url: '{{ docsroot }}',
+                    icon: `<svg class="h-6 w-6 flex-none text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" /></svg>`
+                });
+            {% endif %}
+        {% endif %}
+    }
+
+    function openPalette() {
+        if (items.length === 0) collectItems();
+        palette.classList.remove('hidden');
+        setTimeout(() => {
+            backdrop.classList.replace('opacity-0', 'opacity-100');
+            container.classList.replace('scale-95', 'scale-100');
+            container.classList.replace('opacity-0', 'opacity-100');
+            input.focus();
+            renderResults('');
+        }, 10);
+    }
+
+    function closePalette() {
+        backdrop.classList.replace('opacity-100', 'opacity-0');
+        container.classList.replace('scale-100', 'scale-95');
+        container.classList.replace('opacity-100', 'opacity-0');
+        setTimeout(() => {
+            palette.classList.add('hidden');
+            input.value = '';
+        }, 200);
+    }
+
+    function renderResults(query) {
+        const filtered = items.filter(item => 
+            item.name.toLowerCase().includes(query.toLowerCase()) || 
+            item.subtitle.toLowerCase().includes(query.toLowerCase())
+        ).slice(0, 10);
+
+        options.innerHTML = '';
+        if (filtered.length === 0) {
+            emptyState.classList.remove('hidden');
+            return;
+        }
+
+        emptyState.classList.add('hidden');
+        filtered.forEach((item, index) => {
+            const li = document.createElement('li');
+            li.className = `group flex cursor-default select-none items-center rounded-xl p-3 ${index === selectedIndex ? 'bg-indigo-600' : 'hover:bg-slate-100 dark:hover:bg-zinc-800'}`;
+            li.id = `option-${index}`;
+            li.role = 'option';
+            li.tabIndex = -1;
+            
+            li.innerHTML = `
+                <div class="flex h-10 w-10 flex-none items-center justify-center rounded-lg border border-slate-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 group-hover:border-indigo-400 transition-colors ${index === selectedIndex ? 'border-indigo-300' : ''}">
+                    ${item.icon}
+                </div>
+                <div class="ml-4 flex-auto">
+                    <p class="text-sm font-semibold ${index === selectedIndex ? 'text-white' : 'text-slate-900 dark:text-zinc-100'}">${item.name}</p>
+                    <p class="text-xs ${index === selectedIndex ? 'text-indigo-100' : 'text-slate-500 dark:text-zinc-400'}">${item.subtitle}</p>
+                </div>
+                ${index === selectedIndex ? '<svg class="h-5 w-5 text-indigo-100" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd" /></svg>' : ''}
+            `;
+
+            li.addEventListener('click', () => window.location.href = item.url);
+            li.addEventListener('mouseenter', () => {
+                selectedIndex = index;
+                renderResults(input.value);
+            });
+            options.appendChild(li);
+        });
+    }
+
+    input.addEventListener('input', (e) => {
+        selectedIndex = 0;
+        renderResults(e.target.value);
+    });
+
+    window.addEventListener('keydown', (e) => {
+        if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+            e.preventDefault();
+            openPalette();
+        }
+
+        if (e.key === 'Escape') {
+            closePalette();
+        }
+
+        if (!palette.classList.contains('hidden')) {
+            const filteredCount = options.children.length;
+            if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                selectedIndex = (selectedIndex + 1) % filteredCount;
+                renderResults(input.value);
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                selectedIndex = (selectedIndex - 1 + filteredCount) % filteredCount;
+                renderResults(input.value);
+            } else if (e.key === 'Enter') {
+                e.preventDefault();
+                const selected = options.children[selectedIndex];
+                if (selected) {
+                    const filtered = items.filter(item => 
+                        item.name.toLowerCase().includes(input.value.toLowerCase()) || 
+                        item.subtitle.toLowerCase().includes(input.value.toLowerCase())
+                    ).slice(0, 10);
+                    if (filtered[selectedIndex]) window.location.href = filtered[selectedIndex].url;
+                }
+            }
+        }
+    });
+
+    backdrop.addEventListener('click', closePalette);
+});
+</script>

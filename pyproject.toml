@@ -1,0 +1,47 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "django-admin-js"
+version = "0.1.0"
+authors = [
+    { name = "Rocco", email = "rocco@example.com" },
+]
+description = "A modern Django Admin experience built with Tailwind CSS and progressive JavaScript enhancements."
+readme = "README.md"
+requires-python = ">=3.10"
+keywords = ["django", "admin", "tailwind", "ui", "ux"]
+license = { text = "MIT" }
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Web Environment",
+    "Framework :: Django",
+    "Framework :: Django :: 5.0",
+    "Framework :: Django :: 5.1",
+    "Framework :: Django :: 5.2",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries :: Application Frameworks",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dependencies = [
+    "django>=5.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/rocco/DjangoAdmin.JS"
+Issues = "https://github.com/rocco/DjangoAdmin.JS/issues"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["django_admin_js*"]
+
+[tool.setuptools.package-data]
+django_admin_js = ["templates/**/*.html", "templates/**/*.css", "templates/**/*.js", "static/**/*"]

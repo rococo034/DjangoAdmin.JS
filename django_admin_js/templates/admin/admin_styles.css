@@ -1,0 +1,895 @@
+/* Custom overrides to merge legacy django admin stylesheets cleanly with Tailwind CSS */
+
+body {
+  font-family: 'Inter', -apple-system, sans-serif !important;
+  background-color: #f8fafc !important;
+  color: #0f172a !important;
+  margin: 0;
+  padding: 0;
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #090d16 !important;
+    color: #f8fafc !important;
+  }
+}
+
+/* Header structural overrides */
+#header {
+  height: auto !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+}
+
+#header a, #header button, #header span, #header form {
+  float: none !important;
+}
+
+#branding {
+  float: none !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+#branding h1 {
+  margin: 0 !important;
+  padding: 0 !important;
+  font-size: inherit !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+#user-tools {
+  float: none !important;
+  position: static !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 1rem !important;
+  margin: 0 !important;
+}
+
+#user-tools form {
+  display: inline !important;
+}
+
+#user-tools form button {
+  cursor: pointer !important;
+}
+
+/* Structural Reset */
+.breadcrumbs, #content, .module, #content-related {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Tables & List Override */
+#changelist {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 1.5rem !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.changelist-form-container {
+  width: 100% !important;
+}
+
+#changelist table {
+  width: 100% !important;
+  border-collapse: collapse !important;
+  background-color: #ffffff !important;
+  border: 1px solid rgba(226, 232, 240, 0.8) !important;
+  border-radius: 1rem !important;
+  overflow: hidden !important;
+  margin: 1rem 0 !important;
+}
+
+.dark #changelist table {
+  background-color: #111827 !important;
+  border-color: rgba(31, 41, 55, 0.8) !important;
+}
+
+#changelist table thead th {
+  background-color: rgba(99, 102, 241, 0.05) !important;
+  color: #475569 !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  font-size: 0.75rem !important;
+  letter-spacing: 0.05em !important;
+  padding: 0.75rem 1rem !important;
+  border-bottom: 1px solid rgba(226, 232, 240, 0.8) !important;
+  text-align: left !important;
+}
+
+.dark #changelist table thead th {
+  background-color: rgba(99, 102, 241, 0.1) !important;
+  color: #94a3b8 !important;
+  border-bottom-color: rgba(31, 41, 55, 0.8) !important;
+}
+
+#changelist table tbody tr {
+  border-bottom: 1px solid rgba(226, 232, 240, 0.5) !important;
+  transition: background-color 0.2s !important;
+}
+
+.dark #changelist table tbody tr {
+  border-bottom-color: rgba(31, 41, 55, 0.4) !important;
+}
+
+#changelist table tbody tr:hover {
+  background-color: rgba(99, 102, 241, 0.02) !important;
+}
+
+.dark #changelist table tbody tr:hover {
+  background-color: rgba(255, 255, 255, 0.02) !important;
+}
+
+#changelist table tbody td, #changelist table tbody th {
+  padding: 0.75rem 1rem !important;
+  font-size: 0.875rem !important;
+  color: inherit !important;
+  background: transparent !important;
+}
+
+#changelist table tbody th a {
+  color: #6366f1 !important;
+  font-weight: 500 !important;
+}
+
+.dark #changelist table tbody th a {
+  color: #818cf8 !important;
+}
+
+/* Filter Box Overrides */
+#changelist-filter {
+  background-color: #ffffff !important;
+  border: 1px solid rgba(226, 232, 240, 0.8) !important;
+  border-radius: 1rem !important;
+  padding: 1.25rem !important;
+}
+
+.dark #changelist-filter {
+  background-color: #111827 !important;
+  border-color: rgba(31, 41, 55, 0.8) !important;
+}
+
+#changelist-filter h2 {
+  font-size: 1rem !important;
+  font-weight: 700 !important;
+  margin: 0 0 1rem 0 !important;
+}
+
+#changelist-filter h3 {
+  font-size: 0.75rem !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  color: #64748b !important;
+  margin: 1rem 0 0.5rem 0 !important;
+}
+
+#changelist-filter ul {
+  margin: 0 !important;
+  padding: 0 !important;
+  list-style: none !important;
+}
+
+#changelist-filter li {
+  font-size: 0.875rem !important;
+  margin-bottom: 0.35rem !important;
+}
+
+#changelist-filter li a {
+  color: #64748b !important;
+  transition: color 0.2s !important;
+}
+
+.dark #changelist-filter li a {
+  color: #94a3b8 !important;
+}
+
+#changelist-filter li.selected a {
+  color: #6366f1 !important;
+  font-weight: 600 !important;
+}
+
+.dark #changelist-filter li.selected a {
+  color: #818cf8 !important;
+}
+
+/* Custom theme toggle button reset */
+#user-tools button.theme-toggle {
+  border: none !important;
+  margin: 0 !important;
+  float: none !important;
+}
+
+button.theme-toggle .visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+button.theme-toggle svg {
+  width: 1.15rem !important;
+  height: 1.15rem !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: block !important;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #334155;
+}
+
+/* Form inputs & controls override */
+input[type="text"], input[type="password"], input[type="email"], input[type="url"], input[type="number"], input[type="tel"], input[type="date"], input[type="time"], input[type="datetime-local"], textarea, select {
+  background-color: #ffffff !important;
+  border: 1px solid rgba(226, 232, 240, 0.8) !important;
+  border-radius: 0.5rem !important;
+  color: #0f172a !important;
+  padding: 0.5rem 0.75rem !important;
+  font-size: 0.875rem !important;
+  line-height: 1.25rem !important;
+  transition: all 0.15s ease-in-out !important;
+  outline: none !important;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
+}
+
+.dark input[type="text"], .dark input[type="password"], .dark input[type="email"], .dark input[type="url"], .dark input[type="number"], .dark input[type="tel"], .dark input[type="date"], .dark input[type="time"], .dark input[type="datetime-local"], .dark textarea, .dark select {
+  background-color: #090d16 !important;
+  border-color: rgba(31, 41, 55, 0.8) !important;
+  color: #f8fafc !important;
+}
+
+input[type="text"]:focus, input[type="password"]:focus, input[type="email"]:focus, input[type="url"]:focus, input[type="number"]:focus, input[type="tel"]:focus, input[type="date"]:focus, input[type="time"]:focus, input[type="datetime-local"]:focus, textarea:focus, select:focus {
+  border-color: #6366f1 !important;
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2) !important;
+}
+
+.dark input[type="text"]:focus, .dark input[type="password"]:focus, .dark input[type="email"]:focus, .dark input[type="url"]:focus, .dark input[type="number"]:focus, .dark input[type="tel"]:focus, .dark input[type="date"]:focus, .dark input[type="time"]:focus, .dark input[type="datetime-local"]:focus, .dark textarea:focus, .dark select:focus {
+  border-color: #818cf8 !important;
+  box-shadow: 0 0 0 2px rgba(129, 140, 248, 0.3) !important;
+}
+
+/* Auto-span main content to full width if sidebar block is empty */
+.grid > .lg\:col-span-3:last-child {
+  grid-column: span 4 / span 4 !important;
+}
+
+/* Inline group containers styling */
+.inline-group {
+  background-color: rgba(255, 255, 255, 0.6) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  border: 1px solid rgba(226, 232, 240, 0.8) !important;
+  border-radius: 1.25rem !important;
+  padding: 1.75rem !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.025) !important;
+  overflow: visible !important;
+}
+
+.dark .inline-group {
+  background-color: rgba(20, 20, 25, 0.6) !important;
+  border-color: rgba(255, 255, 255, 0.06) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3) !important;
+}
+
+.inline-group h2 {
+  font-size: 1.125rem !important;
+  font-weight: 700 !important;
+  color: #0f172a !important;
+  margin: 0 0 1.25rem 0 !important;
+  border-bottom: 1px solid rgba(226, 232, 240, 0.5) !important;
+  padding-bottom: 0.75rem !important;
+}
+
+.dark .inline-group h2 {
+  color: #f8fafc !important;
+  border-bottom-color: rgba(255, 255, 255, 0.06) !important;
+}
+
+
+
+/* Custom Checkbox delete button */
+.inline-group td.delete input[type="checkbox"],
+.inline-group .inline-related h3 span.delete input[type="checkbox"] {
+  width: 1rem !important;
+  height: 1rem !important;
+  accent-color: #ef4444 !important;
+  cursor: pointer !important;
+  border-radius: 0.25rem !important;
+}
+
+/* Dynamic Add Row Styling in Django admin Inlines */
+.inline-group .add-row {
+  margin-top: 1rem !important;
+  padding: 0.75rem 0 !important;
+}
+.inline-group .add-row a {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0.5rem !important;
+  padding: 0.5rem 1rem !important;
+  font-size: 0.8125rem !important;
+  font-weight: 600 !important;
+  color: #3b82f6 !important;
+  background-color: rgba(59, 130, 246, 0.08) !important;
+  border-radius: 0.5rem !important;
+  transition: all 0.2s ease !important;
+  text-decoration: none !important;
+  border: 1px solid transparent !important;
+}
+.dark .inline-group .add-row a {
+  color: #60a5fa !important;
+  background-color: rgba(96, 165, 250, 0.1) !important;
+}
+.inline-group .add-row a:hover {
+  background-color: rgba(59, 130, 246, 0.14) !important;
+  border-color: rgba(59, 130, 246, 0.2) !important;
+}
+.dark .inline-group .add-row a:hover {
+  background-color: rgba(96, 165, 250, 0.16) !important;
+  border-color: rgba(96, 165, 250, 0.2) !important;
+}
+
+/* Collapsible inline indicators */
+.inline-collapsible-toggle svg {
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* Tabular inline tables */
+.inline-group table {
+  width: 100% !important;
+  border-collapse: collapse !important;
+}
+
+.inline-group table thead th {
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  font-size: 0.75rem !important;
+  letter-spacing: 0.05em !important;
+  color: #64748b !important;
+  border-bottom: 1px solid rgba(226, 232, 240, 0.8) !important;
+  padding: 0.75rem 0.5rem !important;
+  text-align: left !important;
+}
+
+.dark .inline-group table thead th {
+  color: #94a3b8 !important;
+  border-bottom-color: rgba(31, 41, 55, 0.8) !important;
+}
+
+.inline-group table tbody tr {
+  border-bottom: 1px solid rgba(226, 232, 240, 0.4) !important;
+}
+
+.dark .inline-group table tbody tr {
+  border-bottom-color: rgba(31, 41, 55, 0.4) !important;
+}
+
+.inline-group table tbody td {
+  padding: 0.75rem 0.5rem !important;
+  vertical-align: middle !important;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.2s ease-out forwards;
+}
+
+/* Fieldset styling */
+fieldset.module {
+  border: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+fieldset h2 {
+  font-size: 1.125rem !important;
+  font-weight: 700 !important;
+  color: #0f172a !important;
+  margin-bottom: 0.75rem !important;
+}
+
+.dark fieldset h2 {
+  color: #f8fafc !important;
+}
+
+fieldset .description {
+  font-size: 0.875rem !important;
+  color: #64748b !important;
+  margin-bottom: 1rem !important;
+}
+
+div.form-row {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.375rem !important;
+  padding: 1rem 0 !important;
+  border-bottom: 1px solid rgba(226, 232, 240, 0.4) !important;
+}
+
+.dark div.form-row {
+  border-bottom-color: rgba(31, 41, 55, 0.4) !important;
+}
+
+div.form-row:last-child {
+  border-bottom: none !important;
+}
+
+div.form-row label {
+  font-size: 0.875rem !important;
+  font-weight: 600 !important;
+  color: #475569 !important;
+}
+
+.dark div.form-row label {
+  color: #94a3b8 !important;
+}
+
+.form-row .help {
+  font-size: 0.75rem !important;
+  color: #64748b !important;
+  margin-top: 0.25rem !important;
+}
+
+.dark .form-row .help {
+  color: #64748b !important;
+}
+
+/* Object Tools (History, View on Site, Add buttons) */
+.object-tools {
+  margin: 0 !important;
+  padding: 0 !important;
+  list-style: none !important;
+  display: flex !important;
+  gap: 0.5rem !important;
+}
+
+.object-tools li {
+  display: inline-block !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.object-tools a, .object-tools button {
+  display: inline-flex !important;
+  align-items: center !important;
+  padding: 0.5rem 1rem !important;
+  font-size: 0.875rem !important;
+  font-weight: 600 !important;
+  border-radius: 0.375rem !important;
+  transition: all 0.15s ease-in-out !important;
+  cursor: pointer !important;
+}
+
+.object-tools a.historylink, .object-tools a.viewsitelink {
+  background-color: #ffffff !important;
+  border: 1px solid rgba(226, 232, 240, 0.8) !important;
+  color: #64748b !important;
+}
+
+.dark .object-tools a.historylink, .dark .object-tools a.viewsitelink {
+  background-color: #111827 !important;
+  border-color: rgba(31, 41, 55, 0.8) !important;
+  color: #94a3b8 !important;
+}
+
+.object-tools a.historylink:hover, .object-tools a.viewsitelink:hover {
+  background-color: #f8fafc !important;
+  color: #6366f1 !important;
+}
+
+.dark .object-tools a.historylink:hover, .dark .object-tools a.viewsitelink:hover {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+  color: #818cf8 !important;
+}
+
+.object-tools a.addlink {
+  background-color: #10b981 !important;
+  color: #ffffff !important;
+  border: none !important;
+}
+
+.object-tools a.addlink:hover {
+  background-color: #059669 !important;
+}
+
+/* Paginator */
+.paginator {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.375rem !important;
+  font-size: 0.875rem !important;
+  color: #64748b !important;
+  margin: 0 !important;
+  padding: 0.5rem 0 !important;
+}
+
+.paginator a, .paginator span {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-width: 2rem !important;
+  height: 2rem !important;
+  padding: 0 0.5rem !important;
+  border-radius: 0.5rem !important;
+  font-weight: 500 !important;
+  transition: all 0.15s ease-in-out !important;
+}
+
+.paginator a {
+  color: #64748b !important;
+  background-color: transparent !important;
+}
+
+.dark .paginator a {
+  color: #94a3b8 !important;
+}
+
+.paginator a:hover {
+  background-color: rgba(99, 102, 241, 0.05) !important;
+  color: #6366f1 !important;
+}
+
+.paginator .this-page {
+  background-color: #6366f1 !important;
+  color: #ffffff !important;
+  font-weight: 600 !important;
+}
+
+.paginator .showall {
+  margin-left: auto !important;
+  color: #6366f1 !important;
+  font-weight: 600 !important;
+}
+
+.paginator input[type="submit"] {
+  margin-left: auto !important;
+}
+
+#searchbar {
+  padding-left: 2.75rem !important;
+}
+
+/* Redesigned stacked inline items */
+.inline-group .inline-related {
+  border: 1px solid rgba(226, 232, 240, 0.8) !important;
+  border-radius: 0.75rem !important;
+  background-color: rgba(255, 255, 255, 0.5) !important;
+  margin-bottom: 1rem !important;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.02) !important;
+  transition: all 0.2s ease !important;
+}
+
+.dark .inline-group .inline-related {
+  border-color: rgba(255, 255, 255, 0.05) !important;
+  background-color: rgba(20, 20, 25, 0.3) !important;
+}
+
+.inline-group .inline-related:hover {
+  border-color: rgba(99, 102, 241, 0.25) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03) !important;
+}
+
+.dark .inline-group .inline-related:hover {
+  border-color: rgba(129, 140, 248, 0.3) !important;
+}
+
+/* Stacked inline header bar styles */
+.inline-group .inline-related h3 {
+  background-color: rgba(248, 250, 252, 0.8) !important;
+  border-bottom: 1px solid rgba(226, 232, 240, 0.8) !important;
+  color: #1e293b !important;
+  font-size: 0.875rem !important;
+  font-weight: 600 !important;
+  padding: 0.75rem 1rem !important;
+  margin: 0 !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+}
+
+.dark .inline-group .inline-related h3 {
+  background-color: rgba(30, 30, 40, 0.4) !important;
+  border-bottom-color: rgba(255, 255, 255, 0.06) !important;
+  color: #f1f5f9 !important;
+}
+
+/* Styling for delete link inside stacked inline headers */
+.inline-group .inline-related h3 span.delete {
+  font-size: 0.75rem !important;
+  color: #ef4444 !important;
+  font-weight: 500 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0.375rem !important;
+}
+
+.inline-group .inline-related h3 span.delete label {
+  color: #ef4444 !important;
+  cursor: pointer !important;
+  margin: 0 !important;
+}
+
+/* Tabular inline inputs inside tables */
+.inline-group table td input,
+.inline-group table td select,
+.inline-group table td textarea {
+  background-color: #ffffff !important;
+  border: 1px solid rgba(226, 232, 240, 0.8) !important;
+  border-radius: 0.375rem !important;
+  padding: 0.375rem 0.5rem !important;
+  font-size: 0.8125rem !important;
+  width: 100% !important;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.02) !important;
+}
+.dark .inline-group table td input,
+.dark .inline-group table td select,
+.dark .inline-group table td textarea {
+  background-color: #090d16 !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  color: #f8fafc !important;
+}
+.inline-group table td input:focus,
+.inline-group table td select:focus,
+.inline-group table td textarea:focus {
+  border-color: #6366f1 !important;
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.15) !important;
+}
+.dark .inline-group table td input:focus,
+.dark .inline-group table td select:focus,
+.dark .inline-group table td textarea:focus {
+  border-color: #818cf8 !important;
+  box-shadow: 0 0 0 2px rgba(129, 140, 248, 0.25) !important;
+}
+
+/* Beautiful custom overrides for Django's default yes/no boolean icons (Modern Squircle style) */
+img[src$="icon-yes.svg"] {
+  content: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5.5" fill="%2334c759"/><path d="M7.5 12.5l3 3 6-6" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>') !important;
+  width: 1.125rem !important;
+  height: 1.125rem !important;
+  display: inline-block !important;
+  vertical-align: middle !important;
+}
+
+img[src$="icon-no.svg"] {
+  content: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5.5" fill="%23ff3b30"/><path d="M8.5 8.5l7 7M15.5 8.5l-7 7" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>') !important;
+  width: 1.125rem !important;
+  height: 1.125rem !important;
+  display: inline-block !important;
+  vertical-align: middle !important;
+}
+
+/* Global custom checkbox styles */
+input[type="checkbox"] {
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  width: 1.15rem !important;
+  height: 1.15rem !important;
+  border: 1.5px solid rgba(226, 232, 240, 0.8) !important;
+  border-radius: 0.35rem !important;
+  background-color: #ffffff !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  position: relative !important;
+  vertical-align: middle !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02) !important;
+}
+
+.dark input[type="checkbox"] {
+  background-color: #090d16 !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+input[type="checkbox"]:hover {
+  border-color: #6366f1 !important;
+  background-color: rgba(99, 102, 241, 0.02) !important;
+}
+
+.dark input[type="checkbox"]:hover {
+  border-color: #818cf8 !important;
+  background-color: rgba(129, 140, 248, 0.05) !important;
+}
+
+input[type="checkbox"]:checked {
+  background-color: #6366f1 !important;
+  border-color: #6366f1 !important;
+}
+
+.dark input[type="checkbox"]:checked {
+  background-color: #818cf8 !important;
+  border-color: #818cf8 !important;
+}
+
+input[type="checkbox"]::after {
+  content: "" !important;
+  width: 5px !important;
+  height: 9px !important;
+  border: solid white !important;
+  border-width: 0 2px 2px 0 !important;
+  transform: rotate(45deg) scale(0) !important;
+  transition: transform 0.12s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  margin-bottom: 2px !important;
+}
+
+input[type="checkbox"]:checked::after {
+  transform: rotate(45deg) scale(1) !important;
+}
+
+/* Premium Page Transitions & Micro-Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+#content-main, #changelist {
+  animation: fadeInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+}
+
+/* Smooth feedback scale transitions for buttons & cards */
+.object-tools a, .object-tools button,
+.submit-row button, .submit-row a,
+#changelist-search button,
+.add-row a,
+.change-form-tabs button {
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.object-tools a:active, .object-tools button:active,
+.submit-row button:active, .submit-row a:active,
+#changelist-search button:active,
+.add-row a:active,
+.change-form-tabs button:active {
+  transform: scale(0.97) !important;
+}
+
+/* Smooth transition for table row hover and selections */
+#changelist table tbody tr {
+  transition: background-color 0.25s ease, border-color 0.25s ease !important;
+}
+
+/* Smooth transition for sidebar navigation links */
+#nav-sidebar a {
+  transition: background-color 0.15s ease, color 0.15s ease, padding 0.2s ease !important;
+}
+
+/* Custom smooth easing for sliding active indicator tabs */
+.change-form-tabs div.absolute {
+  transition: left 0.28s cubic-bezier(0.16, 1, 0.3, 1), width 0.28s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+/* Custom Tooltips with correct high z-index and animations */
+[data-tooltip] {
+  position: relative !important;
+}
+
+[data-tooltip]:hover {
+  z-index: 999999 !important;
+}
+
+[data-tooltip]::before {
+  content: attr(data-tooltip) !important;
+  position: absolute !important;
+  bottom: 125% !important;
+  left: 50% !important;
+  transform: translate(-50%, 4px) scale(0.95) !important;
+  transform-origin: bottom center !important;
+  background-color: rgba(15, 23, 42, 0.95) !important; /* Slate 900 */
+  color: #ffffff !important;
+  padding: 0.4rem 0.6rem !important;
+  border-radius: 0.5rem !important;
+  font-size: 0.75rem !important;
+  font-weight: 600 !important;
+  white-space: nowrap !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transition: opacity 0.15s cubic-bezier(0.16, 1, 0.3, 1), transform 0.15s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  z-index: 999999 !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+.dark [data-tooltip]::before {
+  background-color: rgba(30, 30, 35, 0.98) !important;
+  border-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+[data-tooltip]::after {
+  content: "" !important;
+  position: absolute !important;
+  bottom: 110% !important;
+  left: 50% !important;
+  transform: translate(-50%, 4px) !important;
+  border-width: 5px !important;
+  border-style: solid !important;
+  border-color: rgba(15, 23, 42, 0.95) transparent transparent transparent !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transition: opacity 0.12s cubic-bezier(0.16, 1, 0.3, 1), transform 0.12s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  z-index: 999999 !important;
+}
+
+.dark [data-tooltip]::after {
+  border-color: rgba(30, 30, 35, 0.98) transparent transparent transparent !important;
+}
+
+[data-tooltip]:hover::before {
+  opacity: 1 !important;
+  transform: translate(-50%, 0) scale(1) !important;
+}
+
+[data-tooltip]:hover::after {
+  opacity: 1 !important;
+  transform: translate(-50%, 0) !important;
+}
+
+/* Fix z-index stacking context for table rows, cells, and save panel */
+#result_list tbody tr:hover td {
+  position: relative !important;
+  z-index: 50 !important;
+}
+
+#result_list td, #result_list th {
+  overflow: visible !important;
+}
+
+.submit-row {
+  position: relative !important;
+  z-index: 99999 !important;
+}
+
+#content-main, form, .change-form, .inline-group {
+  overflow: visible !important;
+}
+
+/* Ensure the scrollable container does not clip tooltips */
+.overflow-x-auto {
+  overflow: visible !important;
+}
+
+
+
+
+
+
+

@@ -1,0 +1,971 @@
+{% load i18n static %}<!DOCTYPE html>
+{% get_current_language as LANGUAGE_CODE %}{% get_current_language_bidi as LANGUAGE_BIDI %}
+<html lang="{{ LANGUAGE_CODE|default:"en-us" }}" dir="{{ LANGUAGE_BIDI|yesno:'rtl,ltr,auto' }}" class="h-full">
+<head>
+<title>{% block title %}{% endblock %}</title>
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    darkMode: 'class',
+    theme: {
+      extend: {
+        fontFamily: {
+          sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', 'sans-serif'],
+        },
+        colors: {
+          apple: {
+            blue: '#6366f1', /* Indigo primary color */
+            'blue-hover': '#4f46e5',
+            bg: '#f8fafc', /* Slate-like clean light bg */
+            darkbg: '#090d16', /* Rich space gray/black */
+            card: '#ffffff',
+            darkcard: '#111827',
+            border: '#e2e8f0',
+            darkborder: '#1f2937',
+            text: '#0f172a',
+            darktext: '#f8fafc',
+            secondary: '#64748b'
+          }
+        }
+      }
+    }
+  }
+</script>
+<!-- Google Fonts: Inter -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  {% include "admin/admin_styles.css" %}
+</style>
+
+{% block extrastyle %}{% endblock %}
+{% block extrahead %}{% endblock %}
+{% block responsive %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% endblock %}
+{% block blockbots %}<meta name="robots" content="NONE,NOARCHIVE">{% endblock %}
+</head>
+
+<body class="{% if is_popup %}popup {% endif %}{% block bodyclass %}{% endblock %} h-full text-apple-text dark:text-apple-darktext bg-apple-bg dark:bg-apple-darkbg font-sans antialiased relative overflow-x-hidden" data-admin-utc-offset="{% now "Z" %}">
+{% include "admin/includes/aurora_bg.html" %}
+
+<a href="#content-start" class="sr-only focus:not-sr-only focus:absolute focus:p-4 focus:bg-apple-card focus:text-apple-blue focus:rounded-lg">{% translate 'Skip to main content' %}</a>
+
+<!-- Main Shell Container -->
+<div id="container" class="flex flex-col min-h-screen relative z-10">
+
+    {% if not is_popup %}
+    <!-- Modern Navigation Bar -->
+    {% block header %}
+      {% include "admin/includes/header.html" %}
+    {% endblock %}
+    
+    {% endif %}
+
+    <!-- Main Workspace Area -->
+    <div class="main flex-1 flex flex-col md:flex-row relative mx-20 gap-8" id="main">
+      {% if not is_popup and is_nav_sidebar_enabled %}
+        {% block nav-sidebar %}
+          {% include "admin/nav_sidebar.html" %}
+        {% endblock %}
+      {% endif %}
+      
+      <main id="content-start" class="content flex-1 pt-4 pb-8 px-0 overflow-y-auto space-y-6" tabindex="-1">
+        {% if not is_popup %}
+          {% block nav-breadcrumbs %}
+            {% include "admin/includes/breadcrumbs.html" %}
+          {% endblock %}
+        {% endif %}
+        {% block messages %}
+          {% if messages %}
+            <!-- Toast Notification Container -->
+            <div id="toast-container" class="fixed top-2 right-2 z-[99999] flex flex-col gap-2 w-full max-w-sm pointer-events-none px-4 sm:px-0">
+              {% for message in messages %}
+                <div class="django-toast pointer-events-auto flex items-start p-4 rounded-xl border shadow-xl backdrop-blur-md transition-all duration-300 ease-out transform translate-x-[120%] opacity-0 {% if 'error' in message.tags %}bg-red-500/10 border-red-500/30 text-red-800 dark:text-red-300 dark:bg-red-950/20{% elif 'success' in message.tags %}bg-emerald-500/10 border-emerald-500/30 text-emerald-800 dark:text-emerald-300 dark:bg-emerald-950/20{% else %}bg-blue-500/10 border-blue-500/30 text-blue-800 dark:text-blue-300 dark:bg-blue-950/20{% endif %}" data-duration="8000">
+                  <div class="mr-3 mt-0.5 shrink-0">
+                    {% if 'error' in message.tags %}
+                      <svg class="w-5 h-5 text-red-500 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    {% elif 'success' in message.tags %}
+                      <svg class="w-5 h-5 text-emerald-500 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    {% else %}
+                      <svg class="w-5 h-5 text-blue-500 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    {% endif %}
+                  </div>
+                  <div class="flex-1 text-sm font-medium pr-2 leading-5 {% if 'error' in message.tags %}[&_a]:text-red-700 dark:[&_a]:text-red-400{% elif 'success' in message.tags %}[&_a]:text-emerald-700 dark:[&_a]:text-emerald-400{% else %}[&_a]:text-blue-700 dark:[&_a]:text-blue-400{% endif %} [&_a]:font-bold [&_a]:underline hover:[&_a]:opacity-80">
+                    {{ message|capfirst }}
+                  </div>
+                  <button type="button" class="close-toast-btn ml-3 transition-colors duration-150 cursor-pointer shrink-0 {% if 'error' in message.tags %}text-red-500/80 hover:text-red-700 dark:text-red-400/80 dark:hover:text-red-300{% elif 'success' in message.tags %}text-emerald-500/80 hover:text-emerald-700 dark:text-emerald-400/80 dark:hover:text-emerald-300{% else %}text-blue-500/80 hover:text-blue-700 dark:text-blue-400/80 dark:hover:text-blue-300{% endif %}">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12" /></svg>
+                  </button>
+                </div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        {% endblock messages %}
+        
+        <!-- Content Container -->
+        <div id="content" class="{% block content_width_class %}max-w-7xl mx-auto{% endblock %} space-y-6">
+          {% block pretitle %}{% endblock %}
+          
+          <div class="bg-white/60 dark:bg-[#111827]/40 backdrop-blur-md border border-gray-200/50 dark:border-gray-800/80 rounded-2xl p-6 shadow-sm mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+              {% block content_title %}{% if title %}<h1 class="text-2xl font-bold tracking-tight text-apple-text dark:text-apple-darktext">{{ title }}</h1>{% endif %}{% endblock %}
+              {% block content_subtitle %}
+                {% if subtitle %}
+                  <div class="mt-2 flex items-center">
+                    <span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-semibold bg-gray-100 dark:bg-gray-800/80 text-gray-700 dark:text-gray-300 border border-gray-200/60 dark:border-gray-700/60 shadow-sm">
+                      {{ subtitle }}
+                    </span>
+                  </div>
+                {% endif %}
+              {% endblock %}
+            </div>
+            {% block object-tools %}{% endblock %}
+          </div>
+          
+          {% block content_container %}
+          <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            <div class="lg:col-span-3 space-y-6">
+              {% block content %}
+                {{ content }}
+              {% endblock %}
+            </div>
+            
+            {% block sidebar %}
+            {% endblock %}
+          </div>
+          {% endblock %}
+        </div>
+        
+        {% block footer %}<footer id="footer" class="mt-12 text-center text-xs text-apple-secondary"></footer>{% endblock %}
+      </main>
+    </div>
+</div>
+
+<!-- SVGs -->
+<svg xmlns="http://www.w3.org/2000/svg" class="hidden">
+  <symbol viewBox="0 0 24 24" width="1rem" height="1rem" id="icon-auto"><path d="M0 0h24v24H0z" fill="currentColor"/><path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm0-2V4a8 8 0 1 0 0 16z"/></symbol>
+  <symbol viewBox="0 0 24 24" width="1rem" height="1rem" id="icon-moon"><path d="M0 0h24v24H0z" fill="currentColor"/><path d="M10 7a7 7 0 0 0 12 4.9v.1c0 5.523-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2h.1A6.979 6.979 0 0 0 10 7zm-6 5a8 8 0 0 0 15.062 3.762A9 9 0 0 1 8.238 4.938 7.999 7.999 0 0 0 4 12z"/></symbol>
+  <symbol viewBox="0 0 24 24" width="1rem" height="1rem" id="icon-sun"><path d="M0 0h24v24H0z" fill="currentColor"/><path d="M12 18a6 6 0 1 1 0-12 6 6 0 0 1 0 12zm0-2a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM11 1h2v3h-2V1zm0 19h2v3h-2v-3zM3.515 4.929l1.414-1.414L7.05 5.636 5.636 7.05 3.515 4.93zM16.95 18.364l1.414-1.414 2.121 2.121-1.414 1.414-2.121-2.121zm2.121-14.85l1.414 1.415-2.121 2.121-1.414-1.414 2.121-2.121zM5.636 16.95l1.414 1.414-2.121 2.121-1.414-1.414 2.121-2.121zM23 11v2h-3v-2h3zM4 11v2H1v-2h3z"/></symbol>
+</svg>
+
+<style>
+  /* Custom Select accessibility hidden style */
+  .custom-select-hidden {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+  }
+  
+  /* Prevent parent clipping in Django Admin's default form rows and fieldsets */
+  .form-row, .aligned, .module, fieldset, td {
+    overflow: visible !important;
+  }
+  
+  /* Guarantee dropdown is layered above all other interface controls */
+  .custom-select-dropdown {
+    z-index: 99999 !important;
+  }
+  
+  .custom-select-container.z-50 {
+    z-index: 99999 !important;
+  }
+</style>
+
+<script>
+  function initCustomSelects() {
+    const selects = document.querySelectorAll('select:not([multiple]):not([data-custom-select])');
+    
+    selects.forEach(select => {
+      // Exclude navigation filter or other specific elements if necessary
+      if (select.closest('#nav-filter') || select.id === 'nav-filter' || select.closest('.nav-filter')) {
+        return;
+      }
+      
+      select.setAttribute('data-custom-select', 'true');
+      select.classList.add('custom-select-hidden');
+      
+      const container = document.createElement('div');
+      container.className = 'custom-select-container relative w-full inline-block min-w-[200px]';
+      
+      select.parentNode.insertBefore(container, select);
+      container.appendChild(select);
+      
+      const trigger = document.createElement('button');
+      trigger.type = 'button';
+      trigger.className = 'custom-select-trigger w-full flex items-center justify-between bg-white dark:bg-[#111827] border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-sm text-left text-gray-900 dark:text-gray-100 shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150 ease-in-out cursor-pointer';
+      
+      const labelSpan = document.createElement('span');
+      labelSpan.className = 'custom-select-label truncate pr-4';
+      
+      const arrowContainer = document.createElement('div');
+      arrowContainer.className = 'shrink-0 flex items-center';
+      arrowContainer.innerHTML = '<svg class="w-4 h-4 text-gray-400 dark:text-gray-500 transition-transform duration-200 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>';
+      const arrow = arrowContainer.firstElementChild;
+      
+      trigger.appendChild(labelSpan);
+      trigger.appendChild(arrowContainer);
+      container.appendChild(trigger);
+      
+      const dropdown = document.createElement('div');
+      dropdown.className = 'custom-select-dropdown hidden absolute left-0 right-0 z-[999] mt-1 w-full bg-white dark:bg-[#111827] border border-gray-300 dark:border-gray-700 rounded-lg shadow-lg max-h-60 overflow-y-auto';
+      
+      const updateTriggerLabel = () => {
+        const selectedOption = select.options[select.selectedIndex];
+        labelSpan.textContent = selectedOption ? selectedOption.text : '---------';
+      };
+      updateTriggerLabel();
+      
+      let searchInput = null;
+      if (select.options.length > 10) {
+        const searchContainer = document.createElement('div');
+        searchContainer.className = 'custom-select-search-container p-2 border-b border-gray-200 dark:border-gray-800 sticky top-0 bg-white dark:bg-[#111827] z-10';
+        
+        searchInput = document.createElement('input');
+        searchInput.type = 'text';
+        searchInput.className = 'custom-select-search w-full px-3 py-1.5 text-sm rounded-md border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500';
+        searchInput.placeholder = 'Cerca...';
+        
+        searchContainer.appendChild(searchInput);
+        dropdown.appendChild(searchContainer);
+      }
+      
+      const optionsList = document.createElement('ul');
+      optionsList.className = 'custom-select-options w-full py-1 text-sm';
+      
+      let optionElements = [];
+      
+      const buildOptions = () => {
+        optionsList.innerHTML = '';
+        optionElements = [];
+        
+        Array.from(select.options).forEach((opt, index) => {
+          const li = document.createElement('li');
+          li.className = 'custom-select-option w-full px-4 py-2.5 cursor-pointer hover:bg-indigo-50 dark:hover:bg-indigo-950/40 hover:text-indigo-600 dark:hover:text-indigo-400 flex items-center justify-between text-gray-700 dark:text-gray-300 transition-colors duration-150';
+          li.setAttribute('data-value', opt.value);
+          li.setAttribute('data-index', index);
+          
+          const span = document.createElement('span');
+          span.textContent = opt.text;
+          li.appendChild(span);
+          
+          const checkIconContainer = document.createElement('div');
+          checkIconContainer.innerHTML = '<svg class="w-4 h-4 text-indigo-600 dark:text-indigo-400 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>';
+          const checkSvg = checkIconContainer.firstElementChild;
+          li.appendChild(checkSvg);
+          
+          if (select.selectedIndex === index) {
+            checkSvg.classList.remove('hidden');
+            li.classList.add('bg-indigo-50/50', 'dark:bg-indigo-950/20', 'font-medium', 'text-indigo-600', 'dark:text-indigo-400');
+          }
+          
+          li.addEventListener('click', (e) => {
+            e.stopPropagation();
+            select.selectedIndex = index;
+            select.dispatchEvent(new Event('change', { bubbles: true }));
+            updateTriggerLabel();
+            closeDropdown();
+          });
+          
+          optionsList.appendChild(li);
+          optionElements.push({ element: li, text: opt.text.toLowerCase(), checkSvg: checkSvg });
+        });
+      };
+      
+      buildOptions();
+      dropdown.appendChild(optionsList);
+      container.appendChild(dropdown);
+      
+      const toggleDropdown = () => {
+        const isHidden = dropdown.classList.contains('hidden');
+        closeAllCustomSelects(dropdown);
+        
+        if (isHidden) {
+          dropdown.classList.remove('hidden');
+          container.classList.add('z-50');
+          arrow.classList.add('rotate-180');
+          if (searchInput) {
+            searchInput.value = '';
+            filterOptions('');
+            setTimeout(() => searchInput.focus(), 50);
+          }
+        } else {
+          closeDropdown();
+        }
+      };
+      
+      const closeDropdown = () => {
+        dropdown.classList.add('hidden');
+        container.classList.remove('z-50');
+        arrow.classList.remove('rotate-180');
+      };
+      
+      trigger.addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleDropdown();
+      });
+      
+      const filterOptions = (term) => {
+        optionElements.forEach(item => {
+          if (item.text.includes(term.toLowerCase())) {
+            item.element.classList.remove('hidden');
+          } else {
+            item.element.classList.add('hidden');
+          }
+        });
+      };
+      
+      if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+          filterOptions(e.target.value);
+        });
+        searchInput.addEventListener('click', (e) => {
+          e.stopPropagation();
+        });
+      }
+      
+      // Dynamic updates of native select options
+      const observer = new MutationObserver(() => {
+        buildOptions();
+        updateTriggerLabel();
+      });
+      observer.observe(select, { childList: true });
+      
+      select.addEventListener('change', () => {
+        updateTriggerLabel();
+        const idx = select.selectedIndex;
+        optionElements.forEach((item, index) => {
+          if (index === idx) {
+            item.checkSvg.classList.remove('hidden');
+            item.element.classList.add('bg-indigo-50/50', 'dark:bg-indigo-950/20', 'font-medium', 'text-indigo-600', 'dark:text-indigo-400');
+          } else {
+            item.checkSvg.classList.add('hidden');
+            item.element.classList.remove('bg-indigo-50/50', 'dark:bg-indigo-950/20', 'font-medium', 'text-indigo-600', 'dark:text-indigo-400');
+          }
+        });
+      });
+    });
+  }
+  
+  function convertDateTimeInputs() {
+    document.querySelectorAll('input.vDateField:not([type="date"])').forEach(input => {
+      input.type = 'date';
+      // If the field has a timezone warning or custom helper spacing, adjust it
+      input.classList.add('max-w-[150px]');
+    });
+    document.querySelectorAll('input.vTimeField:not([type="time"])').forEach(input => {
+      input.type = 'time';
+      input.classList.add('max-w-[120px]');
+    });
+    document.querySelectorAll('.datetimeshortcuts').forEach(el => {
+      el.style.display = 'none';
+    });
+  }
+  
+  function initObjectTools() {
+    document.querySelectorAll('.object-tools a').forEach(a => {
+      if (a.querySelector('svg')) return;
+      
+      // Inject Apple-style classes that override default styles
+      a.className = 'inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-[#111827] text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800/40 hover:text-indigo-600 dark:hover:text-indigo-400 transition-all duration-150 cursor-pointer shadow-sm';
+      
+      if (a.classList.contains('historylink')) {
+        const svg = document.createElement('div');
+        svg.innerHTML = '<svg class="w-3.5 h-3.5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>';
+        a.insertBefore(svg.firstElementChild, a.firstChild);
+      } else if (a.classList.contains('viewsitelink')) {
+        const svg = document.createElement('div');
+        svg.innerHTML = '<svg class="w-3.5 h-3.5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>';
+        a.insertBefore(svg.firstElementChild, a.firstChild);
+      }
+    });
+  }
+  
+  function initCollapsibleInlines() {
+    document.querySelectorAll('.inline-related').forEach(item => {
+      const toggleBtn = item.querySelector('.inline-collapsible-toggle');
+      const content = item.querySelector('.inline-related-content');
+      if (!toggleBtn || !content || item.hasAttribute('data-collapsible-init')) return;
+      
+      item.setAttribute('data-collapsible-init', 'true');
+      
+      // Rotate by default if not collapsed
+      const svg = toggleBtn.querySelector('svg');
+      if (svg) svg.style.transform = 'rotate(0deg)';
+      
+      toggleBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const isCollapsed = content.classList.contains('hidden');
+        if (isCollapsed) {
+          content.classList.remove('hidden');
+          content.classList.add('animate-fade-in');
+          if (svg) svg.style.transform = 'rotate(0deg)';
+        } else {
+          content.classList.add('hidden');
+          content.classList.remove('animate-fade-in');
+          if (svg) svg.style.transform = 'rotate(-90deg)';
+        }
+      });
+    });
+  }
+
+  function initChangeFormTabs() {
+    const form = document.getElementById('content-main')?.querySelector('form');
+    if (!form) return;
+    
+    // Check if we already initialized tabs here
+    if (form.querySelector('.change-form-tabs')) return;
+    
+    const inlines = Array.from(form.querySelectorAll('.inline-group'));
+    const fieldsetsContainer = form.querySelector('div > div.bg-white, div > div.dark\\:bg-apple-darkcard');
+    
+    if (!fieldsetsContainer || inlines.length === 0) return;
+    
+    const tabHeader = document.createElement('div');
+    tabHeader.className = 'change-form-tabs relative inline-flex items-center p-0.5 bg-slate-100 dark:bg-zinc-800/80 border border-slate-200/50 dark:border-zinc-700/60 rounded-xl mb-6 shadow-sm overflow-hidden z-10';
+    
+    // Add sliding active indicator background
+    const indicator = document.createElement('div');
+    indicator.className = 'absolute top-0.5 bottom-0.5 rounded-[10px] bg-white dark:bg-zinc-700 shadow-sm border border-slate-200/40 dark:border-zinc-600/30 transition-all duration-200 ease-out z-0';
+    tabHeader.appendChild(indicator);
+    
+    const tabItems = [];
+    
+    // 1. Add General Details Tab
+    tabItems.push({
+      name: 'General Info',
+      element: fieldsetsContainer
+    });
+    
+    // 2. Add Inline Tabs
+    inlines.forEach((inline, idx) => {
+      const titleEl = inline.querySelector('h2');
+      const title = titleEl ? titleEl.textContent.trim() : `Related Items ${idx + 1}`;
+      if (titleEl) titleEl.style.display = 'none';
+      
+      tabItems.push({
+        name: title,
+        element: inline
+      });
+    });
+    
+    function moveIndicator(btn) {
+      indicator.style.left = `${btn.offsetLeft}px`;
+      indicator.style.width = `${btn.offsetWidth}px`;
+    }
+    
+    tabItems.forEach((tab, index) => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.textContent = tab.name;
+      
+      const updateBtnStyle = (b, isActive) => {
+        if (isActive) {
+          b.className = 'active-tab relative z-10 px-4 py-1.5 text-xs font-semibold rounded-lg transition-colors duration-200 cursor-pointer select-none text-slate-800 dark:text-white';
+        } else {
+          b.className = 'relative z-10 px-4 py-1.5 text-xs font-semibold rounded-lg transition-colors duration-200 cursor-pointer select-none text-slate-500 dark:text-zinc-400 hover:text-slate-800 dark:hover:text-zinc-200';
+        }
+      };
+      
+      btn.addEventListener('click', () => {
+        tabHeader.querySelectorAll('button').forEach(b => {
+          b.classList.remove('active-tab');
+          updateBtnStyle(b, false);
+        });
+        btn.classList.add('active-tab');
+        updateBtnStyle(btn, true);
+        moveIndicator(btn);
+        
+        tabItems.forEach(t => {
+          if (t === tab) {
+            t.element.classList.remove('hidden');
+            t.element.classList.add('animate-fade-in');
+          } else {
+            t.element.classList.add('hidden');
+            t.element.classList.remove('animate-fade-in');
+          }
+        });
+      });
+      
+      tabHeader.appendChild(btn);
+      
+      if (index === 0) {
+        btn.classList.add('active-tab');
+        updateBtnStyle(btn, true);
+        tab.element.classList.remove('hidden');
+        // Set initial indicator position after adding to DOM
+        setTimeout(() => moveIndicator(btn), 50);
+      } else {
+        updateBtnStyle(btn, false);
+        tab.element.classList.add('hidden');
+      }
+    });
+    
+    window.addEventListener('resize', () => {
+      const activeBtn = tabHeader.querySelector('.active-tab');
+      if (activeBtn) moveIndicator(activeBtn);
+    });
+    
+    fieldsetsContainer.parentNode.insertBefore(tabHeader, fieldsetsContainer);
+    initCollapsibleInlines();
+  }
+  
+  function showDeleteModal(deleteUrl) {
+    if (document.getElementById('custom-delete-modal')) return;
+    
+    const overlay = document.createElement('div');
+    overlay.id = 'custom-delete-modal';
+    overlay.className = 'fixed inset-0 bg-black/60 backdrop-blur-md z-[999999] flex items-center justify-center p-4 opacity-0 transition-opacity duration-200 ease-out';
+    
+    const dialog = document.createElement('div');
+    dialog.className = 'bg-white dark:bg-[#1c1c1e] border border-slate-200/60 dark:border-zinc-800 rounded-2xl shadow-2xl max-w-xl w-full overflow-hidden transform scale-95 transition-transform duration-200 ease-out flex flex-col max-h-[85vh]';
+    
+    const header = document.createElement('div');
+    header.className = 'px-6 py-4 bg-red-500 text-white flex items-center gap-3 shrink-0';
+    header.innerHTML = `
+      <svg class="w-6 h-6 text-white shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+      <div>
+        <h3 class="text-base font-bold text-white leading-tight">Confirm Deletion</h3>
+        <p class="text-red-105 text-xs mt-0.5 font-medium">This action cannot be undone.</p>
+      </div>
+    `;
+    
+    const body = document.createElement('div');
+    body.className = 'p-6 overflow-y-auto flex-1 text-slate-800 dark:text-zinc-200';
+    body.innerHTML = `
+      <div class="flex items-center justify-center py-8">
+        <svg class="animate-spin h-8 w-8 text-red-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+      </div>
+    `;
+    
+    const footer = document.createElement('div');
+    footer.className = 'px-6 py-4 bg-slate-50 dark:bg-zinc-900/60 border-t border-slate-150 dark:border-zinc-800/80 flex items-center justify-end gap-3 shrink-0';
+    
+    const cancelBtn = document.createElement('button');
+    cancelBtn.type = 'button';
+    cancelBtn.className = 'px-4 py-2 text-sm font-semibold text-slate-700 dark:text-zinc-300 bg-white dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 hover:bg-slate-50 dark:hover:bg-zinc-750 rounded-lg shadow-sm transition-colors cursor-pointer';
+    cancelBtn.textContent = 'Cancel';
+    
+    const confirmBtn = document.createElement('button');
+    confirmBtn.type = 'button';
+    confirmBtn.disabled = true;
+    confirmBtn.className = 'px-5 py-2 text-sm font-semibold text-white bg-red-600 hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg shadow-sm transition-colors cursor-pointer';
+    confirmBtn.textContent = 'Yes, Delete';
+    
+    footer.appendChild(cancelBtn);
+    footer.appendChild(confirmBtn);
+    
+    dialog.appendChild(header);
+    dialog.appendChild(body);
+    dialog.appendChild(footer);
+    overlay.appendChild(dialog);
+    document.body.appendChild(overlay);
+    
+    setTimeout(() => {
+      overlay.classList.remove('opacity-0');
+      dialog.classList.remove('scale-95');
+    }, 10);
+    
+    const closeModal = () => {
+      overlay.classList.add('opacity-0');
+      dialog.classList.add('scale-95');
+      setTimeout(() => overlay.remove(), 200);
+    };
+    
+    cancelBtn.onclick = closeModal;
+    overlay.onclick = (e) => {
+      if (e.target === overlay) closeModal();
+    };
+    
+    fetch(deleteUrl)
+      .then(res => res.text())
+      .then(html => {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        
+        const lackingPerms = doc.querySelector('.p-4.bg-red-50, div > div.bg-red-50');
+        const summary = doc.querySelector('#deleted-objects')?.closest('div.border') || doc.querySelector('#deleted-objects');
+        
+        body.innerHTML = '';
+        
+        if (lackingPerms) {
+          body.appendChild(lackingPerms.cloneNode(true));
+          confirmBtn.style.display = 'none';
+        } else if (summary) {
+          const promptText = document.createElement('p');
+          promptText.className = 'text-sm font-medium text-slate-700 dark:text-zinc-300 mb-4';
+          promptText.textContent = 'Are you sure you want to delete this item? All of the following related items will be deleted:';
+          body.appendChild(promptText);
+          body.appendChild(summary.cloneNode(true));
+          confirmBtn.disabled = false;
+        } else {
+          const p = document.createElement('p');
+          p.className = 'text-sm font-medium text-slate-700 dark:text-zinc-300';
+          p.textContent = 'Are you sure you want to delete this item?';
+          body.appendChild(p);
+          confirmBtn.disabled = false;
+        }
+        
+        confirmBtn.onclick = () => {
+          confirmBtn.disabled = true;
+          confirmBtn.textContent = 'Deleting...';
+          
+          const dummyForm = document.createElement('form');
+          dummyForm.method = 'POST';
+          dummyForm.action = deleteUrl;
+          
+          const csrf = doc.querySelector('input[name="csrfmiddlewaretoken"]')?.value || document.querySelector('[name=csrfmiddlewaretoken]')?.value;
+          if (csrf) {
+            const csrfInput = document.createElement('input');
+            csrfInput.type = 'hidden';
+            csrfInput.name = 'csrfmiddlewaretoken';
+            csrfInput.value = csrf;
+            dummyForm.appendChild(csrfInput);
+          }
+          
+          const postInput = document.createElement('input');
+          postInput.type = 'hidden';
+          postInput.name = 'post';
+          postInput.value = 'yes';
+          dummyForm.appendChild(postInput);
+          
+          document.body.appendChild(dummyForm);
+          dummyForm.submit();
+        };
+      })
+      .catch(err => {
+        body.innerHTML = '<p class="text-sm text-red-500 font-medium">Error loading deletion data. Please try again.</p>';
+      });
+  }
+
+  document.addEventListener('click', (e) => {
+    const deleteLink = e.target.closest('a[href*="/delete/"]');
+    if (!deleteLink) return;
+    if (document.body.classList.contains('delete-confirmation')) return;
+    
+    e.preventDefault();
+    e.stopPropagation();
+    showDeleteModal(deleteLink.href);
+  });
+  
+  
+  function initDragAndDropSelectors() {
+    const selectors = document.querySelectorAll('.selector:not([data-drag-init])');
+    
+    selectors.forEach(selector => {
+      selector.setAttribute('data-drag-init', 'true');
+      
+      const availableSelect = selector.querySelector('.selector-available select');
+      const chosenSelect = selector.querySelector('.selector-chosen select');
+      
+      if (!availableSelect || !chosenSelect) return;
+      
+      const availableList = document.createElement('ul');
+      availableList.className = 'custom-drag-list space-y-1.5 p-2 bg-slate-50 dark:bg-black/20 border border-gray-200 dark:border-gray-800/80 rounded-xl min-h-[200px] max-h-60 overflow-y-auto w-full mt-2';
+      
+      const chosenList = document.createElement('ul');
+      chosenList.className = 'custom-drag-list space-y-1.5 p-2 bg-slate-50 dark:bg-black/20 border border-gray-200 dark:border-gray-800/80 rounded-xl min-h-[200px] max-h-60 overflow-y-auto w-full mt-2';
+      
+      // Visually hide the native select elements
+      availableSelect.style.display = 'none';
+      chosenSelect.style.display = 'none';
+      
+      availableSelect.parentNode.insertBefore(availableList, availableSelect.nextSibling);
+      chosenSelect.parentNode.insertBefore(chosenList, chosenSelect.nextSibling);
+      
+      let lastClickedIndex = null;
+      let lastClickedList = null;
+      
+      const renderList = (selectElement, listElement, targetSelectElement) => {
+        listElement.innerHTML = '';
+        
+        Array.from(selectElement.options).forEach((opt, index) => {
+          const li = document.createElement('li');
+          li.className = 'custom-drag-item flex items-center justify-between px-3 py-2 bg-white dark:bg-[#1f2937] border border-gray-200 dark:border-gray-800 rounded-lg shadow-sm cursor-grab hover:bg-indigo-50/50 dark:hover:bg-indigo-950/10 hover:border-indigo-200 dark:hover:border-indigo-900 transition-all text-sm text-gray-800 dark:text-gray-200 select-none';
+          li.draggable = true;
+          li.setAttribute('data-value', opt.value);
+          li.setAttribute('data-index', index);
+          li.textContent = opt.text;
+          
+          li.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const items = Array.from(listElement.querySelectorAll('.custom-drag-item'));
+            
+            // Clear selections in the other list box
+            const otherList = listElement === availableList ? chosenList : availableList;
+            otherList.querySelectorAll('.custom-drag-item').forEach(el => el.classList.remove('!bg-indigo-50', 'dark:!bg-indigo-950/40', '!border-indigo-300', 'dark:!border-indigo-700', 'is-selected'));
+            
+            if (e.ctrlKey || e.metaKey) {
+              li.classList.toggle('is-selected');
+              li.classList.toggle('!bg-indigo-50');
+              li.classList.toggle('dark:!bg-indigo-950/40');
+              li.classList.toggle('!border-indigo-300');
+              li.classList.toggle('dark:!border-indigo-700');
+            } else if (e.shiftKey && lastClickedList === listElement && lastClickedIndex !== null) {
+              const start = Math.min(lastClickedIndex, index);
+              const end = Math.max(lastClickedIndex, index);
+              items.forEach((item, idx) => {
+                if (idx >= start && idx <= end) {
+                  item.classList.add('is-selected', '!bg-indigo-50', 'dark:!bg-indigo-950/40', '!border-indigo-300', 'dark:!border-indigo-700');
+                }
+              });
+            } else {
+              items.forEach(item => item.classList.remove('!bg-indigo-50', 'dark:!bg-indigo-950/40', '!border-indigo-300', 'dark:!border-indigo-700', 'is-selected'));
+              li.classList.add('is-selected', '!bg-indigo-50', 'dark:!bg-indigo-950/40', '!border-indigo-300', 'dark:!border-indigo-700');
+            }
+            
+            lastClickedIndex = index;
+            lastClickedList = listElement;
+          });
+          
+          li.addEventListener('dblclick', (e) => {
+            e.stopPropagation();
+            const selectedItems = Array.from(listElement.querySelectorAll('.is-selected'));
+            if (selectedItems.length > 0 && selectedItems.includes(li)) {
+              const values = selectedItems.map(item => item.getAttribute('data-value'));
+              moveMultipleItems(values, selectElement, targetSelectElement);
+            } else {
+              moveMultipleItems([opt.value], selectElement, targetSelectElement);
+            }
+          });
+          
+          li.addEventListener('dragstart', (e) => {
+            const selectedItems = Array.from(listElement.querySelectorAll('.is-selected'));
+            let values = [];
+            
+            if (selectedItems.length > 0 && selectedItems.includes(li)) {
+              values = selectedItems.map(item => item.getAttribute('data-value'));
+              selectedItems.forEach(item => item.classList.add('opacity-50'));
+            } else {
+              values = [opt.value];
+              li.classList.add('opacity-50');
+            }
+            
+            e.dataTransfer.setData('text/plain', JSON.stringify(values));
+            e.dataTransfer.effectAllowed = 'move';
+          });
+          
+          li.addEventListener('dragend', () => {
+            const items = Array.from(listElement.querySelectorAll('.custom-drag-item'));
+            items.forEach(item => item.classList.remove('opacity-50'));
+          });
+          
+          listElement.appendChild(li);
+        });
+      };
+      
+      const moveMultipleItems = (values, fromSelect, toSelect) => {
+        values.forEach(value => {
+          const option = Array.from(fromSelect.options).find(o => o.value === value);
+          if (option) {
+            if (window.SelectBox) {
+              SelectBox.add_to_cache(toSelect.id, {value: option.value, text: option.text});
+              SelectBox.delete_from_cache(fromSelect.id, option.value);
+            } else {
+              toSelect.appendChild(option);
+              if (toSelect === chosenSelect) {
+                option.selected = true;
+              } else {
+                option.selected = false;
+              }
+            }
+          }
+        });
+        
+        if (window.SelectBox) {
+          SelectBox.redisplay(fromSelect.id);
+          SelectBox.redisplay(toSelect.id);
+        }
+        
+        fromSelect.dispatchEvent(new Event('change', { bubbles: true }));
+        toSelect.dispatchEvent(new Event('change', { bubbles: true }));
+        syncLists();
+      };
+      
+      const syncLists = () => {
+        renderList(availableSelect, availableList, chosenSelect);
+        renderList(chosenSelect, chosenList, availableSelect);
+      };
+      
+      const setupDragOver = (listElement, selectElement, targetSelectElement) => {
+        listElement.addEventListener('dragover', (e) => {
+          e.preventDefault();
+          e.dataTransfer.dropEffect = 'move';
+          listElement.classList.add('border-indigo-500/50', 'bg-indigo-50/20', 'dark:bg-indigo-950/10');
+        });
+        
+        listElement.addEventListener('dragleave', () => {
+          listElement.classList.remove('border-indigo-500/50', 'bg-indigo-50/20', 'dark:bg-indigo-950/10');
+        });
+        
+        listElement.addEventListener('drop', (e) => {
+          e.preventDefault();
+          listElement.classList.remove('border-indigo-500/50', 'bg-indigo-50/20', 'dark:bg-indigo-950/10');
+          try {
+            const values = JSON.parse(e.dataTransfer.getData('text/plain'));
+            const otherSelect = selectElement === availableSelect ? chosenSelect : availableSelect;
+            if (Array.isArray(values)) {
+              moveMultipleItems(values, otherSelect, selectElement);
+            } else {
+              moveMultipleItems([values], otherSelect, selectElement);
+            }
+          } catch (err) {
+            const value = e.dataTransfer.getData('text/plain');
+            const otherSelect = selectElement === availableSelect ? chosenSelect : availableSelect;
+            moveMultipleItems([value], otherSelect, selectElement);
+          }
+        });
+      };
+      
+      setupDragOver(availableList, availableSelect, chosenSelect);
+      setupDragOver(chosenList, chosenSelect, availableSelect);
+      
+      syncLists();
+      
+      // Monitor changes inside the native select options list
+      const selectObserver = new MutationObserver(() => {
+        syncLists();
+      });
+      selectObserver.observe(availableSelect, { childList: true });
+      selectObserver.observe(chosenSelect, { childList: true });
+    });
+  }
+  
+  function closeAllCustomSelects(exceptDropdown = null) {
+    document.querySelectorAll('.custom-select-dropdown').forEach(dropdown => {
+      if (dropdown !== exceptDropdown) {
+        dropdown.classList.add('hidden');
+        const container = dropdown.closest('.custom-select-container');
+        if (container) container.classList.remove('z-50');
+        const arrow = dropdown.previousElementSibling.querySelector('svg');
+        if (arrow) arrow.classList.remove('rotate-180');
+      }
+    });
+  }
+  
+  // Close dropdown on click outside
+  document.addEventListener('click', () => {
+    closeAllCustomSelects();
+  });
+  
+  // Initialize on load
+  document.addEventListener('DOMContentLoaded', () => {
+    initCustomSelects();
+    initDragAndDropSelectors();
+    convertDateTimeInputs();
+    initObjectTools();
+    initChangeFormTabs();
+    
+    // Toast notifications animation
+    const toasts = document.querySelectorAll('.django-toast');
+    toasts.forEach((toast, idx) => {
+      // Slide in stagger effect
+      setTimeout(() => {
+        toast.classList.remove('translate-x-[120%]', 'opacity-0');
+        toast.classList.add('translate-x-0', 'opacity-100');
+      }, 150 * idx);
+
+      // Auto dismiss
+      const duration = parseInt(toast.getAttribute('data-duration')) || 5000;
+      let dismissTimeout = setTimeout(() => {
+        dismissToast(toast);
+      }, duration + (150 * idx));
+
+      // Close button handler
+      const closeBtn = toast.querySelector('.close-toast-btn');
+      if (closeBtn) {
+        closeBtn.addEventListener('click', () => {
+          clearTimeout(dismissTimeout);
+          dismissToast(toast);
+        });
+      }
+    });
+
+    function dismissToast(toast) {
+      toast.classList.remove('translate-x-0', 'opacity-100');
+      toast.classList.add('translate-x-[120%]', 'opacity-0');
+      // Remove element from DOM after transition finishes
+      setTimeout(() => {
+        toast.remove();
+      }, 300);
+    }
+    
+    // Watch for dynamic node additions
+    const docObserver = new MutationObserver((mutations) => {
+      let hasSelects = false;
+      let hasSelectors = false;
+      let hasDateTime = false;
+      let hasTools = false;
+      let hasInlines = false;
+      
+      mutations.forEach(mutation => {
+        mutation.addedNodes.forEach(node => {
+          if (node.nodeType === Node.ELEMENT_NODE) {
+            if (node.tagName === 'SELECT' || node.querySelector('select')) {
+              hasSelects = true;
+            }
+            if (node.classList.contains('selector') || node.querySelector('.selector')) {
+              hasSelectors = true;
+            }
+            if (node.classList.contains('vDateField') || node.querySelector('.vDateField') || node.classList.contains('vTimeField') || node.querySelector('.vTimeField')) {
+              hasDateTime = true;
+            }
+            if (node.classList.contains('object-tools') || node.querySelector('.object-tools')) {
+              hasTools = true;
+            }
+            if (node.classList.contains('inline-related') || node.querySelector('.inline-related')) {
+              hasInlines = true;
+            }
+          }
+        });
+      });
+      
+      if (hasSelects) {
+        initCustomSelects();
+      }
+      if (hasSelectors) {
+        initDragAndDropSelectors();
+      }
+      if (hasDateTime) {
+        convertDateTimeInputs();
+      }
+      if (hasTools) {
+        initObjectTools();
+      }
+      if (hasInlines) {
+        initCollapsibleInlines();
+      }
+    });
+    docObserver.observe(document.body, { childList: true, subtree: true });
+    
+    // Also bind to django's jquery-triggered formset:added event if available
+    document.addEventListener('formset:added', () => {
+      initCollapsibleInlines();
+    });
+    
+    // Ensure all options in chosen selectors are selected on submit so browser includes them in form post
+    document.addEventListener('submit', (e) => {
+      document.querySelectorAll('.selector-chosen select').forEach(select => {
+        Array.from(select.options).forEach(opt => {
+          opt.selected = true;
+        });
+      });
+    });
+  });
+</script>
+{% include "admin/includes/command_palette.html" %}
+</body>
+</html>

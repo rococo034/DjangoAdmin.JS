@@ -1,0 +1,33 @@
+{% load i18n %}
+<div class="actions flex flex-wrap items-center gap-3 text-sm text-apple-secondary">
+  {% block actions %}
+    {% block actions-form %}
+      <div class="flex items-center gap-2">
+        {% for field in action_form %}
+          {% if field.label %}
+            <label class="font-semibold text-apple-text dark:text-apple-darktext">{{ field.label }}</label>
+          {% endif %}
+          {{ field }}
+        {% endfor %}
+      </div>
+    {% endblock %}
+    {% block actions-submit %}
+      <button type="submit" class="!inline-flex !items-center !gap-1.5 button !px-4 !py-2 !text-sm !font-semibold !text-white !bg-apple-blue hover:!bg-apple-blue-hover !rounded-lg !shadow-sm !transition-all !duration-150 !cursor-pointer !h-[38px] !m-0" title="{% translate "Run the selected action" %}" name="index" value="{{ action_index|default:0 }}">
+        <svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" /></svg>
+        <span>{% translate "Go" %}</span>
+      </button>
+    {% endblock %}
+    {% block actions-counter %}
+    {% if actions_selection_counter %}
+        <span class="action-counter text-xs text-apple-secondary" data-actions-icnt="{{ cl.result_list|length }}">{{ selection_note }}</span>
+        {% if cl.result_count != cl.result_list|length %}
+        <span class="all hidden text-xs text-apple-secondary">{{ selection_note_all }}</span>
+        <span class="question hidden text-xs">
+            <a href="#" class="text-apple-blue hover:underline font-semibold" title="{% translate "Click here to select the objects across all pages" %}">{% blocktranslate with cl.result_count as total_count %}Select all {{ total_count }} {{ module_name }}{% endblocktranslate %}</a>
+        </span>
+        <span class="clear hidden text-xs"><a href="#" class="text-red-500 hover:underline">{% translate "Clear selection" %}</a></span>
+        {% endif %}
+    {% endif %}
+    {% endblock %}
+  {% endblock %}
+</div>

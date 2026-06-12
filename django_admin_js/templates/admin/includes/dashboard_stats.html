@@ -1,0 +1,41 @@
+{% load admin_stats %}
+{% get_admin_stats as stats %}
+
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    {% for stat in stats %}
+    <div class="bg-white dark:bg-apple-darkcard border border-apple-border/40 dark:border-apple-darkborder/40 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all duration-200 group">
+        <div class="flex items-center justify-between mb-4">
+            <div class="p-2.5 rounded-xl {% if stat.trend == 'up' %}bg-indigo-50 dark:bg-indigo-950/30 text-indigo-600 dark:text-indigo-400{% else %}bg-slate-50 dark:bg-zinc-800 text-slate-600 dark:text-zinc-400{% endif %} group-hover:scale-110 transition-transform duration-200">
+                {% if stat.icon == 'users' %}
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-2.533-4.656 6.96 6.96 0 00-1.922-.867M9 10.609a3 3 0 100-6 3 3 0 000 6zm6 0a3 3 0 100-6 3 3 0 000 6zm-7.5 7.373a9.251 9.251 0 013 0m0 0a9.235 9.235 0 013 0m-6 0a9.235 9.235 0 003 0m0 0a9.235 9.235 0 003 0m-6 0V16.5m1.875-1.312A2.25 2.25 0 0110.5 15h3a2.25 2.25 0 011.875 1.312m-6.375 0h7.5" /></svg>
+                {% elif stat.icon == 'activity' %}
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" /></svg>
+                {% elif stat.icon == 'database' %}
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 0v3.75m-16.5-3.75v3.75m16.5 0v3.75C20.25 16.128 16.556 17.25 12 17.25s-8.25-1.122-8.25-2.25v-3.75" /></svg>
+                {% elif stat.icon == 'check' %}
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                {% endif %}
+            </div>
+            {% if stat.trend == 'up' %}
+            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold bg-green-100 dark:bg-green-950/30 text-green-700 dark:text-green-400">
+                <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 10l7-7 7 7M12 3v18" /></svg>
+                {{ stat.change }}
+            </span>
+            {% else %}
+            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold bg-slate-100 dark:bg-zinc-800 text-slate-600 dark:text-zinc-400">
+                {{ stat.change }}
+            </span>
+            {% endif %}
+        </div>
+        <h3 class="text-xs font-bold uppercase tracking-wider text-apple-secondary mb-1">{{ stat.label }}</h3>
+        <p class="text-3xl font-extrabold text-apple-text dark:text-apple-darktext tracking-tight">{{ stat.value }}</p>
+        
+        <!-- Minimal Sparkline SVG -->
+        <div class="mt-4 h-8 w-full opacity-30 group-hover:opacity-60 transition-opacity">
+            <svg class="w-full h-full" preserveAspectRatio="none" viewBox="0 0 100 20">
+                <path d="{{ stat.path }}" fill="none" stroke="{% if stat.trend == 'up' %}#6366f1{% else %}#94a3b8{% endif %}" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+        </div>
+    </div>
+    {% endfor %}
+</div>

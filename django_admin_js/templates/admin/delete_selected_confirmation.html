@@ -1,0 +1,81 @@
+{% extends "admin/base_site.html" %}
+{% load i18n l10n admin_urls static %}
+
+{% block extrahead %}
+    {{ block.super }}
+    {{ media }}
+    <script src="{% static 'admin/js/cancel.js' %}" async></script>
+{% endblock %}
+
+{% block bodyclass %}{{ block.super }} app-{{ opts.app_label }} model-{{ opts.model_name }} delete-confirmation delete-selected-confirmation{% endblock %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+<a href="{% url 'admin:index' %}">{% translate 'Home' %}</a>
+&rsaquo; <a href="{% url 'admin:app_list' app_label=opts.app_label %}">{{ opts.app_config.verbose_name }}</a>
+&rsaquo; <a href="{% url opts|admin_urlname:'changelist' %}">{{ opts.verbose_name_plural|capfirst }}</a>
+&rsaquo; {% translate 'Delete multiple objects' %}
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto mt-4">
+  <div class="bg-white dark:bg-apple-darkcard border border-red-200 dark:border-red-950/50 rounded-2xl shadow-xl overflow-hidden">
+    <!-- Header alert banner -->
+    <div class="bg-gradient-to-r from-red-500 to-pink-600 p-6 text-white">
+      <div class="flex items-center gap-3">
+        <svg class="w-8 h-8 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+        </svg>
+        <div>
+          <h1 class="text-xl font-bold text-white">{% translate "Confirm Deletion of Multiple Objects" %}</h1>
+          <p class="text-red-100 text-sm mt-0.5">{% translate "This action cannot be undone." %}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="p-6 space-y-6 text-apple-text dark:text-apple-darktext">
+      {% if perms_lacking %}
+        <div class="p-4 bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-900/40 rounded-xl text-red-800 dark:text-red-300">
+          <p class="font-semibold mb-2">{% blocktranslate %}Deleting the selected {{ objects_name }} would result in deleting related objects, but your account doesn't have permission to delete the following types of objects:{% endblocktranslate %}</p>
+          <ul class="list-disc list-inside space-y-1 mt-2 text-sm">{{ perms_lacking|unordered_list }}</ul>
+        </div>
+      {% elif protected %}
+        <div class="p-4 bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-900/40 rounded-xl text-red-800 dark:text-red-300">
+          <p class="font-semibold mb-2">{% blocktranslate %}Deleting the selected {{ objects_name }} would require deleting the following protected related objects:{% endblocktranslate %}</p>
+          <ul class="list-disc list-inside space-y-1 mt-2 text-sm">{{ protected|unordered_list }}</ul>
+        </div>
+      {% else %}
+        <p class="text-base">{% blocktranslate %}Are you sure you want to delete the selected {{ objects_name }}? All of the following objects and their related items will be deleted:{% endblocktranslate %}</p>
+        
+        {% include "admin/includes/object_delete_summary.html" %}
+        
+        <div class="border border-apple-border/40 dark:border-apple-darkborder/40 rounded-xl overflow-hidden bg-apple-bg/30 dark:bg-black/10">
+          <div class="px-4 py-3 bg-apple-bg/50 dark:bg-black/30 border-b border-apple-border/40 dark:border-apple-darkborder/40 font-semibold text-sm">
+            {% translate "Objects to be deleted" %}
+          </div>
+          <div id="deleted-objects" class="p-4 max-h-60 overflow-y-auto text-sm space-y-2">
+            {% for deletable_object in deletable_objects %}
+              <div class="p-2 bg-white dark:bg-apple-darkcard border border-apple-border/30 dark:border-apple-darkborder/30 rounded-lg shadow-xs">
+                {{ deletable_object|unordered_list }}
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+        
+        <form method="post" class="pt-4 border-t border-apple-border/20 dark:border-apple-darkborder/20">{% csrf_token %}
+          <div class="flex items-center justify-end gap-3">
+            {% for obj in queryset %}
+              <input type="hidden" name="{{ action_checkbox_name }}" value="{{ obj.pk|unlocalize }}">
+            {% endfor %}
+            <input type="hidden" name="action" value="delete_selected">
+            <input type="hidden" name="post" value="yes">
+            <a href="#" class="button cancel-link px-4 py-2 text-sm font-semibold text-apple-text dark:text-apple-darktext bg-white dark:bg-apple-darkcard border border-apple-border/50 dark:border-apple-darkborder/50 hover:bg-apple-bg dark:hover:bg-black/40 rounded-md transition-all duration-150">{% translate "No, take me back" %}</a>
+            <input type="submit" value="{% translate 'Yes, I’m sure' %}" class="px-5 py-2 text-sm font-semibold text-white bg-red-600 hover:bg-red-700 rounded-md shadow-sm transition-all duration-150 cursor-pointer">
+          </div>
+        </form>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

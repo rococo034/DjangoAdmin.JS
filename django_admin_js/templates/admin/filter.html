@@ -1,0 +1,19 @@
+{% load i18n %}
+<div data-filter-title="{{ title }}" class="filter-card bg-white/60 dark:bg-[#111827]/40 backdrop-blur-lg border border-black/[0.04] dark:border-white/[0.06] rounded-2xl p-5 shadow-sm transition-all duration-200 hover:shadow-md">
+  <span class="font-semibold text-[11px] text-gray-400 dark:text-gray-500 uppercase tracking-wider block mb-3">
+    {% blocktranslate with filter_title=title %}By {{ filter_title }}{% endblocktranslate %}
+  </span>
+  
+  <ul class="space-y-1 text-sm max-h-48 overflow-y-auto pr-1 scrollbar-thin">
+  {% for choice in choices %}
+    <li>
+      <a href="{{ choice.query_string|iriencode }}" class="flex items-center justify-between px-3 py-2 rounded-xl transition-all duration-150 font-medium {% if choice.selected %}bg-black/[0.04] dark:bg-white/[0.06] text-indigo-600 dark:text-indigo-400 font-semibold{% else %}text-gray-800 dark:text-gray-200 hover:bg-black/[0.02] dark:hover:bg-white/[0.03]{% endif %}">
+        <span class="truncate">{{ choice.display }}</span>
+        {% if choice.selected %}
+          <svg class="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400 shrink-0 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
+        {% endif %}
+      </a>
+    </li>
+  {% endfor %}
+  </ul>
+</div>

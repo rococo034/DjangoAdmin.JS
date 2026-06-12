@@ -15,7 +15,6 @@ def get_admin_stats():
     new_users_24h = User.objects.filter(date_joined__gte=timezone.now() - datetime.timedelta(days=1)).count()
     
     # 2. Activity Stats
-    total_actions = LogEntry.objects.count()
     actions_24h = LogEntry.objects.filter(action_time__gte=timezone.now() - datetime.timedelta(days=1)).count()
     
     # 3. Model Stats (heuristic)

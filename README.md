@@ -37,7 +37,7 @@ Features a beautifully redesigned UI, customizable graphic styles (glassmorphism
 
 ### 1. Installation
 
-Install via pip:
+Install via pip from [PyPI](https://pypi.org/project/django-admin-js/):
 
 ```bash
 pip install django-admin-js

@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DjangoAdmin.JS - Modern, Responsive Tailwind CSS Theme for Django Admin</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Upgrade your Django Admin with Tailwind CSS, glassmorphism layout, AJAX navigation, background form actions, and an interactive Raycast-style command palette.">
+    <meta name="keywords" content="django admin theme, modern django admin, tailwind django admin, django admin customize, django admin command palette, ajax django admin, django dashboard, django theme">
+    <meta name="author" content="DjangoAdmin.JS Contributor">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="DjangoAdmin.JS - Modern Tailwind CSS Theme for Django Admin">
+    <meta property="og:description" content="A gorgeous, fast, and feature-rich theme replacement for Django Admin with dark mode, AJAX navigation, and a Command Palette.">
+    <meta property="og:image" content="https://raw.githubusercontent.com/rococo034/DjangoAdmin.JS/main/docs/assets/og-image.png">
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="DjangoAdmin.JS - Modern Tailwind CSS Theme for Django Admin">
+    <meta name="twitter:description" content="A gorgeous, fast, and feature-rich theme replacement for Django Admin with dark mode, AJAX navigation, and a Command Palette.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="index.css">
+
+    <!-- Structured Data (JSON-LD) for SEO -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "DjangoAdmin.JS",
+      "operatingSystem": "Platform-independent",
+      "applicationCategory": "DeveloperApplication",
+      "description": "A modern Django Admin experience built with Tailwind CSS, AJAX navigation, and a command palette.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
+</head>
+<body class="bg-slate-900 text-slate-100 font-sans antialiased selection:bg-indigo-500 selection:text-white" id="app-body">
+    
+    <!-- Header/Nav -->
+    <header class="sticky top-0 z-40 w-full border-b border-slate-800 bg-slate-900/80 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <span class="text-2xl font-bold bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent font-outfit">DjangoAdmin.JS</span>
+                <span class="px-2.5 py-0.5 text-xs font-semibold rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">v1.0.0</span>
+            </div>
+            <nav class="hidden md:flex items-center space-x-8 text-sm font-medium text-slate-300">
+                <a href="#features" class="hover:text-white transition-colors">Features</a>
+                <a href="#demo" class="hover:text-white transition-colors">Live Interactive Demo</a>
+                <a href="#installation" class="hover:text-white transition-colors">Installation</a>
+                <a href="https://github.com/rococo034/DjangoAdmin.JS" class="hover:text-white transition-colors" target="_blank">GitHub</a>
+            </nav>
+            <div class="flex items-center space-x-4">
+                <a href="#demo" class="px-4 py-2 text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-500 rounded-lg transition-all shadow-md shadow-indigo-600/20">Try Demo</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="relative overflow-hidden pt-20 pb-16 lg:pt-32 lg:pb-24">
+            <!-- Background lights -->
+            <div class="absolute top-0 left-1/4 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl -z-10"></div>
+            <div class="absolute top-1/3 right-1/4 w-96 h-96 bg-pink-500/10 rounded-full blur-3xl -z-10"></div>
+
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight font-outfit mb-6">
+                    Redesign your <span class="bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent">Django Admin</span> experience.
+                </h1>
+                <p class="max-w-2xl mx-auto text-lg sm:text-xl text-slate-400 mb-10 leading-relaxed">
+                    A drop-in theme booster built with Tailwind CSS, progressive Javascript enhancements, AJAX-driven updates, and a productivity-first command palette.
+                </p>
+                <div class="flex flex-col sm:flex-row justify-center items-center gap-4">
+                    <a href="#demo" class="w-full sm:w-auto px-8 py-4 text-base font-bold text-white bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 rounded-xl transition-all shadow-lg shadow-indigo-500/20">
+                        Launch Live Interactive Mockup
+                    </a>
+                    <a href="#installation" class="w-full sm:w-auto px-8 py-4 text-base font-bold text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-xl transition-all">
+                        Get Started
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Grid -->
+        <section id="features" class="py-16 border-t border-slate-800/80 bg-slate-950/40">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto mb-16">
+                    <h2 class="text-3xl font-bold font-outfit mb-4">Why choose DjangoAdmin.JS?</h2>
+                    <p class="text-slate-400">Bring modern frontend paradigms into Django's robust built-in administration without leaving your python workflow.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Feature 1 -->
+                    <div class="p-6 rounded-2xl bg-slate-900/50 border border-slate-800 hover:border-indigo-500/50 transition-all group">
+                        <div class="w-12 h-12 rounded-xl bg-indigo-500/10 flex items-center justify-center text-indigo-400 mb-4 group-hover:scale-110 transition-transform">
+                            ⚡
+                        </div>
+                        <h3 class="text-lg font-bold mb-2 font-outfit text-white">AJAX Engine (PJAX)</h3>
+                        <p class="text-sm text-slate-400 leading-relaxed">
+                            No more full page refreshes when navigating, sorting, filtering, or paginating. Updates are smooth, fast, and light.
+                        </p>
+                    </div>
+                    <!-- Feature 2 -->
+                    <div class="p-6 rounded-2xl bg-slate-900/50 border border-slate-800 hover:border-emerald-500/50 transition-all group">
+                        <div class="w-12 h-12 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-400 mb-4 group-hover:scale-110 transition-transform">
+                            🎨
+                        </div>
+                        <h3 class="text-lg font-bold mb-2 font-outfit text-white">Dynamic Styles</h3>
+                        <p class="text-sm text-slate-400 leading-relaxed">
+                            Choose between sleek Default cards, Frosty Glassmorphism with real backdrop blurs, or Minimalist high-contrast borders.
+                        </p>
+                    </div>
+                    <!-- Feature 3 -->
+                    <div class="p-6 rounded-2xl bg-slate-900/50 border border-slate-800 hover:border-pink-500/50 transition-all group">
+                        <div class="w-12 h-12 rounded-xl bg-pink-500/10 flex items-center justify-center text-pink-400 mb-4 group-hover:scale-110 transition-transform">
+                            🔍
+                        </div>
+                        <h3 class="text-lg font-bold mb-2 font-outfit text-white">Command Palette</h3>
+                        <p class="text-sm text-slate-400 leading-relaxed">
+                            Hit <kbd class="px-1.5 py-0.5 rounded bg-slate-800 text-xs font-mono text-slate-300">Ctrl+K</kbd> to launch a Spotlight search. Navigate pages or change UI settings instantly.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Live Demo Container -->
+        <section id="demo" class="py-16 border-t border-slate-800/80">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto mb-10">
+                    <span class="px-3 py-1 text-xs font-bold uppercase tracking-wider rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Interactive Playground</span>
+                    <h2 class="text-3xl sm:text-4xl font-bold font-outfit mt-4 mb-2">Simulated Live Demo</h2>
+                    <p class="text-slate-400 text-sm sm:text-base">
+                        Experience the live customizer and theme switcher right now. Try opening the command palette with the button below or pressing <kbd class="px-1.5 py-0.5 rounded bg-slate-800 text-xs font-mono">Ctrl</kbd> + <kbd class="px-1.5 py-0.5 rounded bg-slate-800 text-xs font-mono">K</kbd>.
+                    </p>
+                </div>
+
+                <!-- Customizer Toolbar -->
+                <div class="mb-6 p-4 rounded-xl bg-slate-900/80 border border-slate-800 flex flex-wrap gap-4 items-center justify-between">
+                    <div class="flex flex-wrap gap-3 items-center">
+                        <div>
+                            <label class="block text-xs text-slate-500 font-semibold mb-1">Color Theme</label>
+                            <select id="demo-theme-picker" class="bg-slate-800 border border-slate-700 text-slate-200 text-sm rounded-lg px-3 py-1.5 focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                                <option value="indigo">Indigo (Default)</option>
+                                <option value="emerald">Emerald</option>
+                                <option value="amber">Amber</option>
+                                <option value="rose">Rose</option>
+                                <option value="violet">Violet</option>
+                                <option value="ocean">Ocean</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-500 font-semibold mb-1">UI Layout Style</label>
+                            <select id="demo-style-picker" class="bg-slate-800 border border-slate-700 text-slate-200 text-sm rounded-lg px-3 py-1.5 focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                                <option value="default">Default Cards</option>
+                                <option value="glassmorphism">Glassmorphism</option>
+                                <option value="minimalist">Minimalist</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-500 font-semibold mb-1">Color Mode</label>
+                            <div class="flex items-center space-x-2 bg-slate-800 rounded-lg p-1 border border-slate-700">
+                                <button id="mode-light" class="px-2.5 py-1 text-xs rounded-md transition-all text-slate-400 hover:text-white">Light</button>
+                                <button id="mode-dark" class="px-2.5 py-1 text-xs rounded-md transition-all bg-slate-700 text-white font-semibold shadow-sm">Dark</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <button id="open-palette-btn" class="px-4 py-2 text-sm font-semibold rounded-lg bg-indigo-500/10 text-indigo-400 hover:bg-indigo-500/20 border border-indigo-500/30 flex items-center space-x-2">
+                            <span>Command Palette</span>
+                            <kbd class="px-1.5 py-0.5 rounded bg-slate-800 text-[10px] font-mono border border-slate-700 text-slate-300">Ctrl+K</kbd>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Django Admin Interactive Mockup Frame -->
+                <div class="rounded-2xl overflow-hidden border border-slate-800 shadow-2xl relative" id="mockup-frame-outer">
+                    <!-- Top Window Bar -->
+                    <div class="bg-slate-900 px-4 py-3 flex items-center justify-between border-b border-slate-800">
+                        <div class="flex items-center space-x-2">
+                            <span class="w-3 h-3 rounded-full bg-red-500/80 inline-block"></span>
+                            <span class="w-3 h-3 rounded-full bg-yellow-500/80 inline-block"></span>
+                            <span class="w-3 h-3 rounded-full bg-green-500/80 inline-block"></span>
+                            <span class="text-xs text-slate-500 font-mono pl-2">http://localhost:8000/admin/</span>
+                        </div>
+                        <span class="text-xs bg-slate-800/80 px-2 py-0.5 rounded text-slate-400 border border-slate-700">Mock Django Admin Panel</span>
+                    </div>
+
+                    <!-- Main Admin Layout Wrapper -->
+                    <div id="mock-admin-container" class="style-default theme-indigo bg-slate-950 text-slate-200 transition-all duration-300 min-h-[500px] flex flex-col md:flex-row">
+                        
+                        <!-- Simulated Sidebar -->
+                        <aside class="w-full md:w-64 border-r border-slate-800/60 p-4 shrink-0 transition-all duration-300 admin-sidebar">
+                            <div class="flex items-center justify-between mb-6 pb-4 border-b border-slate-800/60">
+                                <span class="font-bold text-lg tracking-wide font-outfit primary-text">Django Administration</span>
+                            </div>
+                            <nav class="space-y-6">
+                                <div>
+                                    <h4 class="text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-2">Authentication</h4>
+                                    <ul class="space-y-1.5 text-sm">
+                                        <li>
+                                            <a href="#" class="flex items-center justify-between px-3 py-1.5 rounded-lg text-slate-400 hover:text-white transition-colors bg-slate-900/40">
+                                                <span>Users</span>
+                                                <span class="text-xs font-semibold px-1.5 py-0.5 rounded-md bg-slate-800 text-slate-400">12</span>
+                                            </a>
+                                        </li>
+                                        <li><a href="#" class="block px-3 py-1.5 rounded-lg text-slate-400 hover:text-white transition-colors">Groups</a></li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h4 class="text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-2">Store Application</h4>
+                                    <ul class="space-y-1.5 text-sm">
+                                        <li>
+                                            <a href="#" class="flex items-center justify-between px-3 py-1.5 rounded-lg text-slate-200 font-medium bg-primary-light/10 border-l-2 border-primary transition-all">
+                                                <span class="primary-text">Products</span>
+                                                <span class="text-xs font-semibold px-1.5 py-0.5 rounded-md bg-primary/20 primary-text">43</span>
+                                            </a>
+                                        </li>
+                                        <li><a href="#" class="block px-3 py-1.5 rounded-lg text-slate-400 hover:text-white transition-colors">Categories</a></li>
+                                        <li><a href="#" class="block px-3 py-1.5 rounded-lg text-slate-400 hover:text-white transition-colors">Orders</a></li>
+                                    </ul>
+                                </div>
+                            </nav>
+                        </aside>
+
+                        <!-- Simulated Workspace -->
+                        <div class="flex-1 p-6 flex flex-col justify-between">
+                            <div>
+                                <!-- Top Bar inside workspace -->
+                                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+                                    <div>
+                                        <div class="text-xs text-slate-400 mb-1 flex items-center space-x-1.5">
+                                            <span>Home</span>
+                                            <span>&rsaquo;</span>
+                                            <span>Store</span>
+                                            <span>&rsaquo;</span>
+                                            <span class="text-slate-300">Products</span>
+                                        </div>
+                                        <h2 class="text-2xl font-bold text-white font-outfit">Select product to change</h2>
+                                    </div>
+                                    <button class="px-4 py-2 text-sm font-semibold rounded-lg bg-primary hover:bg-primary-hover text-white transition-all shadow-md">
+                                        + Add Product
+                                    </button>
+                                </div>
+
+                                <!-- Table Action Bar -->
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                                    <!-- Search Input -->
+                                    <div class="relative">
+                                        <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">🔍</span>
+                                        <input type="text" id="demo-search-input" placeholder="Live search models..." class="w-full pl-9 pr-4 py-2 text-sm bg-slate-900 border border-slate-800 rounded-lg text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-all">
+                                    </div>
+                                    <div class="flex justify-end items-center gap-2 text-xs text-slate-400">
+                                        <span>Action:</span>
+                                        <select class="bg-slate-900 border border-slate-800 rounded-md px-2 py-1 text-slate-300 focus:outline-none focus:ring-1 focus:ring-primary">
+                                            <option>---------</option>
+                                            <option>Delete selected products</option>
+                                            <option>Mark as active</option>
+                                        </select>
+                                        <button class="px-3 py-1 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 rounded-md">Go</button>
+                                    </div>
+                                </div>
+
+                                <!-- Cards/Table Area -->
+                                <div class="admin-card rounded-xl overflow-hidden border border-slate-800/80 bg-slate-900/30 transition-all duration-300">
+                                    <div class="overflow-x-auto">
+                                        <table class="w-full text-left border-collapse text-sm">
+                                            <thead>
+                                                <tr class="border-b border-slate-800 bg-slate-900/40 text-slate-400 font-semibold">
+                                                    <th class="p-3 w-4"><input type="checkbox" class="rounded border-slate-850"></th>
+                                                    <th class="p-3">Product Name</th>
+                                                    <th class="p-3">Category</th>
+                                                    <th class="p-3">Price</th>
+                                                    <th class="p-3 text-right">Status</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="demo-table-body" class="divide-y divide-slate-800/40">
+                                                <tr class="hover:bg-slate-900/30 transition-colors">
+                                                    <td class="p-3"><input type="checkbox" class="rounded"></td>
+                                                    <td class="p-3 font-medium text-white">Quantum Mechanical Keyboard</td>
+                                                    <td class="p-3 text-slate-400">Peripherals</td>
+                                                    <td class="p-3 font-semibold text-slate-300">$189.99</td>
+                                                    <td class="p-3 text-right"><span class="px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">In Stock</span></td>
+                                                </tr>
+                                                <tr class="hover:bg-slate-900/30 transition-colors">
+                                                    <td class="p-3"><input type="checkbox" class="rounded"></td>
+                                                    <td class="p-3 font-medium text-white">UltraWide Curved Monitor 34"</td>
+                                                    <td class="p-3 text-slate-400">Displays</td>
+                                                    <td class="p-3 font-semibold text-slate-300">$549.50</td>
+                                                    <td class="p-3 text-right"><span class="px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">In Stock</span></td>
+                                                </tr>
+                                                <tr class="hover:bg-slate-900/30 transition-colors">
+                                                    <td class="p-3"><input type="checkbox" class="rounded"></td>
+                                                    <td class="p-3 font-medium text-white">Ergonomic Office Chair V2</td>
+                                                    <td class="p-3 text-slate-400">Furniture</td>
+                                                    <td class="p-3 font-semibold text-slate-300">$320.00</td>
+                                                    <td class="p-3 text-right"><span class="px-2 py-0.5 rounded-full text-xs font-semibold bg-amber-500/10 text-amber-400 border border-amber-500/20">Low Stock</span></td>
+                                                </tr>
+                                                <tr class="hover:bg-slate-900/30 transition-colors">
+                                                    <td class="p-3"><input type="checkbox" class="rounded"></td>
+                                                    <td class="p-3 font-medium text-white">Active Noise Cancelling Headphones</td>
+                                                    <td class="p-3 text-slate-400">Peripherals</td>
+                                                    <td class="p-3 font-semibold text-slate-300">$249.99</td>
+                                                    <td class="p-3 text-right"><span class="px-2 py-0.5 rounded-full text-xs font-semibold bg-red-500/10 text-red-400 border border-red-500/20">Out of Stock</span></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <!-- Table Pagination -->
+                                    <div class="p-3 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-400 bg-slate-900/10">
+                                        <span>Showing 1 to 4 of 4 products</span>
+                                        <div class="flex items-center space-x-1">
+                                            <button class="px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 disabled:opacity-50" disabled>&lsaquo;</button>
+                                            <button class="px-2 py-1 rounded bg-primary text-white font-semibold">1</button>
+                                            <button class="px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 disabled:opacity-50" disabled>&rsaquo;</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            
+                            <!-- Success Toast Simulation -->
+                            <div id="demo-toast" class="mt-4 p-3 rounded-lg border bg-slate-900/90 shadow-lg flex items-center space-x-2 border-emerald-500/30 text-slate-200 hidden">
+                                <span class="text-emerald-400">✔️</span>
+                                <span class="text-xs font-medium" id="toast-message">Success toast message</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Command Palette Modal -->
+        <div id="command-palette-modal" class="fixed inset-0 z-50 flex items-start justify-center pt-[15vh] px-4 bg-slate-950/80 backdrop-blur-sm hidden">
+            <div class="w-full max-w-xl rounded-xl border border-slate-800 bg-slate-900 shadow-2xl overflow-hidden transform transition-all">
+                <div class="p-4 border-b border-slate-800 flex items-center space-x-3">
+                    <span class="text-lg text-slate-400">🔍</span>
+                    <input type="text" id="palette-search-input" placeholder="Type a command (e.g. /style glassmorphism, /color emerald)..." class="w-full bg-transparent border-none text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-0 text-sm">
+                    <span class="text-xs px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-400 font-mono">ESC</span>
+                </div>
+                <div class="max-h-[300px] overflow-y-auto p-2" id="palette-options-list">
+                    <!-- Default Suggestions -->
+                    <div class="text-[10px] font-bold text-slate-500 px-3 py-1.5 uppercase tracking-wider">Style Controls</div>
+                    <div class="palette-item hover:bg-slate-800 rounded-lg p-2.5 flex items-center justify-between cursor-pointer" data-cmd="/style default">
+                        <div class="flex items-center space-x-3">
+                            <span class="text-sm">🎨</span>
+                            <div class="text-left">
+                                <p class="text-xs font-semibold text-white">/style default</p>
+                                <p class="text-[10px] text-slate-400">Switch mockup layout to Default Apple/Tailwind card styles</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="palette-item hover:bg-slate-800 rounded-lg p-2.5 flex items-center justify-between cursor-pointer" data-cmd="/style glassmorphism">
+                        <div class="flex items-center space-x-3">
+                            <span class="text-sm">❄️</span>
+                            <div class="text-left">
+                                <p class="text-xs font-semibold text-white">/style glassmorphism</p>
+                                <p class="text-[10px] text-slate-400">Switch mockup layout to frosty, translucent glass mode</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="palette-item hover:bg-slate-800 rounded-lg p-2.5 flex items-center justify-between cursor-pointer" data-cmd="/style minimalist">
+                        <div class="flex items-center space-x-3">
+                            <span class="text-sm">◼️</span>
+                            <div class="text-left">
+                                <p class="text-xs font-semibold text-white">/style minimalist</p>
+                                <p class="text-[10px] text-slate-400">Switch mockup layout to minimalist flat border designs</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-[10px] font-bold text-slate-500 px-3 py-1.5 uppercase tracking-wider mt-2">Color Preset Commands</div>
+                    <div class="grid grid-cols-2 gap-1 p-1">
+                        <div class="palette-item hover:bg-slate-800 rounded-lg p-2 flex items-center space-x-2 cursor-pointer" data-cmd="/color indigo">
+                            <span class="w-3.5 h-3.5 rounded-full bg-indigo-500"></span>
+                            <span class="text-xs text-white">/color indigo</span>
+                        </div>
+                        <div class="palette-item hover:bg-slate-800 rounded-lg p-2 flex items-center space-x-2 cursor-pointer" data-cmd="/color emerald">
+                            <span class="w-3.5 h-3.5 rounded-full bg-emerald-500"></span>
+                            <span class="text-xs text-white">/color emerald</span>
+                        </div>
+                        <div class="palette-item hover:bg-slate-800 rounded-lg p-2 flex items-center space-x-2 cursor-pointer" data-cmd="/color rose">
+                            <span class="w-3.5 h-3.5 rounded-full bg-rose-500"></span>
+                            <span class="text-xs text-white">/color rose</span>
+                        </div>
+                        <div class="palette-item hover:bg-slate-800 rounded-lg p-2 flex items-center space-x-2 cursor-pointer" data-cmd="/color amber">
+                            <span class="w-3.5 h-3.5 rounded-full bg-amber-500"></span>
+                            <span class="text-xs text-white">/color amber</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Installation Instructions -->
+        <section id="installation" class="py-16 bg-slate-950/20 border-t border-slate-800/80">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl font-bold font-outfit text-white">Quick Installation</h2>
+                    <p class="text-slate-400 mt-2">Upgrade your Django workspace in minutes.</p>
+                </div>
+
+                <div class="space-y-6">
+                    <div class="bg-slate-900 rounded-xl border border-slate-800 p-5">
+                        <p class="text-sm font-semibold text-slate-350 mb-2">1. Install DjangoAdmin.JS via pip</p>
+                        <div class="bg-slate-950 p-4 rounded-lg flex items-center justify-between border border-slate-800/60">
+                            <code class="font-mono text-sm text-emerald-450">pip install django-admin-js</code>
+                            <button onclick="navigator.clipboard.writeText('pip install django-admin-js')" class="text-xs text-slate-500 hover:text-white transition-colors">Copy</button>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900 rounded-xl border border-slate-800 p-5">
+                        <p class="text-sm font-semibold text-slate-355 mb-2">2. Register in your INSTALLED_APPS</p>
+                        <p class="text-xs text-slate-400 mb-3">Ensure it is ordered before Django's core administration application:</p>
+                        <div class="bg-slate-950 p-4 rounded-lg border border-slate-800/60">
+                            <pre class="font-mono text-xs text-slate-300 leading-relaxed overflow-x-auto">
+INSTALLED_APPS = [
+    <span class="text-emerald-400">"django_admin_js",</span>  # Add this before Django Admin
+    "django.contrib.admin",
+    "django.contrib.auth",
+    ...
+]</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="border-t border-slate-800/80 bg-slate-950 py-8 text-center text-xs text-slate-500">
+        <p>&copy; 2026 DjangoAdmin.JS. Released under the MIT License.</p>
+    </footer>
+
+    <!-- Interactive JS Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const mockAdmin = document.getElementById('mock-admin-container');
+            const themePicker = document.getElementById('demo-theme-picker');
+            const stylePicker = document.getElementById('demo-style-picker');
+            const modeLightBtn = document.getElementById('mode-light');
+            const modeDarkBtn = document.getElementById('mode-dark');
+            const searchInput = document.getElementById('demo-search-input');
+            const tableBody = document.getElementById('demo-table-body');
+            const toast = document.getElementById('demo-toast');
+            const toastMsg = document.getElementById('toast-message');
+
+            // Set up state
+            let currentTheme = 'indigo';
+            let currentStyle = 'default';
+            let currentMode = 'dark';
+
+            function updateMockup() {
+                // Clear old styles and themes
+                mockAdmin.className = `transition-all duration-300 min-h-[500px] flex flex-col md:flex-row theme-${currentTheme} style-${currentStyle} mode-${currentMode}`;
+                
+                // Show a brief success notification to mimic saving preferences
+                showToast(`Theme updated: ${currentTheme.toUpperCase()} style: ${currentStyle.toUpperCase()}`);
+            }
+
+            function showToast(msg) {
+                toastMsg.textContent = msg;
+                toast.classList.remove('hidden');
+                setTimeout(() => {
+                    toast.classList.add('hidden');
+                }, 3000);
+            }
+
+            // Bind Event Listeners
+            themePicker.addEventListener('change', (e) => {
+                currentTheme = e.target.value;
+                updateMockup();
+            });
+
+            stylePicker.addEventListener('change', (e) => {
+                currentStyle = e.target.value;
+                updateMockup();
+            });
+
+            modeLightBtn.addEventListener('click', () => {
+                currentMode = 'light';
+                modeLightBtn.classList.add('bg-slate-700', 'text-white', 'font-semibold');
+                modeLightBtn.classList.remove('text-slate-400');
+                modeDarkBtn.classList.remove('bg-slate-700', 'text-white', 'font-semibold');
+                modeDarkBtn.classList.add('text-slate-400');
+                updateMockup();
+            });
+
+            modeDarkBtn.addEventListener('click', () => {
+                currentMode = 'dark';
+                modeDarkBtn.classList.add('bg-slate-700', 'text-white', 'font-semibold');
+                modeDarkBtn.classList.remove('text-slate-400');
+                modeLightBtn.classList.remove('bg-slate-700', 'text-white', 'font-semibold');
+                modeLightBtn.classList.add('text-slate-400');
+                updateMockup();
+            });
+
+            // Simulated Search (Live-search as-you-type feature)
+            const initialRows = Array.from(tableBody.querySelectorAll('tr'));
+            searchInput.addEventListener('input', (e) => {
+                const query = e.target.value.toLowerCase().trim();
+                initialRows.forEach(row => {
+                    const productName = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+                    const category = row.querySelector('td:nth-child(3)').textContent.toLowerCase();
+                    if (productName.includes(query) || category.includes(query)) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            });
+
+            // COMMAND PALETTE LOGIC
+            const paletteModal = document.getElementById('command-palette-modal');
+            const openPaletteBtn = document.getElementById('open-palette-btn');
+            const paletteSearch = document.getElementById('palette-search-input');
+            const paletteItems = document.querySelectorAll('.palette-item');
+
+            function openPalette() {
+                paletteModal.classList.remove('hidden');
+                paletteSearch.focus();
+                paletteSearch.value = '';
+            }
+
+            function closePalette() {
+                paletteModal.classList.add('hidden');
+            }
+
+            openPaletteBtn.addEventListener('click', openPalette);
+
+            // Close on escape
+            window.addEventListener('keydown', (e) => {
+                if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+                    e.preventDefault();
+                    openPalette();
+                }
+                if (e.key === 'Escape') {
+                    closePalette();
+                }
+            });
+
+            // Close when clicking outside modal box
+            paletteModal.addEventListener('click', (e) => {
+                if (e.target === paletteModal) {
+                    closePalette();
+                }
+            });
+
+            // Execute command on option click
+            paletteItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    const cmd = item.getAttribute('data-cmd');
+                    executeCommand(cmd);
+                    closePalette();
+                });
+            });
+
+            // Handle command typing
+            paletteSearch.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    const cmd = paletteSearch.value.trim();
+                    if (cmd.startsWith('/style ') || cmd.startsWith('/color ')) {
+                        executeCommand(cmd);
+                        closePalette();
+                    } else {
+                        showToast(`Command unknown: "${cmd}"`);
+                    }
+                }
+            });
+
+            function executeCommand(cmdString) {
+                if (cmdString.startsWith('/style ')) {
+                    const style = cmdString.replace('/style ', '').trim();
+                    if (['default', 'glassmorphism', 'minimalist'].includes(style)) {
+                        currentStyle = style;
+                        stylePicker.value = style;
+                        updateMockup();
+                    } else {
+                        showToast(`Unknown layout style: ${style}`);
+                    }
+                } else if (cmdString.startsWith('/color ')) {
+                    const color = cmdString.replace('/color ', '').trim();
+                    if (['indigo', 'emerald', 'amber', 'rose', 'violet', 'ocean'].includes(color)) {
+                        currentTheme = color;
+                        themePicker.value = color;
+                        updateMockup();
+                    } else {
+                        showToast(`Unknown theme color: ${color}`);
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

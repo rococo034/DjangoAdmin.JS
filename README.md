@@ -3,24 +3,26 @@
 [![PyPI version](https://img.shields.io/pypi/v/django-admin-js.svg)](https://pypi.org/project/django-admin-js/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-A modern Django Admin experience built with Tailwind CSS and progressive JavaScript enhancements. Features a redesigned UI, improved UX, asynchronous interactions, dynamic visual styles, and a spotlight-like command palette for a faster, more responsive administration panel.
+A modern, responsive, and gorgeous Django Admin experience built with Tailwind CSS and progressive JavaScript enhancements. 
+
+Features a beautifully redesigned UI, customizable graphic styles (glassmorphism/minimalist), seamless AJAX page loads (no full page reloads), asynchronous form actions, and a Spotlight-like interactive Command Palette.
+
+👉 **[Launch the Live Interactive Demo Page](https://rococo034.github.io/DjangoAdmin.JS/)** to experience it directly in your browser!
 
 ---
 
-## ✨ Features
+## ✨ Features & Capabilities
 
-- 🎨 **Tailwind CSS Driven**: Clean, premium aesthetics using the latest utility-first CSS configurations.
-- 📱 **Responsive Layout**: Optimized for mobile, tablet, and desktop viewports.
-- 🌗 **Dark Mode Support**: Built-in support for dark themes with instant toggle and preferences syncing.
-- ⚡ **AJAX Navigation Engine (PJAX)**: Intercepts navigation, pagination, search, and sorting to update content instantly without page reloads.
-- 📩 **Asynchronous Forms & Actions**: Form submissions and deletes happen in the background, complete with inline error handling and success toasts.
-- ⚙️ **Unified Settings**: Configure all behaviors (like live-search, default themes, and styling modes) within a single global dictionary in your settings.
-- 🎭 **Dynamic Layout Styles**: 
-  - `default`: Sleek rounded card modules with subtle shadows (Apple/Tailwind style).
+- 🎨 **Tailwind CSS Driven & Modern UI**: Sleek premium aesthetics with responsive layouts for mobile, tablet, and desktop viewports.
+- 🌗 **Dark Mode Support**: Built-in support for dark themes with instant toggles and settings syncing.
+- ⚡ **Seamless AJAX Navigation (PJAX)**: Instant search, pagination, and sorting filtering without page reloads.
+- 📩 **Asynchronous Forms & Actions**: Non-blocking form submissions and delete actions, with inline validation error styling and success toast notifications.
+- ⚙️ **Unified Configuration Settings**: Easily configure global settings, default layout styles, and colors in `settings.py`.
+- 🎭 **Dynamic Layout Presets**:
+  - `default`: Clean rounded cards with soft shadows.
   - `glassmorphism`: Frosty translucent glass panels with real-time backdrop blur.
-  - `minimalist`: Flat borderless layout with high contrast dark borders and focused input rings.
-- 🛠️ **Theme & Style Picker**: Let admins customize color palettes and layout presets dynamically on the fly.
-- 🔍 **Raycast-Style Command Palette (`Ctrl+K` / `Cmd+K`)**: Spotlight-like search launcher with categorized options, matching keyword highlighting, and live style command executions (e.g. `/style glassmorphism`, `/color emerald`, `/mode dark`).
+  - `minimalist`: High-contrast, borders-first layout with focused input outlines.
+- 🔍 **Raycast/Spotlight Command Palette (`Ctrl+K` / `Cmd+K`)**: Live search bar with instant actions, styled command triggers (e.g. `/style glassmorphism`, `/color emerald`, `/mode dark`), and quick view routes.
 
 ---
 

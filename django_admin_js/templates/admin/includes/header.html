@@ -4,15 +4,8 @@
   <!-- Branding / Logo -->
   <div id="branding" class="flex items-center gap-3">
     <a href="{% url 'admin:index' %}" class="flex items-center gap-2.5 group">
-      <!-- Premium Grid Dashboard Logo Icon -->
-      <div class="w-8 h-8 rounded-lg bg-indigo-600 dark:bg-indigo-500 flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform duration-200">
-        <svg class="w-4.5 h-4.5 text-white" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-          <rect x="3" y="3" width="7" height="9" rx="1.5" />
-          <rect x="14" y="3" width="7" height="5" rx="1.5" />
-          <rect x="14" y="12" width="7" height="9" rx="1.5" />
-          <rect x="3" y="16" width="7" height="5" rx="1.5" />
-        </svg>
-      </div>
+      <!-- Premium Logo Icon -->
+      <img src="{% static 'django_admin_js/logo.png' %}" alt="Logo" class="w-10 h-10 rounded-lg object-cover shadow-sm group-hover:scale-105 transition-transform duration-200">
       <span class="text-lg font-bold tracking-tight text-zinc-900 dark:text-zinc-100 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
         {{ site_header|default:_('Django administration') }}
       </span>

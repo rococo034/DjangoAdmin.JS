@@ -1,5 +1,9 @@
 # DjangoAdmin.JS
 
+<p align="center">
+  <img src="docs/assets/logo.png" alt="DjangoAdmin.JS Logo" width="120" height="120" style="border-radius: 20%;">
+</p>
+
 [![PyPI version](https://img.shields.io/pypi/v/django-admin-js.svg)](https://pypi.org/project/django-admin-js/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 

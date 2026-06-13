@@ -54,12 +54,8 @@
   <div class="relative z-10 w-full max-w-[420px] bg-white/70 dark:bg-zinc-900/70 border border-slate-200/50 dark:border-zinc-800/50 backdrop-blur-xl shadow-2xl rounded-3xl p-8 space-y-6 floating-card transition-all duration-300">
     
     <div class="text-center space-y-2">
-      <!-- Apple-like Logo/Icon -->
-      <div class="mx-auto w-12 h-12 bg-apple-blue rounded-2xl flex items-center justify-center shadow-lg shadow-apple-blue/20">
-        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
-        </svg>
-      </div>
+      <!-- Logo/Icon -->
+      <img src="{% static 'django_admin_js/logo.png' %}" alt="Logo" class="mx-auto w-24 h-24 rounded-3xl object-cover shadow-lg shadow-apple-blue/20">
       <h2 class="text-2xl font-bold tracking-tight bg-gradient-to-r from-apple-text to-slate-500 dark:from-apple-darktext dark:to-slate-400 bg-clip-text text-transparent mt-4">{% translate 'Sign in to Admin' %}</h2>
       <p class="text-xs text-apple-secondary font-medium">Enter your credentials to access the dashboard</p>
     </div>

@@ -2,6 +2,24 @@
 <html>
   <head><title>{% translate 'Popup closing…' %}</title></head>
   <body>
+    <script>
+      try {
+        if (window.parent && window.parent !== window) {
+          Object.defineProperty(window, 'opener', {
+            value: window.parent,
+            writable: true,
+            configurable: true
+          });
+          window.close = function() {
+            if (typeof window.parent.closePopupModal === 'function') {
+              window.parent.closePopupModal();
+            }
+          };
+        }
+      } catch (e) {
+        console.error("Failed to define opener/close:", e);
+      }
+    </script>
     <script id="django-admin-popup-response-constants"
             src="{% static "admin/js/popup_response.js" %}"
             data-popup-response="{{ popup_response_data }}">

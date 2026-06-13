@@ -79,6 +79,19 @@ DJANGO_ADMIN_JS = {
     # Initial graphic layout style 
     # Options: "default", "glassmorphism", "minimalist"
     "THEME_STYLE": "default",
+
+    # Map models/apps to icons.
+    # Supports FontAwesome classes (FontAwesome 6.4.0 is bundled),
+    # Heroicon keywords ("user", "users", "group", "site", "cog", "database", "key", "shield", "tag", "folder"),
+    # or direct custom raw HTML/SVG.
+    "MODEL_ICONS": {
+        "auth.user": "fa-solid fa-user-shield",
+        "auth.group": "fa-solid fa-users-gear",
+        "management.teammember": "fa-solid fa-user-tie",
+        "management.project": "fa-solid fa-diagram-project",
+        "store.product": "fa-solid fa-box-open",
+        # Case-insensitive, supports either <app_label>.<model_name> or just <model_name>
+    }
 }
 ```
 

@@ -131,4 +131,17 @@ DJANGO_ADMIN_JS = {
     "THEME_PICKER": True,
     "DEFAULT_THEME": "emerald",
     "THEME_STYLE": "glassmorphism",
+    "MODEL_ICONS": {
+        "auth.user": "fa-solid fa-user-shield",
+        "auth.group": "fa-solid fa-users-gear",
+        "management.teammember": "fa-solid fa-user-tie",
+        "management.project": "fa-solid fa-diagram-project",
+        "management.task": "fa-solid fa-list-check",
+        "store.category": "fa-solid fa-tags",
+        "store.product": "fa-solid fa-box-open",
+        "store.customer": "fa-solid fa-user-tag",
+        "store.order": "fa-solid fa-receipt",
+        "store.orderitem": "fa-solid fa-dolly",
+    }
 }
+

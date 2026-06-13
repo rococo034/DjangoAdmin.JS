@@ -6,6 +6,8 @@ body {
   color: #0f172a !important;
   margin: 0;
   padding: 0;
+  max-width: 100vw !important;
+  overflow-x: hidden !important;
 }
 
 .dark body {
@@ -20,6 +22,8 @@ body {
   display: flex !important;
   justify-content: space-between !important;
   align-items: center !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
 }
 
 #header a, #header button, #header span, #header form {
@@ -40,10 +44,21 @@ body {
   align-items: center !important;
 }
 
+@media (min-width: 768px) {
+  #user-tools {
+    display: flex !important;
+  }
+}
+
+@media (max-width: 767px) {
+  #user-tools {
+    display: none !important;
+  }
+}
+
 #user-tools {
   float: none !important;
   position: static !important;
-  display: flex !important;
   align-items: center !important;
   gap: 1rem !important;
   margin: 0 !important;
@@ -65,13 +80,25 @@ body {
 }
 
 /* Fieldsets inside change form should remain transparent regardless of theme */
-.change-form fieldset.module {
+.change-form fieldset.module,
+.change-form-card fieldset.module,
+.theme-style-glassmorphism .change-form fieldset.module,
+.theme-style-glassmorphism .change-form-card fieldset.module,
+.theme-style-minimalist .change-form fieldset.module,
+.theme-style-minimalist .change-form-card fieldset.module,
+.dark .theme-style-glassmorphism .change-form fieldset.module,
+.dark .theme-style-glassmorphism .change-form-card fieldset.module,
+.dark .theme-style-minimalist .change-form fieldset.module,
+.dark .theme-style-minimalist .change-form-card fieldset.module {
   background: transparent !important;
   background-color: transparent !important;
   border: none !important;
   box-shadow: none !important;
   padding: 0 !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
 }
+
 
 
 /* Tables & List Override */
@@ -146,12 +173,12 @@ body {
 }
 
 #changelist table tbody th a {
-  color: #6366f1 !important;
+  color: var(--primary-color, #6366f1) !important;
   font-weight: 500 !important;
 }
 
 .dark #changelist table tbody th a {
-  color: #818cf8 !important;
+  color: var(--primary-hover-color, #818cf8) !important;
 }
 
 /* Filter Box Overrides */
@@ -202,12 +229,12 @@ body {
 }
 
 #changelist-filter li.selected a {
-  color: #6366f1 !important;
+  color: var(--primary-color, #6366f1) !important;
   font-weight: 600 !important;
 }
 
 .dark #changelist-filter li.selected a {
-  color: #818cf8 !important;
+  color: var(--primary-hover-color, #818cf8) !important;
 }
 
 /* Custom theme toggle button reset */
@@ -277,13 +304,13 @@ input[type="text"], input[type="password"], input[type="email"], input[type="url
 }
 
 input[type="text"]:focus, input[type="password"]:focus, input[type="email"]:focus, input[type="url"]:focus, input[type="number"]:focus, input[type="tel"]:focus, input[type="date"]:focus, input[type="time"]:focus, input[type="datetime-local"]:focus, textarea:focus, select:focus {
-  border-color: #6366f1 !important;
-  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2) !important;
+  border-color: var(--primary-color, #6366f1) !important;
+  box-shadow: 0 0 0 2px rgba(var(--primary-color-rgb, 99, 102, 241), 0.2) !important;
 }
 
 .dark input[type="text"]:focus, .dark input[type="password"]:focus, .dark input[type="email"]:focus, .dark input[type="url"]:focus, .dark input[type="number"]:focus, .dark input[type="tel"]:focus, .dark input[type="date"]:focus, .dark input[type="time"]:focus, .dark input[type="datetime-local"]:focus, .dark textarea:focus, .dark select:focus {
-  border-color: #818cf8 !important;
-  box-shadow: 0 0 0 2px rgba(129, 140, 248, 0.3) !important;
+  border-color: var(--primary-hover-color, #818cf8) !important;
+  box-shadow: 0 0 0 2px rgba(var(--primary-color-rgb, 129, 140, 248), 0.3) !important;
 }
 
 /* Auto-span main content to full width if sidebar block is empty */
@@ -516,12 +543,12 @@ div.form-row label {
 
 .object-tools a.historylink:hover, .object-tools a.viewsitelink:hover {
   background-color: #f8fafc !important;
-  color: #6366f1 !important;
+  color: var(--primary-color, #6366f1) !important;
 }
 
 .dark .object-tools a.historylink:hover, .dark .object-tools a.viewsitelink:hover {
   background-color: rgba(255, 255, 255, 0.05) !important;
-  color: #818cf8 !important;
+  color: var(--primary-hover-color, #818cf8) !important;
 }
 
 .object-tools a.addlink {
@@ -567,19 +594,19 @@ div.form-row label {
 }
 
 .paginator a:hover {
-  background-color: rgba(99, 102, 241, 0.05) !important;
-  color: #6366f1 !important;
+  background-color: rgba(var(--primary-color-rgb, 99, 102, 241), 0.05) !important;
+  color: var(--primary-color, #6366f1) !important;
 }
 
 .paginator .this-page {
-  background-color: #6366f1 !important;
+  background-color: var(--primary-color, #6366f1) !important;
   color: #ffffff !important;
   font-weight: 600 !important;
 }
 
 .paginator .showall {
   margin-left: auto !important;
-  color: #6366f1 !important;
+  color: var(--primary-color, #6366f1) !important;
   font-weight: 600 !important;
 }
 
@@ -731,23 +758,23 @@ input[type="checkbox"] {
 }
 
 input[type="checkbox"]:hover {
-  border-color: #6366f1 !important;
-  background-color: rgba(99, 102, 241, 0.02) !important;
+  border-color: var(--primary-color, #6366f1) !important;
+  background-color: rgba(var(--primary-color-rgb, 99, 102, 241), 0.02) !important;
 }
 
 .dark input[type="checkbox"]:hover {
-  border-color: #818cf8 !important;
-  background-color: rgba(129, 140, 248, 0.05) !important;
+  border-color: var(--primary-hover-color, #818cf8) !important;
+  background-color: rgba(var(--primary-color-rgb, 129, 140, 248), 0.05) !important;
 }
 
 input[type="checkbox"]:checked {
-  background-color: #6366f1 !important;
-  border-color: #6366f1 !important;
+  background-color: var(--primary-color, #6366f1) !important;
+  border-color: var(--primary-color, #6366f1) !important;
 }
 
 .dark input[type="checkbox"]:checked {
-  background-color: #818cf8 !important;
-  border-color: #818cf8 !important;
+  background-color: var(--primary-hover-color, #818cf8) !important;
+  border-color: var(--primary-hover-color, #818cf8) !important;
 }
 
 input[type="checkbox"]::after {
@@ -976,12 +1003,12 @@ select[multiple] option {
 }
 
 select[multiple] option:checked {
-  background: #6366f1 !important;
+  background: var(--primary-color, #6366f1) !important;
   color: #ffffff !important;
 }
 
 .dark select[multiple] option:checked {
-  background: #818cf8 !important;
+  background: var(--primary-hover-color, #818cf8) !important;
   color: #ffffff !important;
 }
 
@@ -1238,5 +1265,251 @@ select[multiple] option:checked {
 .theme-style-minimalist .aurora-bg {
   display: none !important;
 }
+
+/* Strip card styling from inline groups when nested inside the main change form card */
+.change-form-card .inline-group,
+.change-form-card .inline-related {
+  background: transparent !important;
+  background-color: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+
+
+/* --- Mobile Responsive Sidebar Dropdown --- */
+@keyframes slideDownMobile {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 767px) {
+  #nav-sidebar {
+    display: none !important;
+    position: fixed !important;
+    top: 5rem !important;
+    left: 1rem !important;
+    right: 1rem !important;
+    width: auto !important;
+    height: auto !important;
+    max-height: calc(100vh - 6.5rem) !important;
+    z-index: 999999 !important;
+    margin: 0 !important;
+    border-radius: 1.5rem !important;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25) !important;
+    background-color: rgb(241, 245, 249) !important; /* light theme fallback */
+  }
+  
+  .dark #nav-sidebar {
+    background-color: rgb(15, 23, 42) !important; /* dark theme fallback */
+  }
+
+  .theme-style-glassmorphism #nav-sidebar {
+    background: rgba(241, 245, 249, 0.85) !important;
+    backdrop-filter: blur(25px) !important;
+    -webkit-backdrop-filter: blur(25px) !important;
+  }
+
+  .dark.theme-style-glassmorphism #nav-sidebar,
+  .dark .theme-style-glassmorphism #nav-sidebar {
+    background: rgba(15, 23, 42, 0.85) !important;
+  }
+
+  #nav-sidebar.mobile-open {
+    display: block !important;
+    animation: slideDownMobile 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+  }
+}
+
+
+/* --- Global Responsive Layout & Tables Overrides --- */
+@media (max-width: 1024px) {
+  /* Tables horizontal scrolling */
+  .changelist-form-container {
+    overflow-x: auto !important;
+    width: 100% !important;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  #changelist table {
+    min-width: 800px !important;
+  }
+
+  /* Horizontal Filter Tags */
+  #changelist-filter {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 1rem !important;
+  }
+  
+  #changelist-filter h3 {
+    margin-top: 0.5rem !important;
+    font-size: 0.75rem !important;
+  }
+  
+  #changelist-filter ul {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 0.5rem !important;
+  }
+  
+  #changelist-filter li {
+    margin: 0 !important;
+  }
+  
+  #changelist-filter li a {
+    display: inline-block !important;
+    padding: 0.35rem 0.85rem !important;
+    border-radius: 9999px !important;
+    background-color: rgba(99, 102, 241, 0.08) !important;
+    font-size: 0.75rem !important;
+    font-weight: 600 !important;
+    transition: all 0.15s ease !important;
+  }
+  
+  .dark #changelist-filter li a {
+    background-color: rgba(255, 255, 255, 0.06) !important;
+    color: #cbd5e1 !important;
+  }
+  
+  #changelist-filter li.selected a {
+    background-color: var(--primary-color) !important;
+    color: #ffffff !important;
+  }
+  
+  .dark #changelist-filter li.selected a {
+    background-color: var(--primary-color) !important;
+    color: #ffffff !important;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Forms input stacking and full-width */
+  .form-row input[type="text"],
+  .form-row input[type="password"],
+  .form-row input[type="email"],
+  .form-row input[type="number"],
+  .form-row input[type="url"],
+  .form-row input[type="date"],
+  .form-row input[type="time"],
+  .form-row select,
+  .form-row textarea,
+  .form-row .vTextField,
+  .form-row .vIntegerField,
+  .form-row .vURLField,
+  .form-row .vLargeTextField {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+  
+  /* Stacking Submit Action Row */
+  .submit-row {
+    display: flex !important;
+    flex-direction: column-reverse !important;
+    gap: 0.75rem !important;
+    padding: 1rem !important;
+    background-color: rgba(248, 250, 252, 0.8) !important;
+  }
+  
+  .dark .submit-row {
+    background-color: rgba(17, 24, 39, 0.8) !important;
+  }
+  
+  .submit-row input,
+  .submit-row button,
+  .submit-row a,
+  .submit-row p.deletelink-box {
+    width: 100% !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    margin: 0 !important;
+    height: 2.75rem !important;
+    border-radius: 0.75rem !important;
+  }
+
+  .submit-row p.deletelink-box a {
+    width: 100% !important;
+    height: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 0.75rem !important;
+    margin: 0 !important;
+  }
+
+  /* Inline tabular / stacked groups */
+  .inline-group {
+    padding: 0.5rem !important;
+  }
+  
+  .inline-related {
+    margin-bottom: 1rem !important;
+    padding: 1rem !important;
+    border-radius: 1rem !important;
+  }
+
+  /* Command Palette Responsive */
+  #command-palette .modal-dialog {
+    width: 95% !important;
+    max-width: 100% !important;
+    margin: 2.5% auto !important;
+  }
+  
+  /* Popup Iframe Responsive overrides */
+  .modal-overlay-popup .modal-dialog {
+    width: 95vw !important;
+    height: 90vh !important;
+    max-height: 90vh !important;
+  }
+
+  /* Toolbar/Search layout stacking */
+  #changelist-search {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 0.75rem !important;
+  }
+  
+  #changelist-search input[type="text"] {
+    width: 100% !important;
+  }
+
+  #changelist-search .search-actions {
+    width: 100% !important;
+    display: flex !important;
+    gap: 0.5rem !important;
+  }
+  
+  #changelist-search .search-actions button,
+  #changelist-search .search-actions a {
+    flex: 1 !important;
+    justify-content: center !important;
+  }
+
+  /* Object tools list wrapping */
+  .object-tools {
+    flex-wrap: wrap !important;
+    width: 100% !important;
+  }
+  
+  .object-tools li,
+  .object-tools a,
+  .object-tools button {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+}
+
+
+
 
 

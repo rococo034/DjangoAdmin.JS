@@ -221,33 +221,57 @@
         </section>
 
         <!-- Installation Instructions -->
-        <section id="installation" class="py-16 bg-slate-100/40 border-t border-slate-200/80">
+        <section id="installation" class="py-20 bg-slate-100/40 border-t border-slate-200/80">
             <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="text-center mb-12">
-                    <h2 class="text-3xl font-bold font-outfit text-slate-900">Quick Installation</h2>
-                    <p class="text-slate-650 mt-2">Upgrade your Django workspace in minutes.</p>
+                <div class="text-center mb-16">
+                    <span class="px-3.5 py-1 text-xs font-bold uppercase tracking-wider rounded-full bg-indigo-500/10 text-indigo-700 border border-indigo-550/20">Get Started</span>
+                    <h2 class="text-3xl font-bold font-outfit mt-4 text-slate-900">Quick Installation</h2>
+                    <p class="text-slate-655 mt-2">Integrate DjangoAdmin.JS into your workspace in less than 2 minutes.</p>
                 </div>
 
-                <div class="space-y-6">
-                    <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm">
-                        <p class="text-sm font-semibold text-slate-800 mb-2">1. Install DjangoAdmin.JS via pip</p>
-                        <div class="bg-slate-900 p-4 rounded-lg flex items-center justify-between border border-slate-800">
-                            <code class="font-mono text-sm text-emerald-450">pip install django-admin-js</code>
-                            <button onclick="navigator.clipboard.writeText('pip install django-admin-js')" class="text-xs text-slate-400 hover:text-white transition-colors">Copy</button>
+                <!-- Stepper Timeline Container -->
+                <div class="space-y-12 relative before:absolute before:inset-0 before:left-8 before:top-4 before:bottom-4 before:w-[2px] before:bg-slate-200">
+                    
+                    <!-- Step 1 -->
+                    <div class="relative pl-16 group">
+                        <div class="absolute left-3.5 top-0 w-9 h-9 rounded-full bg-indigo-650 text-white flex items-center justify-center font-bold text-sm shadow-md shadow-indigo-600/10 transition-transform group-hover:scale-105">1</div>
+                        <h3 class="text-lg font-bold text-slate-900 mb-2 font-outfit">Install the Package</h3>
+                        <p class="text-sm text-slate-650 mb-4">Run the following command in your terminal to install the latest stable package via PyPI:</p>
+                        <div class="bg-slate-900 rounded-xl p-4 flex items-center justify-between border border-slate-800 shadow-md">
+                            <code class="font-mono text-sm text-emerald-400">pip install django-admin-js</code>
+                            <button onclick="navigator.clipboard.writeText('pip install django-admin-js'); this.textContent='Copied!'; setTimeout(() => this.textContent='Copy', 2000)" class="px-3 py-1 rounded bg-slate-800 hover:bg-slate-700 text-xs font-medium text-slate-300 hover:text-white transition-colors border border-slate-700">Copy</button>
                         </div>
                     </div>
 
-                    <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm">
-                        <p class="text-sm font-semibold text-slate-800 mb-2">2. Register in your INSTALLED_APPS</p>
-                        <p class="text-xs text-slate-500 mb-3">Ensure it is ordered before Django's core administration application:</p>
-                        <div class="bg-slate-900 p-4 rounded-lg border border-slate-800">
-                            <pre class="font-mono text-xs text-slate-350 leading-relaxed overflow-x-auto">
+                    <!-- Step 2 -->
+                    <div class="relative pl-16 group">
+                        <div class="absolute left-3.5 top-0 w-9 h-9 rounded-full bg-indigo-655 text-white flex items-center justify-center font-bold text-sm shadow-md shadow-indigo-600/10 transition-transform group-hover:scale-105">2</div>
+                        <h3 class="text-lg font-bold text-slate-900 mb-2 font-outfit">Register in INSTALLED_APPS</h3>
+                        <p class="text-sm text-slate-650 mb-4">Add the package name to your registered applications dictionary inside your project's <code class="px-1.5 py-0.5 rounded bg-slate-200/60 text-xs font-mono text-slate-700">settings.py</code> file. **Important:** It must be placed before <code class="px-1.5 py-0.5 rounded bg-slate-200/60 text-xs font-mono text-slate-700">django.contrib.admin</code>:</p>
+                        <div class="bg-slate-900 rounded-xl p-4 border border-slate-800 shadow-md">
+                            <pre class="font-mono text-xs text-slate-300 leading-relaxed overflow-x-auto">
 INSTALLED_APPS = [
     <span class="text-emerald-400">"django_admin_js",</span>  # Add this before Django Admin
     "django.contrib.admin",
     "django.contrib.auth",
     ...
 ]</pre>
+                        </div>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="relative pl-16 group">
+                        <div class="absolute left-3.5 top-0 w-9 h-9 rounded-full bg-indigo-655 text-white flex items-center justify-center font-bold text-sm shadow-md shadow-indigo-600/10 transition-transform group-hover:scale-105">3</div>
+                        <h3 class="text-lg font-bold text-slate-900 mb-2 font-outfit">Configure Customize Preferences (Optional)</h3>
+                        <p class="text-sm text-slate-655 mb-4">You can set default visual presets, themes, and behavior controls using the following global configuration dictionary in your <code class="px-1.5 py-0.5 rounded bg-slate-200/60 text-xs font-mono text-slate-700">settings.py</code>:</p>
+                        <div class="bg-slate-900 rounded-xl p-4 border border-slate-800 shadow-md">
+                            <pre class="font-mono text-xs text-slate-300 leading-relaxed overflow-x-auto">
+DJANGO_ADMIN_JS = {
+    "LIVE_SEARCH": True,         # Live filtering as-you-type
+    "THEME_PICKER": True,        # Show the layout/color switcher widget
+    "DEFAULT_THEME": "indigo",   # Preset choices: indigo, emerald, rose, amber, ocean, violet
+    "THEME_STYLE": "default",    # Layout choices: default, glassmorphism, minimalist
+}</pre>
                         </div>
                     </div>
                 </div>

@@ -1,0 +1,208 @@
+<div class="relative inline-block text-left" id="color-picker-container">
+  <button type="button" id="color-picker-trigger" class="p-2 rounded-xl text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200 hover:bg-slate-100 dark:hover:bg-zinc-800/60 transition-all duration-150 flex items-center justify-center cursor-pointer" title="Personalizza tema grafico">
+    <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M9.53 16.122a3 3 0 00-5.78 1.128 2.25 2.25 0 01-2.4 2.245 4.5 4.5 0 008.4-2.245c0-.399-.078-.78-.22-1.128zm0 0a15.998 15.998 0 003.388-1.62m-5.043-.025a15.994 15.994 0 011.622-3.395m3.42 3.42a15.995 15.995 0 004.764-4.648l3.876-5.814a1.151 1.151 0 00-1.597-1.597L14.146 6.32a15.996 15.996 0 00-4.649 4.763m3.42 3.42a6.776 6.776 0 00-3.42-3.42" />
+    </svg>
+  </button>
+
+  <div id="color-picker-dropdown" class="hidden absolute right-0 mt-2.5 w-52 rounded-2xl bg-white/95 dark:bg-zinc-900/95 border border-slate-200/80 dark:border-zinc-850 backdrop-blur-md shadow-xl z-50 p-4 transition-all duration-150 origin-top-right transform scale-95 opacity-0">
+    <div class="text-[10px] font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider mb-2.5">Colori Tema</div>
+    <div class="grid grid-cols-4 gap-2.5">
+      {% for theme in js_settings.themes %}
+        <button type="button" 
+                class="color-option-btn w-9 h-9 rounded-full border-2 border-transparent hover:scale-110 active:scale-95 transition-all duration-150 relative flex items-center justify-center cursor-pointer shadow-sm"
+                data-id="{{ theme.id }}"
+                data-primary="{{ theme.primary }}" 
+                data-hover="{{ theme.hover }}"
+                data-bg-light="{{ theme.bg_light }}"
+                data-bg-dark="{{ theme.bg_dark }}"
+                data-card-light="{{ theme.card_light }}"
+                data-card-dark="{{ theme.card_dark }}"
+                data-name="{{ theme.name }}"
+                title="{{ theme.name }}"
+                style="background-color: {{ theme.primary }}">
+          <span class="sr-only">{{ theme.name }}</span>
+          <svg class="w-4.5 h-4.5 text-white hidden check-icon" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+          </svg>
+        </button>
+      {% endfor %}
+    </div>
+
+    <div class="h-px bg-slate-200/60 dark:bg-zinc-800/80 my-3.5"></div>
+    <div class="text-[10px] font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider mb-2">Stile Layout</div>
+    <div class="flex flex-col gap-1.5">
+      <button type="button" class="layout-option-btn w-full px-3 py-1.5 text-xs font-semibold rounded-lg text-left transition-colors duration-150 cursor-pointer border border-transparent text-slate-700 hover:bg-slate-100 dark:text-zinc-300 dark:hover:bg-zinc-800/60 flex items-center justify-between" data-style="default">
+        <span>Sleek Default</span>
+        <svg class="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400 hidden check-style-icon" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+        </svg>
+      </button>
+      <button type="button" class="layout-option-btn w-full px-3 py-1.5 text-xs font-semibold rounded-lg text-left transition-colors duration-150 cursor-pointer border border-transparent text-slate-700 hover:bg-slate-100 dark:text-zinc-300 dark:hover:bg-zinc-800/60 flex items-center justify-between" data-style="glassmorphism">
+        <span>Glassmorphism</span>
+        <svg class="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400 hidden check-style-icon" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+        </svg>
+      </button>
+      <button type="button" class="layout-option-btn w-full px-3 py-1.5 text-xs font-semibold rounded-lg text-left transition-colors duration-150 cursor-pointer border border-transparent text-slate-700 hover:bg-slate-100 dark:text-zinc-300 dark:hover:bg-zinc-800/60 flex items-center justify-between" data-style="minimalist">
+        <span>Minimal Outline</span>
+        <svg class="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400 hidden check-style-icon" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+        </svg>
+      </button>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  (function() {
+    const container = document.getElementById('color-picker-container');
+    const trigger = document.getElementById('color-picker-trigger');
+    const dropdown = document.getElementById('color-picker-dropdown');
+    const options = document.querySelectorAll('.color-option-btn');
+    const layoutOptions = document.querySelectorAll('.layout-option-btn');
+
+    if (!container || !trigger || !dropdown) return;
+
+    // Toggle dropdown
+    trigger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isHidden = dropdown.classList.contains('hidden');
+      if (isHidden) {
+        dropdown.classList.remove('hidden');
+        requestAnimationFrame(() => {
+          dropdown.classList.remove('scale-95', 'opacity-0');
+          dropdown.classList.add('scale-100', 'opacity-100');
+        });
+      } else {
+        closeDropdown();
+      }
+    });
+
+    function closeDropdown() {
+      dropdown.classList.remove('scale-100', 'opacity-100');
+      dropdown.classList.add('scale-95', 'opacity-0');
+      setTimeout(() => {
+        if (dropdown.classList.contains('opacity-0')) {
+          dropdown.classList.add('hidden');
+        }
+      }, 150);
+    }
+
+    // Close on click outside
+    document.addEventListener('click', (e) => {
+      if (!container.contains(e.target)) {
+        closeDropdown();
+      }
+    });
+
+    function hexToRgb(hex) {
+      var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+      hex = hex.replace(shorthandRegex, function(m, r, g, b) {
+        return r + r + g + g + b + b;
+      });
+      var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+      return result ? `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}` : null;
+    }
+
+    // Theme Color application
+    function applyTheme(themeObj) {
+      document.documentElement.style.setProperty('--primary-color', themeObj.primary);
+      document.documentElement.style.setProperty('--primary-hover-color', themeObj.hover);
+      
+      const rgb = hexToRgb(themeObj.primary);
+      if (rgb) {
+        document.documentElement.style.setProperty('--primary-color-rgb', rgb);
+      }
+      
+      document.documentElement.style.setProperty('--bg-light', themeObj.bgLight);
+      document.documentElement.style.setProperty('--bg-dark', themeObj.bgDark);
+      document.documentElement.style.setProperty('--card-light', themeObj.cardLight);
+      document.documentElement.style.setProperty('--card-dark', themeObj.cardDark);
+      
+      localStorage.setItem('selected-theme-id', themeObj.id);
+      
+      updateCheckedState(themeObj.id);
+    }
+
+    function updateCheckedState(themeId) {
+      options.forEach(btn => {
+        const check = btn.querySelector('.check-icon');
+        const isCurrent = btn.getAttribute('data-id') === themeId;
+        if (isCurrent) {
+          check.classList.remove('hidden');
+          btn.classList.add('border-indigo-600', 'dark:border-indigo-400');
+        } else {
+          check.classList.add('hidden');
+          btn.classList.remove('border-indigo-600', 'dark:border-indigo-400');
+        }
+      });
+    }
+
+    // Layout Style application
+    function applyLayoutStyle(style) {
+      document.documentElement.classList.remove('theme-style-default', 'theme-style-glassmorphism', 'theme-style-minimalist');
+      document.documentElement.classList.add(`theme-style-${style}`);
+      
+      // Update body tag if it exists in DOM yet
+      const body = document.body;
+      if (body) {
+        body.classList.remove('theme-style-default', 'theme-style-glassmorphism', 'theme-style-minimalist');
+        body.classList.add(`theme-style-${style}`);
+      }
+
+
+      localStorage.setItem('selected-theme-style', style);
+      updateCheckedStyleState(style);
+    }
+
+    function updateCheckedStyleState(style) {
+      layoutOptions.forEach(btn => {
+        const check = btn.querySelector('.check-style-icon');
+        const btnStyle = btn.getAttribute('data-style');
+        const isCurrent = btnStyle === style;
+        
+        if (isCurrent) {
+          check.classList.remove('hidden');
+          btn.className = 'layout-option-btn w-full px-3 py-1.5 text-xs rounded-lg text-left transition-colors duration-150 cursor-pointer border bg-indigo-50 border-indigo-250 text-indigo-650 dark:bg-indigo-950/20 dark:border-indigo-900/60 dark:text-indigo-400 font-bold flex items-center justify-between';
+        } else {
+          check.classList.add('hidden');
+          btn.className = 'layout-option-btn w-full px-3 py-1.5 text-xs font-semibold rounded-lg text-left transition-colors duration-150 cursor-pointer border border-transparent text-slate-700 hover:bg-slate-100 dark:text-zinc-300 dark:hover:bg-zinc-800/60 flex items-center justify-between';
+        }
+      });
+    }
+
+    // Bind option click listeners
+    options.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const themeObj = {
+          id: btn.getAttribute('data-id'),
+          primary: btn.getAttribute('data-primary'),
+          hover: btn.getAttribute('data-hover'),
+          bgLight: btn.getAttribute('data-bg-light'),
+          bgDark: btn.getAttribute('data-bg-dark'),
+          cardLight: btn.getAttribute('data-card-light'),
+          cardDark: btn.getAttribute('data-card-dark')
+        };
+        applyTheme(themeObj);
+      });
+    });
+
+    layoutOptions.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const style = btn.getAttribute('data-style');
+        applyLayoutStyle(style);
+      });
+    });
+
+    // Initial check state on load
+    const savedThemeId = localStorage.getItem('selected-theme-id') || "{{ js_settings.default_theme }}";
+    updateCheckedState(savedThemeId);
+
+    const savedStyle = localStorage.getItem('selected-theme-style') || "{{ js_settings.theme_style|default:'default' }}";
+    updateCheckedStyleState(savedStyle);
+  })();
+</script>

@@ -12,6 +12,16 @@
   {% endif %}
   {{ media.css }}
   <style>
+    #changelist-loading-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 0%;
+      height: 3px;
+      background: #6366f1;
+      z-index: 999999;
+      transition: width 0.2s ease, opacity 0.2s ease;
+    }
     #changelist {
       gap: 0.75rem !important;
     }
@@ -244,80 +254,6 @@
           </form>
         </div>
       </div>
-      
-      <script>
-        document.addEventListener('DOMContentLoaded', () => {
-          const table = document.getElementById('result_list');
-          if (!table) return;
-          
-          // 1. Add Actions header to thead
-          const theadRow = table.querySelector('thead tr');
-          if (theadRow) {
-            const actionsHeader = document.createElement('th');
-            actionsHeader.scope = 'col';
-            actionsHeader.className = 'text-right p-4 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-zinc-400 w-32';
-            actionsHeader.innerHTML = '<div class="text text-right">Actions</div>';
-            theadRow.appendChild(actionsHeader);
-          }
-          
-          // 2. Process each row in tbody
-          const rows = table.querySelectorAll('tbody tr');
-          rows.forEach(row => {
-            let detailUrl = null;
-            let originalLink = null;
-            
-            // Scan all links in the row to find the detail link (ends with /change/ or contains /change/?)
-            const links = row.querySelectorAll('a');
-            links.forEach(link => {
-              const href = link.getAttribute('href');
-              if (href && (href.endsWith('/change/') || href.includes('/change/?') || href.includes('/change/&') || /\/\d+\/change\//.test(href))) {
-                detailUrl = href;
-                originalLink = link;
-              }
-            });
-            
-            if (detailUrl && originalLink) {
-              // Replace the clickable link with its plain text
-              const textSpan = document.createElement('span');
-              textSpan.textContent = originalLink.textContent;
-              textSpan.className = 'text-slate-700 dark:text-zinc-300 font-semibold';
-              originalLink.parentNode.replaceChild(textSpan, originalLink);
-              
-              // Compute delete URL
-              const deleteUrl = detailUrl.replace('/change/', '/delete/');
-              
-              // Create Actions cell
-              const actionsCell = document.createElement('td');
-              actionsCell.className = 'p-4 text-right align-middle whitespace-nowrap space-x-2';
-              
-              // Detail button
-              const detailBtn = document.createElement('a');
-              detailBtn.href = detailUrl;
-              detailBtn.className = 'inline-flex items-center justify-center p-2 text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/20 hover:bg-blue-100 dark:hover:bg-blue-900/40 rounded-lg transition-colors';
-              detailBtn.setAttribute('data-tooltip', 'Dettaglio');
-              detailBtn.innerHTML = `
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125" /></svg>
-              `;
-              
-              // Delete button
-              const deleteBtn = document.createElement('a');
-              deleteBtn.href = deleteUrl;
-              deleteBtn.className = 'inline-flex items-center justify-center p-2 text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-950/20 hover:bg-red-100 dark:hover:bg-red-900/40 rounded-lg transition-colors';
-              deleteBtn.setAttribute('data-tooltip', 'Elimina');
-              deleteBtn.innerHTML = `
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
-              `;
-              
-              actionsCell.appendChild(detailBtn);
-              actionsCell.appendChild(deleteBtn);
-              row.appendChild(actionsCell);
-            } else {
-              const actionsCell = document.createElement('td');
-              row.appendChild(actionsCell);
-            }
-          });
-        });
-      </script>
     {% endblock %}
   </div>
 {% endblock %}

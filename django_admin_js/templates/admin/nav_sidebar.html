@@ -1,16 +1,6 @@
 {% load i18n %}
 <nav class="sticky top-28 h-[calc(100vh-140px)] w-72 shrink-0 border border-slate-300/80 dark:border-zinc-800/80 bg-slate-100/80 dark:bg-zinc-900/60 backdrop-blur-md p-6 overflow-y-auto space-y-6 hidden md:block rounded-2xl ml-0 mb-6 shadow-xl shadow-slate-200/40 dark:shadow-black/30" id="nav-sidebar" aria-label="{% translate 'Sidebar' %}">
-  <div class="relative">
-    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-      <svg class="h-4 w-4 text-apple-secondary" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-      </svg>
-    </div>
-    <input type="search" id="nav-filter"
-           placeholder="{% translate 'Start typing to filter…' %}"
-           aria-label="{% translate 'Filter navigation items' %}"
-           class="w-full pl-9 pr-4 py-2.5 bg-white dark:bg-apple-darkcard border border-apple-border/50 dark:border-apple-darkborder/50 rounded-xl text-xs font-medium focus:outline-none focus:ring-2 focus:ring-apple-blue/50 focus:border-apple-blue transition-all text-apple-text dark:text-apple-darktext">
-  </div>
+
   <div class="space-y-4">
     {% include 'admin/app_list.html' with app_list=available_apps show_changelinks=False %}
   </div>

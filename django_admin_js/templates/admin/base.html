@@ -1,10 +1,63 @@
-{% load i18n static %}<!DOCTYPE html>
+{% load i18n static admin_stats %}<!DOCTYPE html>
 {% get_current_language as LANGUAGE_CODE %}{% get_current_language_bidi as LANGUAGE_BIDI %}
+{% django_admin_js_settings as js_settings %}
 <html lang="{{ LANGUAGE_CODE|default:"en-us" }}" dir="{{ LANGUAGE_BIDI|yesno:'rtl,ltr,auto' }}" class="h-full">
 <head>
 <title>{% block title %}{% endblock %}</title>
 <!-- Tailwind CSS CDN -->
 <script src="https://cdn.tailwindcss.com"></script>
+<script>
+  // Apply theme and custom colors immediately to prevent flashing of un-themed content
+  (function() {
+    const themeMode = localStorage.getItem('theme') || 'auto';
+    if (themeMode === 'dark' || (themeMode === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+
+    function hexToRgb(hex) {
+      var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+      hex = hex.replace(shorthandRegex, function(m, r, g, b) {
+        return r + r + g + g + b + b;
+      });
+      var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+      return result ? `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}` : null;
+    }
+
+    const themesList = {{ js_settings.themes_json|safe }};
+    const defaultThemeId = "{{ js_settings.default_theme }}";
+    const themePickerEnabled = {{ js_settings.theme_picker|yesno:"true,false" }};
+
+    let selectedThemeId = defaultThemeId;
+    let activeStyle = "{{ js_settings.theme_style|default:'default' }}";
+    if (themePickerEnabled) {
+      selectedThemeId = localStorage.getItem('selected-theme-id') || defaultThemeId;
+      activeStyle = localStorage.getItem('selected-theme-style') || activeStyle;
+    }
+
+    // Set style layout class immediately on documentElement to prevent styling flashes
+    document.documentElement.classList.remove('theme-style-default', 'theme-style-glassmorphism', 'theme-style-minimalist');
+    document.documentElement.classList.add(`theme-style-${activeStyle}`);
+
+
+    // Find active theme object
+    let activeTheme = themesList.find(t => t.id === selectedThemeId) || themesList.find(t => t.id === defaultThemeId) || themesList[0];
+
+    if (activeTheme) {
+      document.documentElement.style.setProperty('--primary-color', activeTheme.primary);
+      document.documentElement.style.setProperty('--primary-hover-color', activeTheme.hover);
+      const rgb = hexToRgb(activeTheme.primary);
+      if (rgb) {
+        document.documentElement.style.setProperty('--primary-color-rgb', rgb);
+      }
+      document.documentElement.style.setProperty('--bg-light', activeTheme.bg_light);
+      document.documentElement.style.setProperty('--bg-dark', activeTheme.bg_dark);
+      document.documentElement.style.setProperty('--card-light', activeTheme.card_light);
+      document.documentElement.style.setProperty('--card-dark', activeTheme.card_dark);
+    }
+  })();
+</script>
 <script>
   tailwind.config = {
     darkMode: 'class',
@@ -14,13 +67,26 @@
           sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', 'sans-serif'],
         },
         colors: {
+          indigo: {
+            50: 'rgba(var(--primary-color-rgb, 99, 102, 241), 0.08)',
+            100: 'rgba(var(--primary-color-rgb, 99, 102, 241), 0.15)',
+            200: 'rgba(var(--primary-color-rgb, 99, 102, 241), 0.3)',
+            300: 'rgba(var(--primary-color-rgb, 99, 102, 241), 0.5)',
+            400: 'var(--primary-color, #6366f1)',
+            500: 'var(--primary-color, #6366f1)',
+            600: 'var(--primary-color, #6366f1)',
+            700: 'var(--primary-hover-color, #4f46e5)',
+            800: 'var(--primary-hover-color, #4f46e5)',
+            900: 'var(--primary-hover-color, #4f46e5)',
+            950: 'rgba(var(--primary-color-rgb, 99, 102, 241), 0.2)',
+          },
           apple: {
-            blue: '#6366f1', /* Indigo primary color */
-            'blue-hover': '#4f46e5',
-            bg: '#f8fafc', /* Slate-like clean light bg */
-            darkbg: '#090d16', /* Rich space gray/black */
-            card: '#ffffff',
-            darkcard: '#111827',
+            blue: 'var(--primary-color, #6366f1)', /* Dynamic primary color */
+            'blue-hover': 'var(--primary-hover-color, #4f46e5)', /* Dynamic hover color */
+            bg: 'var(--bg-light, #f8fafc)', /* Dynamic clean light bg */
+            darkbg: 'var(--bg-dark, #090d16)', /* Dynamic rich space gray/black */
+            card: 'var(--card-light, #ffffff)',
+            darkcard: 'var(--card-dark, #111827)',
             border: '#e2e8f0',
             darkborder: '#1f2937',
             text: '#0f172a',
@@ -49,7 +115,7 @@
 {% block blockbots %}<meta name="robots" content="NONE,NOARCHIVE">{% endblock %}
 </head>
 
-<body class="{% if is_popup %}popup {% endif %}{% block bodyclass %}{% endblock %} h-full text-apple-text dark:text-apple-darktext bg-apple-bg dark:bg-apple-darkbg font-sans antialiased relative overflow-x-hidden" data-admin-utc-offset="{% now "Z" %}">
+<body class="{% if is_popup %}popup {% endif %}{% block bodyclass %}{% endblock %} theme-style-{{ js_settings.theme_style|default:'default' }} h-full text-apple-text dark:text-apple-darktext bg-apple-bg dark:bg-apple-darkbg font-sans antialiased relative overflow-x-hidden" data-admin-utc-offset="{% now "Z" %}">
 {% include "admin/includes/aurora_bg.html" %}
 
 <a href="#content-start" class="sr-only focus:not-sr-only focus:absolute focus:p-4 focus:bg-apple-card focus:text-apple-blue focus:rounded-lg">{% translate 'Skip to main content' %}</a>
@@ -140,7 +206,12 @@
           {% endblock %}
         </div>
         
-        {% block footer %}<footer id="footer" class="mt-12 text-center text-xs text-apple-secondary"></footer>{% endblock %}
+        {% block footer %}
+        <footer id="footer" class="mt-12 text-center text-xs text-apple-secondary font-medium pb-8">
+            Powered by <a href="https://github.com/rococo034/DjangoAdmin.JS" target="_blank" rel="noopener noreferrer" class="font-semibold text-indigo-650 dark:text-indigo-400 hover:underline">DjangoAdmin.JS</a> v{% django_admin_js_version %}
+        </footer>
+        {% endblock %}
+
       </main>
     </div>
 </div>
@@ -153,6 +224,16 @@
 </svg>
 
 <style>
+  #changelist-loading-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 0%;
+    height: 3px;
+    background: #6366f1;
+    z-index: 999999;
+    transition: width 0.2s ease, opacity 0.2s ease;
+  }
   /* Custom Select accessibility hidden style */
   .custom-select-hidden {
     position: absolute !important;
@@ -166,6 +247,26 @@
     border: 0 !important;
   }
   
+  /* Modern thin scrollbar for nav-sidebar */
+  #nav-sidebar::-webkit-scrollbar {
+    width: 5px;
+  }
+  #nav-sidebar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  #nav-sidebar::-webkit-scrollbar-thumb {
+    background: rgba(156, 163, 175, 0.25);
+    border-radius: 9999px;
+  }
+  #nav-sidebar::-webkit-scrollbar-thumb:hover {
+    background: rgba(156, 163, 175, 0.45);
+  }
+  /* Firefox */
+  #nav-sidebar {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(156, 163, 175, 0.25) transparent;
+  }
+
   /* Prevent parent clipping in Django Admin's default form rows and fieldsets */
   .form-row, .aligned, .module, fieldset, td {
     overflow: visible !important;
@@ -182,6 +283,11 @@
 </style>
 
 <script>
+  {% django_admin_js_settings as js_settings %}
+  window.DJANGO_ADMIN_JS_SETTINGS = {
+    liveSearch: {{ js_settings.live_search|yesno:"true,false" }}
+  };
+
   function initCustomSelects() {
     const selects = document.querySelectorAll('select:not([multiple]):not([data-custom-select])');
     
@@ -623,27 +729,45 @@
           confirmBtn.disabled = true;
           confirmBtn.textContent = 'Deleting...';
           
-          const dummyForm = document.createElement('form');
-          dummyForm.method = 'POST';
-          dummyForm.action = deleteUrl;
-          
           const csrf = doc.querySelector('input[name="csrfmiddlewaretoken"]')?.value || document.querySelector('[name=csrfmiddlewaretoken]')?.value;
+          const formData = new FormData();
           if (csrf) {
-            const csrfInput = document.createElement('input');
-            csrfInput.type = 'hidden';
-            csrfInput.name = 'csrfmiddlewaretoken';
-            csrfInput.value = csrf;
-            dummyForm.appendChild(csrfInput);
+            formData.append('csrfmiddlewaretoken', csrf);
           }
+          formData.append('post', 'yes');
           
-          const postInput = document.createElement('input');
-          postInput.type = 'hidden';
-          postInput.name = 'post';
-          postInput.value = 'yes';
-          dummyForm.appendChild(postInput);
-          
-          document.body.appendChild(dummyForm);
-          dummyForm.submit();
+          fetch(deleteUrl, {
+            method: 'POST',
+            body: formData
+          })
+          .then(res => {
+            if (!res.ok) throw new Error('Delete failed');
+            return res.text();
+          })
+          .then(html => {
+            closeModal();
+            
+            // Parse messages from the response and show them
+            const parser = new DOMParser();
+            const responseDoc = parser.parseFromString(html, 'text/html');
+            window.showToastsFromDocument(responseDoc);
+            
+            // Reload the list asynchronously if possible
+            if (typeof loadChangelistPage === 'function') {
+              loadChangelistPage(window.location.href, false);
+            } else {
+              window.location.reload();
+            }
+          })
+          .catch(err => {
+            console.error('Delete error:', err);
+            confirmBtn.disabled = false;
+            confirmBtn.textContent = 'Yes, Delete';
+            const errorMsg = document.createElement('p');
+            errorMsg.className = 'text-sm text-red-500 font-medium mt-4';
+            errorMsg.textContent = 'Error executing deletion. Please try again.';
+            body.appendChild(errorMsg);
+          });
         };
       })
       .catch(err => {
@@ -843,7 +967,310 @@
       selectObserver.observe(chosenSelect, { childList: true });
     });
   }
+
+  window.initDragAndDropUploaders = function() {
+    const fileInputs = document.querySelectorAll('input[type="file"]:not([data-drag-uploader-init])');
+    fileInputs.forEach(input => {
+      input.setAttribute('data-drag-uploader-init', 'true');
+      
+      // Hide the native input (visually hidden)
+      input.style.position = 'absolute';
+      input.style.width = '1px';
+      input.style.height = '1px';
+      input.style.padding = '0';
+      input.style.margin = '-1px';
+      input.style.overflow = 'hidden';
+      input.style.clip = 'rect(0,0,0,0)';
+      input.style.border = '0';
+
+      // Create container wrapper
+      const wrapper = document.createElement('div');
+      wrapper.className = 'drag-drop-wrapper w-full max-w-lg mt-1';
+      input.parentNode.insertBefore(wrapper, input);
+      wrapper.appendChild(input);
+
+      // Check for existing file (ClearableFileInput)
+      const parent = wrapper.parentNode;
+      let existingFileUrl = null;
+      let existingFileName = null;
+      let clearCheckbox = null;
+
+      // Extract existing file link before hiding
+      const links = parent.querySelectorAll('a');
+      links.forEach(link => {
+        if (link.href && (link.href.includes('/media/') || link.href.includes('/static/') || link.href.includes('product') || link.href.includes('upload') || link.href.includes('products') || /\.(jpg|jpeg|png|gif|svg|webp|pdf|txt|doc|docx|xls|xlsx|zip|tar|gz|mp4|avi)$/i.test(link.href))) {
+          existingFileUrl = link.href;
+          existingFileName = link.textContent.trim();
+        }
+      });
+
+      // Find clear checkbox
+      const checkboxes = parent.querySelectorAll('input[type="checkbox"]');
+      checkboxes.forEach(cb => {
+        if (cb.name && cb.name.includes('-clear')) {
+          clearCheckbox = cb;
+        }
+      });
+
+      // Hide all other sibling elements and clear sibling text nodes, keeping only the main field label, our wrapper, errors, and help texts
+      const mainLabel = parent.querySelector(`label[for="${input.id}"]`) || parent.querySelector('label:not([for*="-clear"])');
+      
+      Array.from(parent.childNodes).forEach(node => {
+        if (node === wrapper || node === mainLabel) {
+          return;
+        }
+        if (node.nodeType === Node.ELEMENT_NODE) {
+          if (node.classList.contains('errorlist') || node.classList.contains('help')) {
+            return;
+          }
+          if (node === clearCheckbox) {
+            node.style.display = 'none';
+            return;
+          }
+          node.style.display = 'none';
+        } else if (node.nodeType === Node.TEXT_NODE) {
+          node.textContent = '';
+        }
+      });
+
+      // Create Drag & Drop Zone element
+      const dropzone = document.createElement('div');
+      dropzone.className = 'drag-drop-zone border-2 border-dashed border-gray-300 dark:border-gray-700/85 rounded-2xl p-6 text-center cursor-pointer hover:border-indigo-500/80 dark:hover:border-indigo-400/80 hover:bg-indigo-50/10 dark:hover:bg-indigo-950/5 transition-all duration-250 flex flex-col items-center justify-center gap-2 select-none min-h-[140px]';
+      dropzone.innerHTML = `
+        <svg class="w-8 h-8 text-gray-400 dark:text-zinc-550 group-hover:text-indigo-500 transition-colors" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z" />
+        </svg>
+        <span class="text-xs font-bold text-gray-700 dark:text-zinc-350">Trascina un file qui o clicca per caricare</span>
+        <span class="text-[10px] text-gray-450 dark:text-zinc-500">Supporta qualsiasi tipo di file (max 10MB)</span>
+      `;
+      wrapper.appendChild(dropzone);
+
+      // Create Preview Container
+      const preview = document.createElement('div');
+      preview.className = 'drag-drop-preview hidden border border-gray-200 dark:border-gray-800/80 rounded-2xl p-4 bg-gray-50/50 dark:bg-zinc-950/20 backdrop-blur-md flex items-center justify-between gap-4';
+      
+      const previewInfo = document.createElement('div');
+      previewInfo.className = 'flex items-center gap-3 min-w-0';
+      
+      const previewThumb = document.createElement('div');
+      previewThumb.className = 'w-12 h-12 rounded-lg bg-white dark:bg-zinc-900 border border-gray-150 dark:border-gray-800 flex items-center justify-center overflow-hidden shrink-0 shadow-sm';
+      previewThumb.innerHTML = `<svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/></svg>`;
+      
+      const previewMeta = document.createElement('div');
+      previewMeta.className = 'min-w-0';
+      
+      const previewName = document.createElement('p');
+      previewName.className = 'text-xs font-bold text-gray-800 dark:text-zinc-200 truncate leading-tight';
+      
+      const previewSize = document.createElement('p');
+      previewSize.className = 'text-[10px] text-gray-450 dark:text-zinc-500 font-semibold leading-none mt-1';
+      
+      previewMeta.appendChild(previewName);
+      previewMeta.appendChild(previewSize);
+      previewInfo.appendChild(previewThumb);
+      previewInfo.appendChild(previewMeta);
+      
+      const removeBtn = document.createElement('button');
+      removeBtn.type = 'button';
+      removeBtn.className = 'p-1.5 rounded-lg text-red-650 dark:text-red-400 hover:bg-red-500/10 transition-colors shrink-0 cursor-pointer flex items-center justify-center';
+      removeBtn.innerHTML = `<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>`;
+      
+      preview.appendChild(previewInfo);
+      preview.appendChild(removeBtn);
+      wrapper.appendChild(preview);
+
+      // Handle Existing File Preview on Load
+      if (existingFileUrl) {
+        dropzone.classList.add('hidden');
+        preview.classList.remove('hidden');
+        // Make previewName a clickable link to open the file
+        const fileLink = document.createElement('a');
+        fileLink.href = existingFileUrl;
+        fileLink.target = '_blank';
+        fileLink.className = 'hover:underline text-indigo-600 dark:text-indigo-400 font-bold';
+        fileLink.textContent = existingFileName || 'Allegato esistente';
+        
+        previewName.innerHTML = '';
+        previewName.appendChild(fileLink);
+        previewSize.textContent = 'Già salvato (Clicca per aprire)';
+        
+        const isImage = /\.(jpg|jpeg|png|gif|svg|webp)$/i.test(existingFileUrl);
+        if (isImage) {
+          previewThumb.innerHTML = `<a href="${existingFileUrl}" target="_blank" class="w-full h-full block"><img src="${existingFileUrl}" class="w-full h-full object-cover hover:opacity-80 transition-opacity"></a>`;
+        }
+      }
+
+      // Dropzone click -> trigger native input click
+      dropzone.addEventListener('click', () => {
+        input.click();
+      });
+
+      // File drag events
+      dropzone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropzone.classList.add('border-indigo-500', 'bg-indigo-50/10', 'dark:bg-indigo-950/5');
+      });
+
+      dropzone.addEventListener('dragleave', () => {
+        dropzone.classList.remove('border-indigo-500', 'bg-indigo-50/10', 'dark:bg-indigo-950/5');
+      });
+
+      dropzone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropzone.classList.remove('border-indigo-500', 'bg-indigo-50/10', 'dark:bg-indigo-950/5');
+        
+        if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+          input.files = e.dataTransfer.files;
+          input.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+      });
+
+      // File change event -> show preview
+      input.addEventListener('change', () => {
+        if (input.files && input.files.length > 0) {
+          const file = input.files[0];
+          dropzone.classList.add('hidden');
+          preview.classList.remove('hidden');
+          previewName.textContent = file.name;
+          previewSize.textContent = formatBytes(file.size);
+          
+          if (clearCheckbox) {
+            clearCheckbox.checked = false; // uncheck Django clear
+          }
+
+          if (file.type.startsWith('image/')) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+              previewThumb.innerHTML = `<img src="${e.target.result}" class="w-full h-full object-cover">`;
+            };
+            reader.readAsDataURL(file);
+          } else {
+            previewThumb.innerHTML = `<svg class="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/></svg>`;
+          }
+        }
+      });
+
+      // Remove File action
+      removeBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        input.value = ''; // clear value
+        
+        if (clearCheckbox) {
+          clearCheckbox.checked = true; // Check Django clear
+        }
+
+        preview.classList.add('hidden');
+        dropzone.classList.remove('hidden');
+        previewThumb.innerHTML = '';
+      });
+    });
+  };
+
+  function formatBytes(bytes, decimals = 2) {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const dm = decimals < 0 ? 0 : decimals;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+  }
+
   
+  window.initChangeListTable = function() {
+    const table = document.getElementById('result_list');
+    if (!table) return;
+    
+    // Check if Actions header has already been added to avoid duplicate additions on re-init
+    const theadRow = table.querySelector('thead tr');
+    if (theadRow && !theadRow.querySelector('.actions-header')) {
+      const actionsHeader = document.createElement('th');
+      actionsHeader.scope = 'col';
+      actionsHeader.className = 'actions-header text-right p-4 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-zinc-400 w-32';
+      actionsHeader.innerHTML = '<div class="text text-right">Actions</div>';
+      theadRow.appendChild(actionsHeader);
+    }
+    
+    // Process each row in tbody
+    const rows = table.querySelectorAll('tbody tr');
+    rows.forEach(row => {
+      // Check if this row is already processed to prevent duplicate buttons
+      if (row.querySelector('.actions-cell')) return;
+
+      let detailUrl = null;
+      let originalLink = null;
+      
+      // Scan all links in the row to find the detail link
+      const links = row.querySelectorAll('a');
+      links.forEach(link => {
+        const href = link.getAttribute('href');
+        if (href && (href.endsWith('/change/') || href.includes('/change/?') || href.includes('/change/&') || /\/\d+\/change\//.test(href))) {
+          detailUrl = href;
+          originalLink = link;
+        }
+      });
+      
+      if (detailUrl && originalLink) {
+        // Replace the clickable link with its plain text
+        const textSpan = document.createElement('span');
+        textSpan.textContent = originalLink.textContent;
+        textSpan.className = 'text-slate-700 dark:text-zinc-300 font-semibold';
+        originalLink.parentNode.replaceChild(textSpan, originalLink);
+        
+        // Compute delete URL
+        const deleteUrl = detailUrl.replace('/change/', '/delete/');
+        
+        // Create Actions cell
+        const actionsCell = document.createElement('td');
+        actionsCell.className = 'actions-cell p-4 text-right align-middle whitespace-nowrap space-x-2';
+        
+        // Detail button
+        const detailBtn = document.createElement('a');
+        detailBtn.href = detailUrl;
+        detailBtn.className = 'inline-flex items-center justify-center p-2 text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/20 hover:bg-blue-100 dark:hover:bg-blue-900/40 rounded-lg transition-colors';
+        detailBtn.setAttribute('data-tooltip', 'Dettaglio');
+        detailBtn.innerHTML = `
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125" /></svg>
+        `;
+        
+        // Delete button
+        const deleteBtn = document.createElement('a');
+        deleteBtn.href = deleteUrl;
+        deleteBtn.className = 'inline-flex items-center justify-center p-2 text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-950/20 hover:bg-red-100 dark:hover:bg-red-900/40 rounded-lg transition-colors';
+        deleteBtn.setAttribute('data-tooltip', 'Elimina');
+        deleteBtn.innerHTML = `
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+        `;
+        
+        actionsCell.appendChild(detailBtn);
+        actionsCell.appendChild(deleteBtn);
+        row.appendChild(actionsCell);
+      } else {
+        const actionsCell = document.createElement('td');
+        actionsCell.className = 'actions-cell';
+        row.appendChild(actionsCell);
+      }
+    });
+  };
+
+  window.updateThemeUI = function(theme) {
+    // Toggle class on document
+    if (theme === 'dark' || (theme === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+
+    const container = document.querySelector('.theme-toggle-switch');
+    if (!container) return;
+
+    const slider = container.querySelector('.theme-slider');
+    const activeBtn = container.querySelector(`button[data-theme-val="${theme}"]`);
+    if (slider && activeBtn) {
+      slider.style.left = `${activeBtn.offsetLeft}px`;
+      slider.style.width = `${activeBtn.offsetWidth}px`;
+    }
+  };
+
   function closeAllCustomSelects(exceptDropdown = null) {
     document.querySelectorAll('.custom-select-dropdown').forEach(dropdown => {
       if (dropdown !== exceptDropdown) {
@@ -863,28 +1290,89 @@
   
   // Initialize on load
   document.addEventListener('DOMContentLoaded', () => {
+    // Initialize theme
+    const currentTheme = localStorage.getItem('theme') || 'auto';
+    window.updateThemeUI(currentTheme);
+
+    // Global listener for theme toggler clicks
+    document.addEventListener('click', (e) => {
+      const themeBtn = e.target.closest('.theme-btn');
+      if (themeBtn) {
+        e.stopPropagation();
+        const nextTheme = themeBtn.getAttribute('data-theme-val');
+        localStorage.setItem('theme', nextTheme);
+        window.updateThemeUI(nextTheme);
+      }
+    });
+
+    window.addEventListener('resize', () => {
+      const currentTheme = localStorage.getItem('theme') || 'auto';
+      window.updateThemeUI(currentTheme);
+    });
+
+    // --- LIVE SEARCH (AS-YOU-TYPE) DEBOUNCED ENGINE ---
+    let searchDebounceTimeout = null;
+    document.addEventListener('input', (e) => {
+      if (!window.DJANGO_ADMIN_JS_SETTINGS || !window.DJANGO_ADMIN_JS_SETTINGS.liveSearch) return;
+      const searchbar = e.target.closest('#searchbar');
+      if (!searchbar) return;
+
+      const form = searchbar.closest('form');
+      if (!form) return;
+
+      const cursorStart = searchbar.selectionStart;
+      const cursorEnd = searchbar.selectionEnd;
+      const value = searchbar.value;
+
+      if (searchDebounceTimeout) clearTimeout(searchDebounceTimeout);
+
+      searchDebounceTimeout = setTimeout(() => {
+        const formData = new FormData(form);
+        const params = new URLSearchParams();
+        for (const [key, value] of formData.entries()) {
+          // Keep all parameters to preserve other active filters
+          if (value) params.append(key, value);
+        }
+        const url = window.location.pathname + '?' + params.toString();
+
+        window.loadAdminPage(url, true, {
+          searchbarActive: true,
+          cursorStart,
+          cursorEnd,
+          value
+        });
+      }, 300); // 300ms debounce
+    });
+
     initCustomSelects();
     initDragAndDropSelectors();
+    initDragAndDropUploaders();
     convertDateTimeInputs();
     initObjectTools();
     initChangeFormTabs();
+    initChangeListTable();
     
-    // Toast notifications animation
-    const toasts = document.querySelectorAll('.django-toast');
-    toasts.forEach((toast, idx) => {
-      // Slide in stagger effect
+    // Global toast dismiss function
+    function dismissToast(toast) {
+      toast.classList.remove('translate-x-0', 'opacity-100');
+      toast.classList.add('translate-x-[120%]', 'opacity-0');
+      setTimeout(() => {
+        toast.remove();
+      }, 300);
+    }
+
+    // Global toast animation function
+    window.animateToast = function(toast, idx = 0) {
       setTimeout(() => {
         toast.classList.remove('translate-x-[120%]', 'opacity-0');
         toast.classList.add('translate-x-0', 'opacity-100');
       }, 150 * idx);
 
-      // Auto dismiss
       const duration = parseInt(toast.getAttribute('data-duration')) || 5000;
       let dismissTimeout = setTimeout(() => {
         dismissToast(toast);
       }, duration + (150 * idx));
 
-      // Close button handler
       const closeBtn = toast.querySelector('.close-toast-btn');
       if (closeBtn) {
         closeBtn.addEventListener('click', () => {
@@ -892,16 +1380,41 @@
           dismissToast(toast);
         });
       }
-    });
+    };
 
-    function dismissToast(toast) {
-      toast.classList.remove('translate-x-0', 'opacity-100');
-      toast.classList.add('translate-x-[120%]', 'opacity-0');
-      // Remove element from DOM after transition finishes
-      setTimeout(() => {
-        toast.remove();
-      }, 300);
+    window.showToastsFromDocument = function(sourceDoc) {
+      const newToasts = sourceDoc.querySelectorAll('.django-toast');
+      const newToastContainer = sourceDoc.querySelector('#toast-container');
+      if (newToastContainer) {
+        newToastContainer.remove();
+      }
+      if (newToasts.length > 0) {
+        let toastContainer = document.getElementById('toast-container');
+        if (toastContainer && toastContainer.closest('#content-start')) {
+          document.body.appendChild(toastContainer);
+        }
+        if (!toastContainer) {
+          toastContainer = document.createElement('div');
+          toastContainer.id = 'toast-container';
+          toastContainer.className = 'fixed top-2 right-2 z-[99999] flex flex-col gap-2 w-full max-w-sm pointer-events-none px-4 sm:px-0';
+          document.body.appendChild(toastContainer);
+        }
+        newToasts.forEach((toast, idx) => {
+          toastContainer.appendChild(toast);
+          window.animateToast(toast, idx);
+        });
+      }
+    };
+
+    // Move initial toast container to body to prevent duplication and animate them
+    const initialToastContainer = document.getElementById('toast-container');
+    if (initialToastContainer) {
+      document.body.appendChild(initialToastContainer);
     }
+    const toasts = document.querySelectorAll('.django-toast');
+    toasts.forEach((toast, idx) => {
+      window.animateToast(toast, idx);
+    });
     
     // Watch for dynamic node additions
     const docObserver = new MutationObserver((mutations) => {
@@ -910,6 +1423,7 @@
       let hasDateTime = false;
       let hasTools = false;
       let hasInlines = false;
+      let hasFileInputs = false;
       
       mutations.forEach(mutation => {
         mutation.addedNodes.forEach(node => {
@@ -928,6 +1442,9 @@
             }
             if (node.classList.contains('inline-related') || node.querySelector('.inline-related')) {
               hasInlines = true;
+            }
+            if ((node.tagName === 'INPUT' && node.type === 'file') || node.querySelector('input[type="file"]')) {
+              hasFileInputs = true;
             }
           }
         });
@@ -948,6 +1465,9 @@
       if (hasInlines) {
         initCollapsibleInlines();
       }
+      if (hasFileInputs) {
+        initDragAndDropUploaders();
+      }
     });
     docObserver.observe(document.body, { childList: true, subtree: true });
     
@@ -956,13 +1476,278 @@
       initCollapsibleInlines();
     });
     
-    // Ensure all options in chosen selectors are selected on submit so browser includes them in form post
+    // Global tracking of clicked submit button
+    document.addEventListener('click', (e) => {
+      const btn = e.target.closest('button[type="submit"], input[type="submit"]');
+      if (btn && btn.form) {
+        btn.form._clickedSubmitButton = btn;
+      }
+    });
+
+    // --- ASYNC/PJAX NAVIGATION ENGINE ---
+
+    function showProgressBar() {
+      let bar = document.getElementById('changelist-loading-bar');
+      if (!bar) {
+        bar = document.createElement('div');
+        bar.id = 'changelist-loading-bar';
+        document.body.appendChild(bar);
+      }
+      bar.style.width = '0%';
+      bar.style.opacity = '1';
+      bar.offsetWidth; // Force reflow
+      bar.style.width = '30%';
+      
+      if (window.loadingBarInterval) clearInterval(window.loadingBarInterval);
+      window.loadingBarInterval = setInterval(() => {
+        const width = parseFloat(bar.style.width);
+        if (width < 90) {
+          bar.style.width = (width + Math.random() * 8) + '%';
+        }
+      }, 150);
+    }
+
+    function hideProgressBar() {
+      if (window.loadingBarInterval) clearInterval(window.loadingBarInterval);
+      const bar = document.getElementById('changelist-loading-bar');
+      if (bar) {
+        bar.style.width = '100%';
+        setTimeout(() => {
+          bar.style.opacity = '0';
+          setTimeout(() => {
+            bar.style.width = '0%';
+          }, 200);
+        }, 100);
+      }
+    }
+
+    window.loadAdminPage = function(url, pushToHistory = true, restoreState = null) {
+      const contentStart = document.getElementById('content-start');
+      if (!contentStart) {
+        window.location.href = url;
+        return;
+      }
+
+      contentStart.classList.add('opacity-50', 'pointer-events-none');
+      showProgressBar();
+
+      fetch(url)
+        .then(res => {
+          if (!res.ok) throw new Error('Failed to load page');
+          return res.text();
+        })
+        .then(html => {
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(html, 'text/html');
+          const newContentStart = doc.getElementById('content-start');
+          
+          if (newContentStart) {
+            window.showToastsFromDocument(doc);
+            // Keep the filters panel open state if it was open before
+            const currentDetails = contentStart.querySelector('details');
+            const newDetails = newContentStart.querySelector('details');
+            if (currentDetails && newDetails && currentDetails.hasAttribute('open')) {
+              newDetails.setAttribute('open', '');
+            }
+
+            contentStart.innerHTML = newContentStart.innerHTML;
+
+            if (doc.title) {
+              document.title = doc.title;
+            }
+
+            // Update sidebar active states if sidebar exists
+            const newSidebar = doc.getElementById('nav-sidebar') || doc.querySelector('.nav-sidebar');
+            const currentSidebar = document.getElementById('nav-sidebar') || document.querySelector('.nav-sidebar');
+            if (newSidebar && currentSidebar) {
+              currentSidebar.innerHTML = newSidebar.innerHTML;
+            }
+
+            if (pushToHistory) {
+              window.history.pushState({ pjax: true, url: url }, '', url);
+            }
+
+            // Re-initialize table changes if we are on a list view
+            if (typeof initChangeListTable === 'function') {
+              initChangeListTable();
+            }
+
+            // Restore searchbar focus and cursor position
+            if (restoreState && restoreState.searchbarActive) {
+              const newSearchbar = document.getElementById('searchbar');
+              if (newSearchbar) {
+                newSearchbar.value = restoreState.value;
+                newSearchbar.focus();
+                newSearchbar.setSelectionRange(restoreState.cursorStart, restoreState.cursorEnd);
+              }
+            }
+
+            // Dispatch global event for other components to re-bind if needed
+            document.dispatchEvent(new CustomEvent('page:updated', { detail: { url: url } }));
+          } else {
+            window.location.href = url;
+          }
+        })
+        .catch(err => {
+          console.error('AJAX navigation error, falling back:', err);
+          window.location.href = url;
+        })
+        .finally(() => {
+          contentStart.classList.remove('opacity-50', 'pointer-events-none');
+          hideProgressBar();
+        });
+    };
+
+    // Initialize history state on load
+    if (!window.history.state) {
+      window.history.replaceState({ pjax: true, url: window.location.href }, '', window.location.href);
+    }
+
+    // Intercept all administrative link clicks for async navigation
+    document.addEventListener('click', (e) => {
+      const link = e.target.closest('a');
+      if (!link) return;
+
+      const href = link.getAttribute('href');
+      if (!href || href.startsWith('#') || href.startsWith('javascript:')) return;
+
+      // Do not intercept authentication pages
+      if (href.includes('/logout/') || href.includes('/login/') || href.includes('/password_change/')) {
+        return;
+      }
+
+      // Do not intercept external links
+      if (link.hostname && link.hostname !== window.location.hostname) {
+        return;
+      }
+
+      // Do not intercept Django Admin widget actions (lookups, add-related popup triggers, etc.)
+      if (link.classList.contains('related-lookup') || link.classList.contains('add-another') || link.classList.contains('change-related') || link.classList.contains('delete-related')) {
+        return;
+      }
+
+      e.preventDefault();
+      window.loadAdminPage(link.href);
+    });
+
+    // Global tracking of clicked submit button
+    document.addEventListener('click', (e) => {
+      const btn = e.target.closest('button[type="submit"], input[type="submit"]');
+      if (btn && btn.form) {
+        btn.form._clickedSubmitButton = btn;
+      }
+    });
+
+    // Intercept form submissions for Django Admin change form
     document.addEventListener('submit', (e) => {
-      document.querySelectorAll('.selector-chosen select').forEach(select => {
+      const form = e.target;
+      if (!form.id || !form.id.endsWith('_form')) {
+        // Fallback selectors select for other non-model forms if any
+        form.querySelectorAll('.selector-chosen select').forEach(select => {
+          Array.from(select.options).forEach(opt => opt.selected = true);
+        });
+        return;
+      }
+
+      // Ensure all options in chosen selectors are selected on submit so browser includes them in form post
+      form.querySelectorAll('.selector-chosen select').forEach(select => {
         Array.from(select.options).forEach(opt => {
           opt.selected = true;
         });
       });
+
+      e.preventDefault();
+
+      // Show loader / progress bar
+      showProgressBar();
+
+      // Disable submit buttons to prevent double-submit
+      const submitButtons = form.querySelectorAll('button[type="submit"], input[type="submit"]');
+      submitButtons.forEach(btn => btn.disabled = true);
+
+      const formData = new FormData(form);
+      const clickedBtn = form._clickedSubmitButton;
+      if (clickedBtn && clickedBtn.name) {
+        formData.append(clickedBtn.name, clickedBtn.value || 'yes');
+      }
+
+      fetch(form.action || window.location.href, {
+        method: 'POST',
+        body: formData
+      })
+      .then(res => {
+        if (!res.ok) throw new Error('Submission failed');
+        return res.text().then(html => ({ url: res.url, html }));
+      })
+      .then(({ url, html }) => {
+        hideProgressBar();
+
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+
+        // Check if there are form errors in the response HTML
+        const errorBanner = doc.querySelector('.p-4.bg-red-50, .bg-red-50');
+        const errorLists = doc.querySelectorAll('.errorlist');
+
+        if (errorBanner || errorLists.length > 0) {
+          // Re-enable submit buttons
+          submitButtons.forEach(btn => btn.disabled = false);
+
+          // Replace the form element inside the DOM
+          const newForm = doc.querySelector('form[id$="_form"]');
+          if (newForm) {
+            form.replaceWith(newForm);
+          }
+
+          // Show error toasts
+          window.showToastsFromDocument(doc);
+        } else {
+          // Success! Replace content-start container (updates breadcrumbs, page contents, etc.)
+          window.showToastsFromDocument(doc);
+          const newContentStart = doc.getElementById('content-start');
+          const currentContentStart = document.getElementById('content-start');
+          if (newContentStart && currentContentStart) {
+            currentContentStart.innerHTML = newContentStart.innerHTML;
+
+            if (doc.title) {
+              document.title = doc.title;
+            }
+
+            // Update sidebar active states if sidebar exists
+            const newSidebar = doc.getElementById('nav-sidebar') || doc.querySelector('.nav-sidebar');
+            const currentSidebar = document.getElementById('nav-sidebar') || document.querySelector('.nav-sidebar');
+            if (newSidebar && currentSidebar) {
+              currentSidebar.innerHTML = newSidebar.innerHTML;
+            }
+
+            // Update browser URL
+            window.history.pushState({ pjax: true, url: url }, '', url);
+
+            // Re-run the table change list initializer if we ended up back on the change list
+            if (typeof initChangeListTable === 'function') {
+              initChangeListTable();
+            }
+          } else {
+            window.location.href = url;
+          }
+        }
+      })
+      .catch(err => {
+        console.error('Change form AJAX error:', err);
+        submitButtons.forEach(btn => btn.disabled = false);
+        hideProgressBar();
+      });
+    });
+
+    // Handle browser Back/Forward navigation globally
+    window.addEventListener('popstate', (e) => {
+      if (e.state && e.state.pjax) {
+        window.loadAdminPage(e.state.url, false);
+      } else if (e.state && e.state.url) {
+        window.loadAdminPage(e.state.url, false);
+      } else {
+        window.loadAdminPage(window.location.href, false);
+      }
     });
   });
 </script>

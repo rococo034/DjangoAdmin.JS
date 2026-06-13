@@ -1,15 +1,29 @@
 {% load i18n %}
-<button class="theme-toggle p-2 rounded-xl hover:bg-white/80 dark:hover:bg-zinc-800 text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-all duration-150 flex items-center justify-center cursor-pointer" style="background: transparent; border: none; outline: none; box-shadow: none;">
-  <div class="visually-hidden theme-label-when-auto">{% translate 'Toggle theme (current theme: auto)' %}</div>
-  <div class="visually-hidden theme-label-when-light">{% translate 'Toggle theme (current theme: light)' %}</div>
-  <div class="visually-hidden theme-label-when-dark">{% translate 'Toggle theme (current theme: dark)' %}</div>
-  <svg aria-hidden="true" class="theme-icon-when-auto w-4.5 h-4.5">
-    <use xlink:href="#icon-auto" />
-  </svg>
-  <svg aria-hidden="true" class="theme-icon-when-dark w-4.5 h-4.5">
-    <use xlink:href="#icon-moon" />
-  </svg>
-  <svg aria-hidden="true" class="theme-icon-when-light w-4.5 h-4.5">
-    <use xlink:href="#icon-sun" />
-  </svg>
-</button>
+<div class="theme-toggle-switch relative inline-flex items-center p-0.5 bg-slate-200/60 dark:bg-zinc-800/80 border border-slate-250/50 dark:border-zinc-700/60 rounded-xl shadow-[inset_0_1px_2px_rgba(0,0,0,0.05)] overflow-hidden select-none">
+  <!-- Active sliding indicator -->
+  <div class="theme-slider absolute top-0.5 bottom-0.5 rounded-[9px] bg-white dark:bg-zinc-700 shadow-sm border border-slate-200/40 dark:border-zinc-650/30 transition-all duration-200 ease-out z-0"></div>
+  
+  <!-- Light Button -->
+  <button type="button" data-theme-val="light" class="theme-btn relative z-10 p-1.5 rounded-lg text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200 flex items-center justify-center transition-colors duration-150 cursor-pointer" title="{% translate 'Light theme' %}">
+    <svg aria-hidden="true" class="w-4 h-4 text-amber-500" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="4"/>
+      <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
+    </svg>
+  </button>
+  
+  <!-- Auto Button -->
+  <button type="button" data-theme-val="auto" class="theme-btn relative z-10 p-1.5 rounded-lg text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200 flex items-center justify-center transition-colors duration-150 cursor-pointer" title="{% translate 'System theme' %}">
+    <svg aria-hidden="true" class="w-4 h-4 text-zinc-500 dark:text-zinc-400" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+      <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+      <line x1="8" y1="21" x2="16" y2="21"/>
+      <line x1="12" y1="17" x2="12" y2="21"/>
+    </svg>
+  </button>
+
+  <!-- Dark Button -->
+  <button type="button" data-theme-val="dark" class="theme-btn relative z-10 p-1.5 rounded-lg text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200 flex items-center justify-center transition-colors duration-150 cursor-pointer" title="{% translate 'Dark theme' %}">
+    <svg aria-hidden="true" class="w-4 h-4 text-indigo-500 dark:text-indigo-400" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+      <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+    </svg>
+  </button>
+</div>

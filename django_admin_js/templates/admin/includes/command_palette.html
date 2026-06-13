@@ -1,37 +1,49 @@
 {% load i18n %}
 <div id="command-palette" class="fixed inset-0 z-[100] hidden overflow-y-auto p-4 pt-[15vh] sm:p-6 sm:pt-[20vh]" role="dialog" aria-modal="true">
     <!-- Backdrop -->
-    <div id="palette-backdrop" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity opacity-0"></div>
+    <div id="palette-backdrop" class="fixed inset-0 bg-slate-900/40 dark:bg-black/60 backdrop-blur-md transition-opacity opacity-0"></div>
 
     <!-- Palette Container -->
-    <div id="palette-container" class="relative mx-auto max-w-2xl transform divide-y divide-slate-100 dark:divide-zinc-800 overflow-hidden rounded-2xl bg-white dark:bg-[#111827] shadow-2xl ring-1 ring-black/5 transition-all scale-95 opacity-0">
-        <div class="relative">
-            <svg class="pointer-events-none absolute left-4 top-3.5 h-5 w-5 text-slate-400 dark:text-zinc-500" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                <path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z" clip-rule="evenodd" />
-            </svg>
-            <input type="text" id="palette-input" class="h-12 w-full border-0 bg-transparent pl-11 pr-4 text-slate-900 dark:text-zinc-100 placeholder:text-slate-400 dark:placeholder:text-zinc-500 focus:ring-0 sm:text-sm" placeholder="Search apps, models or actions..." role="combobox" aria-expanded="false" aria-controls="palette-options">
-        </div>
-
-        <!-- Results -->
-        <ul class="max-h-96 scroll-py-3 overflow-y-auto p-3" id="palette-options" role="listbox">
-            <!-- Items will be injected here -->
-        </ul>
-
-        <!-- Empty State -->
-        <div id="palette-empty" class="hidden px-6 py-14 text-center sm:px-14">
-            <svg class="mx-auto h-6 w-6 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <div id="palette-container" class="relative mx-auto max-w-2xl transform divide-y divide-slate-100 dark:divide-zinc-800/80 overflow-hidden rounded-2xl bg-white/90 dark:bg-zinc-900/90 border border-slate-200/80 dark:border-zinc-800/80 shadow-2xl backdrop-blur-xl transition-all scale-95 opacity-0">
+        <!-- Input area -->
+        <div class="relative flex items-center" style="display: flex !important; flex-direction: row !important; align-items: center !important; position: relative !important; width: 100% !important;">
+            <svg class="pointer-events-none text-indigo-500 dark:text-indigo-400" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" style="position: absolute !important; left: 1rem !important; top: 50% !important; transform: translateY(-50%) !important; width: 1.25rem !important; height: 1.25rem !important; margin: 0 !important; z-index: 10 !important; pointer-events: none !important;">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
             </svg>
-            <p class="mt-4 text-sm text-slate-900 dark:text-zinc-300">No results found.</p>
+            <input type="text" id="palette-input" class="h-14 w-full border-0 bg-transparent text-slate-800 dark:text-zinc-100 placeholder:text-slate-400 dark:placeholder:text-zinc-500 focus:outline-none focus:ring-0 text-sm" placeholder="Cerca app, modelli, o digita '/' per i comandi rapidi..." role="combobox" aria-expanded="false" aria-controls="palette-options" style="width: 100% !important; height: 3.5rem !important; border: 0 !important; background: transparent !important; padding-left: 3rem !important; padding-right: 3.5rem !important; outline: none !important; box-shadow: none !important;">
+            <div class="absolute right-4 flex items-center gap-1" style="position: absolute !important; right: 1rem !important; top: 50% !important; transform: translateY(-50%) !important; display: flex !important; align-items: center !important; z-index: 10 !important; margin: 0 !important;">
+                <kbd class="hidden sm:inline-block px-1.5 py-0.5 text-[10px] font-bold text-slate-400 dark:text-zinc-500 border border-slate-200 dark:border-zinc-800 bg-slate-50 dark:bg-zinc-800/50 rounded-md shadow-sm">ESC</kbd>
+            </div>
         </div>
 
-        <!-- Footer -->
-        <div class="flex items-center bg-slate-50 dark:bg-zinc-900/50 px-4 py-2.5 text-xs text-slate-500 dark:text-zinc-400">
-            <span class="flex items-center gap-1"><kbd class="font-sans border border-slate-300 dark:border-zinc-700 px-1 rounded bg-white dark:bg-zinc-800">↵</kbd> select</span>
-            <span class="mx-3 h-3 w-px bg-slate-300 dark:bg-zinc-700"></span>
-            <span class="flex items-center gap-1"><kbd class="font-sans border border-slate-300 dark:border-zinc-700 px-1 rounded bg-white dark:bg-zinc-800">↑↓</kbd> navigate</span>
-            <span class="mx-3 h-3 w-px bg-slate-300 dark:bg-zinc-700"></span>
-            <span class="flex items-center gap-1"><kbd class="font-sans border border-slate-300 dark:border-zinc-700 px-1 rounded bg-white dark:bg-zinc-800">esc</kbd> close</span>
+
+        <!-- Results -->
+        <div class="max-h-96 overflow-y-auto p-2" id="palette-scroll-container">
+            <div id="palette-options" role="listbox" class="space-y-1">
+                <!-- Items will be dynamically injected here -->
+            </div>
+        </div>
+
+        <!-- Empty State -->
+        <div id="palette-empty" class="hidden px-6 py-12 text-center">
+            <svg class="mx-auto h-8 w-8 text-slate-400 dark:text-zinc-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" />
+            </svg>
+            <p class="mt-4 text-sm font-semibold text-slate-700 dark:text-zinc-300">Nessun risultato trovato</p>
+            <p class="mt-1 text-xs text-slate-500 dark:text-zinc-500">Prova a cercare qualcos'altro o digita '/' per vedere tutti i comandi.</p>
+        </div>
+
+        <!-- Footer / Shortcuts -->
+        <div class="flex items-center justify-between bg-slate-50/50 dark:bg-zinc-950/20 px-4 py-3 text-[11px] text-slate-500 dark:text-zinc-400 border-t border-slate-100 dark:border-zinc-800/60">
+            <div class="flex items-center gap-4">
+                <span class="flex items-center gap-1.5"><kbd class="font-sans border border-slate-250 dark:border-zinc-700 px-1.5 py-0.5 rounded bg-white dark:bg-zinc-800 shadow-sm font-bold">↵</kbd> Seleziona</span>
+                <span class="flex items-center gap-1.5"><kbd class="font-sans border border-slate-250 dark:border-zinc-700 px-1.5 py-0.5 rounded bg-white dark:bg-zinc-800 shadow-sm font-bold">↑↓</kbd> Naviga</span>
+            </div>
+            <div class="hidden sm:flex items-center gap-1.5">
+                <span class="text-zinc-400 dark:text-zinc-500">Premi</span>
+                <kbd class="font-sans border border-slate-250 dark:border-zinc-700 px-1.5 py-0.5 rounded bg-white dark:bg-zinc-800 shadow-sm font-bold">/</kbd>
+                <span class="text-zinc-400 dark:text-zinc-500">per i comandi di stile</span>
+            </div>
         </div>
     </div>
 </div>
@@ -46,12 +58,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const emptyState = document.getElementById('palette-empty');
     
     let items = [];
+    let filteredItems = [];
     let selectedIndex = 0;
 
-    // Collect data from sidebar/nav
+    // Collect Navigation and Custom Settings Action Items
     function collectItems() {
         items = [];
-        // Add navigation links from any app-list structure (dashboard or sidebar)
+
+        // 1. Navigation items from Sidebar
         document.querySelectorAll('[class*="app-"]').forEach(module => {
             const appName = module.querySelector('caption, h2, div > a')?.textContent.trim() || 'App';
             module.querySelectorAll('[class*="model-"]').forEach(row => {
@@ -67,52 +81,113 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
 
                 if (mainLink) {
+                    const modelName = mainLink.textContent.trim();
                     items.push({
-                        type: 'model',
-                        name: mainLink.textContent.trim(),
-                        subtitle: appName,
+                        category: 'Modelli',
+                        type: 'navigation',
+                        name: modelName,
+                        subtitle: `Vai all'elenco di ${modelName} (${appName})`,
                         url: mainLink.href,
-                        icon: `<svg class="h-6 w-6 flex-none text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" /></svg>`
+                        icon: `<svg class="h-4 w-4 text-indigo-500 dark:text-indigo-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" /></svg>`
                     });
                 }
                 
                 if (addLink) {
+                    const modelName = mainLink ? mainLink.textContent.trim() : 'Modello';
                     items.push({
-                        type: 'action',
-                        name: `Add ${mainLink ? mainLink.textContent.trim() : 'New Item'}`,
-                        subtitle: appName,
+                        category: 'Modelli',
+                        type: 'navigation',
+                        name: `Aggiungi ${modelName}`,
+                        subtitle: `Crea un nuovo elemento in ${modelName} (${appName})`,
                         url: addLink,
-                        icon: `<svg class="h-6 w-6 flex-none text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>`
+                        icon: `<svg class="h-4 w-4 text-emerald-500 dark:text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>`
                     });
                 }
             });
         });
 
-        // Add common actions
-        items.push({
-            type: 'action',
-            name: 'Go to Dashboard',
-            subtitle: 'Navigation',
-            url: '{% url "admin:index" %}',
-            icon: `<svg class="h-6 w-6 flex-none text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" /></svg>`
-        });
-        
-        {% if user.is_active and user.is_staff %}
-            {% url 'django-admindocs-docroot' as docsroot %}
-            {% if docsroot %}
+        // 2. Add layout styles commands (if theme_picker is enabled)
+        const themePickerEnabled = {% if js_settings.theme_picker %}true{% else %}false{% endif %};
+        if (themePickerEnabled) {
+            // Layout commands
+            const layoutStyles = [
+                { id: 'default', name: 'Sleek Default Layout', desc: 'Attiva lo stile con bordi morbidi e ombreggiature' },
+                { id: 'glassmorphism', name: 'Glassmorphism Layout', desc: 'Attiva lo stile con trasparenza effetto vetro e blur' },
+                { id: 'minimalist', name: 'Minimal Outline Layout', desc: 'Attiva lo stile minimale piatto con focus colorato' }
+            ];
+
+            layoutStyles.forEach(s => {
                 items.push({
-                    type: 'action',
-                    name: 'View Documentation',
-                    subtitle: 'Help',
-                    url: '{{ docsroot }}',
-                    icon: `<svg class="h-6 w-6 flex-none text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" /></svg>`
+                    category: 'Stile & Layout (Comandi)',
+                    type: 'command-style',
+                    styleId: s.id,
+                    name: `/style ${s.id}`,
+                    subtitle: s.desc,
+                    icon: `<svg class="h-4 w-4 text-amber-500 dark:text-amber-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.53 16.122a3 3 0 00-5.78 1.128 2.25 2.25 0 01-2.4 2.245 4.5 4.5 0 008.4-2.245c0-.399-.078-.78-.22-1.128zm0 0a15.998 15.998 0 003.388-1.62m-5.043-.025a15.994 15.994 0 011.622-3.395m3.42 3.42a15.995 15.995 0 004.764-4.648l3.876-5.814a1.151 1.151 0 00-1.597-1.597L14.146 6.32a15.996 15.996 0 00-4.649 4.763m3.42 3.42a6.776 6.776 0 00-3.42-3.42" /></svg>`
                 });
-            {% endif %}
-        {% endif %}
+            });
+
+            // Color preset commands
+            const colorsList = {{ js_settings.themes_json|safe }};
+            colorsList.forEach(color => {
+                items.push({
+                    category: 'Colori Tema (Comandi)',
+                    type: 'command-color',
+                    colorObj: {
+                        id: color.id,
+                        primary: color.primary,
+                        hover: color.hover,
+                        bgLight: color.bg_light,
+                        bgDark: color.bg_dark,
+                        cardLight: color.card_light,
+                        cardDark: color.card_dark
+                    },
+                    name: `/color ${color.id}`,
+                    subtitle: `Cambia la palette primaria dell'admin in ${color.name}`,
+                    icon: `<div class="w-3.5 h-3.5 rounded-full" style="background-color: ${color.primary}"></div>`
+                });
+            });
+        }
+
+        // 3. Quick Actions
+        items.push({
+            category: 'Azioni',
+            type: 'navigation',
+            name: 'Vai alla Dashboard principale',
+            subtitle: 'Naviga verso la homepage di amministrazione',
+            url: '{% url "admin:index" %}',
+            icon: `<svg class="h-4 w-4 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" /></svg>`
+        });
+
+        // Theme Mode commands (Dark / Light)
+        items.push({
+            category: 'Impostazioni Schermo',
+            type: 'command-mode',
+            mode: 'light',
+            name: '/mode light',
+            subtitle: 'Attiva il tema Chiaro',
+            icon: `<svg class="h-4 w-4 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m11.314 11.314l.707.707M12 5a7 7 0 100 14 7 7 0 000-14z" /></svg>`
+        });
+        items.push({
+            category: 'Impostazioni Schermo',
+            type: 'command-mode',
+            mode: 'dark',
+            name: '/mode dark',
+            subtitle: 'Attiva il tema Scuro',
+            icon: `<svg class="h-4 w-4 text-violet-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>`
+        });
+        items.push({
+            category: 'Impostazioni Schermo',
+            type: 'command-mode',
+            mode: 'auto',
+            name: '/mode auto',
+            subtitle: 'Sincronizza il tema con le impostazioni del sistema operativo',
+            icon: `<svg class="h-4 w-4 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>`
+        });
     }
 
     function openPalette() {
-        if (items.length === 0) collectItems();
+        collectItems(); // Collect fresh on open
         palette.classList.remove('hidden');
         setTimeout(() => {
             backdrop.classList.replace('opacity-0', 'opacity-100');
@@ -133,44 +208,191 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 200);
     }
 
+    function highlightText(text, query) {
+        if (!query) return text;
+        const index = text.toLowerCase().indexOf(query.toLowerCase());
+        if (index === -1) return text;
+        
+        const part1 = text.substring(0, index);
+        const part2 = text.substring(index, index + query.length);
+        const part3 = text.substring(index + query.length);
+        
+        return `${part1}<mark class="bg-indigo-100 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-300 font-bold px-0.5 rounded">${part2}</mark>${part3}`;
+    }
+
+    function updateSelectionVisuals() {
+        const itemsList = options.querySelectorAll('[role="option"]');
+        itemsList.forEach((el, idx) => {
+            const isActive = idx === selectedIndex;
+            const textEl = el.querySelector('.flex-auto p:first-child');
+            const subtextEl = el.querySelector('.flex-auto p:nth-child(2)');
+            const checkContainer = el.querySelector('.ml-2');
+            
+            if (isActive) {
+                el.classList.add('bg-indigo-600', 'text-white', 'shadow-md');
+                el.classList.remove('hover:bg-slate-100/70', 'dark:hover:bg-zinc-800/40', 'text-slate-700', 'dark:text-zinc-300');
+                if (textEl) {
+                    textEl.classList.add('text-white');
+                    textEl.classList.remove('text-slate-800', 'dark:text-zinc-100');
+                }
+                if (subtextEl) {
+                    subtextEl.classList.add('text-indigo-150');
+                    subtextEl.classList.remove('text-slate-500', 'dark:text-zinc-400');
+                }
+                el.setAttribute('aria-selected', 'true');
+                if (checkContainer) {
+                    checkContainer.innerHTML = '<svg class="h-4.5 w-4.5 text-white animate-pulse" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd" /></svg>';
+                }
+            } else {
+                el.classList.remove('bg-indigo-600', 'text-white', 'shadow-md');
+                el.classList.add('hover:bg-slate-100/70', 'dark:hover:bg-zinc-800/40', 'text-slate-700', 'dark:text-zinc-300');
+                if (textEl) {
+                    textEl.classList.remove('text-white');
+                    textEl.classList.add('text-slate-800', 'dark:text-zinc-100');
+                }
+                if (subtextEl) {
+                    subtextEl.classList.remove('text-indigo-150');
+                    subtextEl.classList.add('text-slate-500', 'dark:text-zinc-400');
+                }
+                el.setAttribute('aria-selected', 'false');
+                if (checkContainer) {
+                    checkContainer.innerHTML = '';
+                }
+            }
+        });
+
+        // Ensure selected item is visible (scroll-into-view)
+        const activeNode = document.getElementById(`option-${selectedIndex}`);
+        if (activeNode) {
+            activeNode.scrollIntoView({ block: 'nearest' });
+        }
+    }
+
     function renderResults(query) {
-        const filtered = items.filter(item => 
+        // Filter search logic
+        filteredItems = items.filter(item => 
             item.name.toLowerCase().includes(query.toLowerCase()) || 
-            item.subtitle.toLowerCase().includes(query.toLowerCase())
-        ).slice(0, 10);
+            item.subtitle.toLowerCase().includes(query.toLowerCase()) ||
+            item.category.toLowerCase().includes(query.toLowerCase())
+        );
 
         options.innerHTML = '';
-        if (filtered.length === 0) {
+        if (filteredItems.length === 0) {
             emptyState.classList.remove('hidden');
             return;
         }
 
         emptyState.classList.add('hidden');
-        filtered.forEach((item, index) => {
-            const li = document.createElement('li');
-            li.className = `group flex cursor-default select-none items-center rounded-xl p-3 ${index === selectedIndex ? 'bg-indigo-600' : 'hover:bg-slate-100 dark:hover:bg-zinc-800'}`;
+        
+        let currentCategory = '';
+        
+        filteredItems.forEach((item, index) => {
+            // Render Category Header if it changes
+            if (item.category !== currentCategory) {
+                currentCategory = item.category;
+                const catHeader = document.createElement('div');
+                catHeader.className = 'text-[10px] font-bold text-slate-400 dark:text-zinc-500 uppercase tracking-wider px-3 py-2 mt-2 first:mt-1';
+                catHeader.textContent = currentCategory;
+                options.appendChild(catHeader);
+            }
+
+            const li = document.createElement('div');
+            const isActive = index === selectedIndex;
+            
+            li.className = `group flex cursor-pointer select-none items-center rounded-xl p-2.5 transition-all duration-100 border border-transparent ${
+                isActive 
+                ? 'bg-indigo-600 text-white shadow-md' 
+                : 'hover:bg-slate-100/70 dark:hover:bg-zinc-800/40 text-slate-700 dark:text-zinc-300'
+            }`;
+            li.style.cssText = "display: flex !important; flex-direction: row !important; align-items: center !important; justify-content: flex-start !important;";
             li.id = `option-${index}`;
-            li.role = 'option';
-            li.tabIndex = -1;
+            li.setAttribute('role', 'option');
+            li.setAttribute('aria-selected', isActive ? 'true' : 'false');
             
             li.innerHTML = `
-                <div class="flex h-10 w-10 flex-none items-center justify-center rounded-lg border border-slate-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 group-hover:border-indigo-400 transition-colors ${index === selectedIndex ? 'border-indigo-300' : ''}">
+                <div class="flex-none rounded-lg border border-slate-200/60 dark:border-zinc-800 bg-white dark:bg-zinc-900 group-hover:border-indigo-400/40 transition-colors shrink-0" style="display: flex !important; align-items: center !important; justify-content: center !important; width: 2rem !important; height: 2rem !important; margin-right: 0.75rem !important; flex-shrink: 0 !important;">
                     ${item.icon}
                 </div>
-                <div class="ml-4 flex-auto">
-                    <p class="text-sm font-semibold ${index === selectedIndex ? 'text-white' : 'text-slate-900 dark:text-zinc-100'}">${item.name}</p>
-                    <p class="text-xs ${index === selectedIndex ? 'text-indigo-100' : 'text-slate-500 dark:text-zinc-400'}">${item.subtitle}</p>
+                <div class="flex-auto min-w-0" style="flex: 1 1 auto !important; min-width: 0px !important; text-align: left !important;">
+                    <p class="text-sm font-semibold truncate ${isActive ? 'text-white' : 'text-slate-800 dark:text-zinc-100'}" style="margin: 0 !important;">
+                        ${highlightText(item.name, query)}
+                    </p>
+                    <p class="text-[11px] truncate mt-0.5 ${isActive ? 'text-indigo-150' : 'text-slate-500 dark:text-zinc-400'}" style="margin: 0 !important; margin-top: 0.125rem !important;">
+                        ${highlightText(item.subtitle, query)}
+                    </p>
                 </div>
-                ${index === selectedIndex ? '<svg class="h-5 w-5 text-indigo-100" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd" /></svg>' : ''}
+                <div class="ml-2 shrink-0" style="margin-left: 0.5rem !important; flex-shrink: 0 !important;">
+                    ${isActive ? '<svg class="h-4.5 w-4.5 text-white animate-pulse" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd" /></svg>' : ''}
+                </div>
             `;
 
-            li.addEventListener('click', () => window.location.href = item.url);
+
+            li.addEventListener('click', () => executeItem(item));
             li.addEventListener('mouseenter', () => {
                 selectedIndex = index;
-                renderResults(input.value);
+                updateSelectionVisuals();
             });
             options.appendChild(li);
         });
+    }
+
+    function executeItem(item) {
+        if (item.type === 'navigation') {
+            window.location.href = item.url;
+        } else if (item.type === 'command-style') {
+            // Apply Layout Style live
+            if (typeof applyLayoutStyle === 'function') {
+                applyLayoutStyle(item.styleId);
+            } else {
+                // Fallback
+                document.documentElement.classList.remove('theme-style-default', 'theme-style-glassmorphism', 'theme-style-minimalist');
+                document.documentElement.classList.add(`theme-style-${item.styleId}`);
+                localStorage.setItem('selected-theme-style', item.styleId);
+            }
+            closePalette();
+            showPaletteNotification(`Stile layout impostato su "${item.name}"`);
+        } else if (item.type === 'command-color') {
+            // Apply color live
+            if (typeof applyTheme === 'function') {
+                applyTheme(item.colorObj);
+            } else {
+                // Fallback
+                document.documentElement.style.setProperty('--primary-color', item.colorObj.primary);
+                document.documentElement.style.setProperty('--primary-hover-color', item.colorObj.hover);
+                localStorage.setItem('selected-theme-id', item.colorObj.id);
+            }
+            closePalette();
+            showPaletteNotification(`Colore tema impostato su "${item.name}"`);
+        } else if (item.type === 'command-mode') {
+            // Apply theme mode light/dark
+            localStorage.setItem('theme', item.mode);
+            if (typeof updateThemeUI === 'function') {
+                updateThemeUI(item.mode);
+            }
+            closePalette();
+            showPaletteNotification(`Schermo impostato in modalità "${item.mode}"`);
+        }
+    }
+
+    function showPaletteNotification(message) {
+        // Create dynamic toast to notify action success
+        const notification = document.createElement('div');
+        notification.className = 'django-toast pointer-events-auto flex items-start p-4 rounded-xl border border-indigo-500/30 bg-indigo-500/10 text-indigo-800 dark:text-indigo-300 dark:bg-indigo-950/20 shadow-xl backdrop-blur-md transition-all duration-300 ease-out transform translate-x-[120%] opacity-0 fixed top-2 right-2 z-[999999]';
+        notification.innerHTML = `
+            <div class="mr-3 shrink-0">
+                <svg class="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            </div>
+            <div class="flex-1 text-sm font-semibold pr-2 leading-5">${message}</div>
+        `;
+        document.body.appendChild(notification);
+        setTimeout(() => {
+            notification.classList.remove('translate-x-[120%]', 'opacity-0');
+            notification.classList.add('translate-x-0', 'opacity-100');
+        }, 50);
+        setTimeout(() => {
+            notification.classList.add('translate-x-[120%]', 'opacity-0');
+            setTimeout(() => notification.remove(), 300);
+        }, 3000);
     }
 
     input.addEventListener('input', (e) => {
@@ -179,7 +401,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     window.addEventListener('keydown', (e) => {
-        if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        if ((e.metaKey || e.key === 'Meta' || e.ctrlKey) && e.key.toLowerCase() === 'k') {
             e.preventDefault();
             openPalette();
         }
@@ -189,24 +411,20 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (!palette.classList.contains('hidden')) {
-            const filteredCount = options.children.length;
+            const filteredCount = filteredItems.length;
             if (e.key === 'ArrowDown') {
                 e.preventDefault();
                 selectedIndex = (selectedIndex + 1) % filteredCount;
-                renderResults(input.value);
+                updateSelectionVisuals();
             } else if (e.key === 'ArrowUp') {
                 e.preventDefault();
                 selectedIndex = (selectedIndex - 1 + filteredCount) % filteredCount;
-                renderResults(input.value);
+                updateSelectionVisuals();
             } else if (e.key === 'Enter') {
                 e.preventDefault();
-                const selected = options.children[selectedIndex];
+                const selected = filteredItems[selectedIndex];
                 if (selected) {
-                    const filtered = items.filter(item => 
-                        item.name.toLowerCase().includes(input.value.toLowerCase()) || 
-                        item.subtitle.toLowerCase().includes(input.value.toLowerCase())
-                    ).slice(0, 10);
-                    if (filtered[selectedIndex]) window.location.href = filtered[selectedIndex].url;
+                    executeItem(selected);
                 }
             }
         }

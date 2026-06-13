@@ -1,0 +1,243 @@
+{% load admin_stats %}
+{% get_admin_charts_data as chart_data %}
+
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8" id="dashboard-charts-container">
+  <!-- Users Registration Chart -->
+  <div class="bg-white/80 dark:bg-[#111827]/80 border border-gray-200/50 dark:border-gray-800/80 rounded-2xl p-6 shadow-sm backdrop-blur-xl flex flex-col h-[350px]">
+    <div class="flex items-center justify-between mb-4">
+      <div>
+        <h3 class="text-sm font-bold text-gray-800 dark:text-zinc-100">Registrazioni Utenti</h3>
+        <p class="text-xs text-gray-400 dark:text-zinc-500">Nuovi iscritti negli ultimi 7 giorni</p>
+      </div>
+      <span class="p-2 bg-indigo-500/10 text-indigo-500 dark:text-indigo-400 rounded-xl">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-2.533-4.656 6.96 6.96 0 00-1.922-.867M9 10.609a3 3 0 100-6 3 3 0 000 6zm6 0a3 3 0 100-6 3 3 0 000 6zm-7.5 7.373a9.251 9.251 0 013 0m0 0a9.235 9.235 0 013 0m-6 0a9.235 9.235 0 003 0m0 0a9.235 9.235 0 003 0m-6 0V16.5m1.875-1.312A2.25 2.25 0 0110.5 15h3a2.25 2.25 0 011.875 1.312m-6.375 0h7.5" />
+        </svg>
+      </span>
+    </div>
+    <div class="flex-1 relative min-h-0">
+      <canvas id="chart-user-registrations"></canvas>
+    </div>
+  </div>
+
+  <!-- Activity Logs Chart -->
+  <div class="bg-white/80 dark:bg-[#111827]/80 border border-gray-200/50 dark:border-gray-800/80 rounded-2xl p-6 shadow-sm backdrop-blur-xl flex flex-col h-[350px]">
+    <div class="flex items-center justify-between mb-4">
+      <div>
+        <h3 class="text-sm font-bold text-gray-800 dark:text-zinc-100">Attività del Sistema</h3>
+        <p class="text-xs text-gray-400 dark:text-zinc-500">Operazioni effettuate negli ultimi 7 giorni</p>
+      </div>
+      <span class="p-2 bg-amber-500/10 text-amber-500 dark:text-amber-400 rounded-xl">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
+        </svg>
+      </span>
+    </div>
+    <div class="flex-1 relative min-h-0">
+      <canvas id="chart-system-activity"></canvas>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  const chartLabels = {{ chart_data.labels|safe }};
+  const userData = {{ chart_data.users|safe }};
+  const actionData = {{ chart_data.actions|safe }};
+
+  let userChart = null;
+  let actionChart = null;
+
+  function getThemeColors() {
+    const style = getComputedStyle(document.documentElement);
+    const primary = style.getPropertyValue('--primary-color').trim() || '#6366f1';
+    const isDark = document.documentElement.classList.contains('dark');
+    
+    return {
+      primary: primary,
+      text: isDark ? '#94a3b8' : '#64748b',
+      grid: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.04)',
+      tooltipBg: isDark ? '#1f2937' : '#ffffff',
+      tooltipBorder: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.08)'
+    };
+  }
+
+  function initCharts() {
+    const colors = getThemeColors();
+
+    // 1. User Registrations Chart (Line Chart with Area Gradient)
+    const ctxUser = document.getElementById('chart-user-registrations')?.getContext('2d');
+    if (ctxUser) {
+      const gradient = ctxUser.createLinearGradient(0, 0, 0, 250);
+      gradient.addColorStop(0, hexToRgba(colors.primary, 0.3));
+      gradient.addColorStop(1, hexToRgba(colors.primary, 0.0));
+
+      userChart = new Chart(ctxUser, {
+        type: 'line',
+        data: {
+          labels: chartLabels,
+          datasets: [{
+            label: 'Nuovi Utenti',
+            data: userData,
+            borderColor: colors.primary,
+            borderWidth: 3,
+            pointBackgroundColor: colors.primary,
+            pointBorderColor: '#ffffff',
+            pointBorderWidth: 2,
+            pointRadius: 4,
+            pointHoverRadius: 6,
+            fill: true,
+            backgroundColor: gradient,
+            tension: 0.35
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              backgroundColor: colors.tooltipBg,
+              titleColor: colors.text,
+              bodyColor: colors.text,
+              borderColor: colors.tooltipBorder,
+              borderWidth: 1,
+              padding: 10,
+              cornerRadius: 8,
+              displayColors: false
+            }
+          },
+          scales: {
+            x: {
+              grid: { display: false },
+              ticks: { color: colors.text, font: { family: 'Inter', size: 11 } }
+            },
+            y: {
+              grid: { color: colors.grid },
+              ticks: { 
+                color: colors.text, 
+                font: { family: 'Inter', size: 11 },
+                precision: 0
+              }
+            }
+          }
+        }
+      });
+    }
+
+    // 2. System Activity Chart (Rounded Bar Chart)
+    const ctxAction = document.getElementById('chart-system-activity')?.getContext('2d');
+    if (ctxAction) {
+      actionChart = new Chart(ctxAction, {
+        type: 'bar',
+        data: {
+          labels: chartLabels,
+          datasets: [{
+            label: 'Operazioni',
+            data: actionData,
+            backgroundColor: colors.primary,
+            borderRadius: 6,
+            borderSkipped: false
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              backgroundColor: colors.tooltipBg,
+              titleColor: colors.text,
+              bodyColor: colors.text,
+              borderColor: colors.tooltipBorder,
+              borderWidth: 1,
+              padding: 10,
+              cornerRadius: 8,
+              displayColors: false
+            }
+          },
+          scales: {
+            x: {
+              grid: { display: false },
+              ticks: { color: colors.text, font: { family: 'Inter', size: 11 } }
+            },
+            y: {
+              grid: { color: colors.grid },
+              ticks: { 
+                color: colors.text, 
+                font: { family: 'Inter', size: 11 },
+                precision: 0
+              }
+            }
+          }
+        }
+      });
+    }
+  }
+
+  function updateCharts() {
+    if (!userChart && !actionChart) return;
+    
+    const colors = getThemeColors();
+
+    if (userChart) {
+      const ctxUser = document.getElementById('chart-user-registrations')?.getContext('2d');
+      if (ctxUser) {
+        const gradient = ctxUser.createLinearGradient(0, 0, 0, 250);
+        gradient.addColorStop(0, hexToRgba(colors.primary, 0.3));
+        gradient.addColorStop(1, hexToRgba(colors.primary, 0.0));
+        
+        userChart.data.datasets[0].borderColor = colors.primary;
+        userChart.data.datasets[0].pointBackgroundColor = colors.primary;
+        userChart.data.datasets[0].backgroundColor = gradient;
+      }
+      userChart.options.scales.x.ticks.color = colors.text;
+      userChart.options.scales.y.ticks.color = colors.text;
+      userChart.options.scales.y.grid.color = colors.grid;
+      userChart.options.plugins.tooltip.backgroundColor = colors.tooltipBg;
+      userChart.options.plugins.tooltip.titleColor = colors.text;
+      userChart.options.plugins.tooltip.bodyColor = colors.text;
+      userChart.options.plugins.tooltip.borderColor = colors.tooltipBorder;
+      userChart.update('none'); // Update without full animations for smooth transition
+    }
+
+    if (actionChart) {
+      actionChart.data.datasets[0].backgroundColor = colors.primary;
+      actionChart.options.scales.x.ticks.color = colors.text;
+      actionChart.options.scales.y.ticks.color = colors.text;
+      actionChart.options.scales.y.grid.color = colors.grid;
+      actionChart.options.plugins.tooltip.backgroundColor = colors.tooltipBg;
+      actionChart.options.plugins.tooltip.titleColor = colors.text;
+      actionChart.options.plugins.tooltip.bodyColor = colors.text;
+      actionChart.options.plugins.tooltip.borderColor = colors.tooltipBorder;
+      actionChart.update('none');
+    }
+  }
+
+  // Utility to convert Hex to RGBA
+  function hexToRgba(hex, alpha) {
+    var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+    hex = hex.replace(shorthandRegex, function(m, r, g, b) {
+      return r + r + g + g + b + b;
+    });
+    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? `rgba(${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}, ${alpha})` : `rgba(99,102,241, ${alpha})`;
+  }
+
+  // Initial Load
+  setTimeout(initCharts, 100);
+
+  // Monitor class (dark mode) and style (color presets) modifications on root document element
+  const observer = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+      if (mutation.attributeName === 'class' || mutation.attributeName === 'style') {
+        updateCharts();
+      }
+    });
+  });
+  observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class', 'style'] });
+})();
+</script>

@@ -3,7 +3,10 @@
 [![PyPI version](https://img.shields.io/pypi/v/django-admin-js.svg)](https://pypi.org/project/django-admin-js/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-A modern, responsive, and gorgeous Django Admin experience built with Tailwind CSS and progressive JavaScript enhancements. 
+A modern, responsive, and gorgeous Django Admin experience built with Tailwind CSS and progressive JavaScript enhancements.
+
+> [!WARNING]
+> **DjangoAdmin.JS is currently in BETA.** We are actively refining features, fixing bugs, and collecting feedback. Some API behaviors or style configurations might change before the official v1.0.0 release. Contributions and bug reports are highly welcome!
 
 Features a beautifully redesigned UI, customizable graphic styles (glassmorphism/minimalist), seamless AJAX page loads (no full page reloads), asynchronous form actions, and a Spotlight-like interactive Command Palette.
 

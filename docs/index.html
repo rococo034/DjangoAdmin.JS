@@ -109,41 +109,93 @@
         </section>
 
         <!-- Features Grid -->
-        <section id="features" class="py-16 border-t border-slate-200/80 bg-slate-100/40">
+        <section id="features" class="py-20 border-t border-slate-200/80 bg-slate-100/30">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center max-w-3xl mx-auto mb-16">
-                    <h2 class="text-3xl font-bold font-outfit mb-4 text-slate-900">Why choose DjangoAdmin.JS?</h2>
-                    <p class="text-slate-650">Bring modern frontend paradigms into Django's robust built-in administration without leaving your python workflow.</p>
+                    <span class="px-3.5 py-1 text-xs font-bold uppercase tracking-wider rounded-full bg-indigo-500/10 text-indigo-700 border border-indigo-550/20">Funzionalità Chiave</span>
+                    <h2 class="text-3xl sm:text-4xl font-bold font-outfit mt-4 mb-4 text-slate-900">Perché scegliere DjangoAdmin.JS?</h2>
+                    <p class="text-slate-650 text-base sm:text-lg">
+                        Abbiamo unito la robustezza e la stabilità dell'admin nativo di Django con le migliori tecnologie e pattern dell'ecosistema frontend moderno.
+                    </p>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <!-- Feature 1 -->
-                    <div class="p-6 rounded-2xl bg-white border border-slate-200/80 hover:border-indigo-500/50 transition-all shadow-sm group">
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Feature 1: AJAX Engine -->
+                    <div class="p-6 rounded-2xl bg-white border border-slate-200/85 hover:border-indigo-500/50 hover:shadow-lg transition-all duration-300 group">
                         <div class="w-12 h-12 rounded-xl bg-indigo-500/10 flex items-center justify-center text-indigo-600 mb-4 group-hover:scale-110 transition-transform">
-                            ⚡
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                            </svg>
                         </div>
-                        <h3 class="text-lg font-bold mb-2 font-outfit text-slate-900">AJAX Engine (PJAX)</h3>
+                        <h3 class="text-lg font-bold mb-2 font-outfit text-slate-900">Navigazione AJAX ultra-rapida</h3>
                         <p class="text-sm text-slate-650 leading-relaxed">
-                            No more full page refreshes when navigating, sorting, filtering, or paginating. Updates are smooth, fast, and light.
+                            Dì addio ai caricamenti completi della pagina. Il motore PJAX integrato intercetta la navigazione, la ricerca, i filtri e la paginazione, aggiornando solo i contenuti del workspace in millisecondi.
                         </p>
                     </div>
-                    <!-- Feature 2 -->
-                    <div class="p-6 rounded-2xl bg-white border border-slate-200/80 hover:border-emerald-500/50 transition-all shadow-sm group">
+
+                    <!-- Feature 2: Command Palette -->
+                    <div class="p-6 rounded-2xl bg-white border border-slate-200/85 hover:border-purple-500/50 hover:shadow-lg transition-all duration-300 group">
+                        <div class="w-12 h-12 rounded-xl bg-purple-500/10 flex items-center justify-center text-purple-650 mb-4 group-hover:scale-110 transition-transform">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-bold mb-2 font-outfit text-slate-900">Command Palette (Ctrl+K)</h3>
+                        <p class="text-sm text-slate-650 leading-relaxed">
+                            Un'interfaccia di comando in stile Spotlight/Raycast. Consente agli amministratori di navigare istantaneamente tra i modelli ed eseguire macro-azioni (es. cambio temi o layout `/style glassmorphism`).
+                        </p>
+                    </div>
+
+                    <!-- Feature 3: Tailwind CSS -->
+                    <div class="p-6 rounded-2xl bg-white border border-slate-200/85 hover:border-emerald-500/50 hover:shadow-lg transition-all duration-300 group">
                         <div class="w-12 h-12 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-600 mb-4 group-hover:scale-110 transition-transform">
-                            🎨
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path>
+                            </svg>
                         </div>
-                        <h3 class="text-lg font-bold mb-2 font-outfit text-slate-900">Dynamic Styles</h3>
+                        <h3 class="text-lg font-bold mb-2 font-outfit text-slate-900">Estetica Tailwind CSS Premium</h3>
                         <p class="text-sm text-slate-650 leading-relaxed">
-                            Choose between sleek Default cards, Frosty Glassmorphism with real backdrop blurs, or Minimalist high-contrast borders.
+                            Layout completamente responsive e riprogettato da zero. Offre una resa visiva eccellente su mobile, tablet e desktop, con una palette colori curata ed elegante, allontanandosi dal vecchio stile monolitico.
                         </p>
                     </div>
-                    <!-- Feature 3 -->
-                    <div class="p-6 rounded-2xl bg-white border border-slate-200/80 hover:border-pink-500/50 transition-all shadow-sm group">
-                        <div class="w-12 h-12 rounded-xl bg-pink-500/10 flex items-center justify-center text-pink-600 mb-4 group-hover:scale-110 transition-transform">
-                            🔍
+
+                    <!-- Feature 4: Layout Styles -->
+                    <div class="p-6 rounded-2xl bg-white border border-slate-200/85 hover:border-amber-500/50 hover:shadow-lg transition-all duration-300 group">
+                        <div class="w-12 h-12 rounded-xl bg-amber-500/10 flex items-center justify-center text-amber-600 mb-4 group-hover:scale-110 transition-transform">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"></path>
+                            </svg>
                         </div>
-                        <h3 class="text-lg font-bold mb-2 font-outfit text-slate-900">Command Palette</h3>
+                        <h3 class="text-lg font-bold mb-2 font-outfit text-slate-900">3 Layout grafici dinamici</h3>
                         <p class="text-sm text-slate-650 leading-relaxed">
-                            Hit <kbd class="px-1.5 py-0.5 rounded bg-slate-100 text-xs font-mono text-slate-600 border border-slate-200">Ctrl+K</kbd> to launch a Spotlight search. Navigate pages or change UI settings instantly.
+                            Passa al volo tra stili diversi: **Default** (schede stondate e ombreggiature soffici), **Glassmorphism** (trasparenza vetrata con sfocatura in tempo reale) o **Minimalist** (design piatto e linee nette).
+                        </p>
+                    </div>
+
+                    <!-- Feature 5: Background Actions -->
+                    <div class="p-6 rounded-2xl bg-white border border-slate-200/85 hover:border-pink-500/50 hover:shadow-lg transition-all duration-300 group">
+                        <div class="w-12 h-12 rounded-xl bg-pink-500/10 flex items-center justify-center text-pink-650 mb-4 group-hover:scale-110 transition-transform">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-bold mb-2 font-outfit text-slate-900">Form e Azioni Asincrone</h3>
+                        <p class="text-sm text-slate-650 leading-relaxed">
+                            Le operazioni di inserimento, aggiornamento e cancellazione dei record avvengono in background via AJAX, con gestione immediata degli errori di validazione del form e toast di notifica galleggianti.
+                        </p>
+                    </div>
+
+                    <!-- Feature 6: Global settings -->
+                    <div class="p-6 rounded-2xl bg-white border border-slate-200/85 hover:border-teal-500/50 hover:shadow-lg transition-all duration-300 group">
+                        <div class="w-12 h-12 rounded-xl bg-teal-500/10 flex items-center justify-center text-teal-650 mb-4 group-hover:scale-110 transition-transform">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-bold mb-2 font-outfit text-slate-900">Configurazione centralizzata</h3>
+                        <p class="text-sm text-slate-650 leading-relaxed">
+                            Controlla tutto da un singolo dizionario `DJANGO_ADMIN_JS` nelle impostazioni del tuo progetto Django. Modifica temi di default, attiva o disattiva la ricerca istantanea e il widget di personalizzazione.
                         </p>
                     </div>
                 </div>

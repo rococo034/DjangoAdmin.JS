@@ -206,19 +206,69 @@
         <section id="demo" class="py-16 border-t border-slate-200/80">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center max-w-3xl mx-auto mb-10">
-                    <span class="px-3 py-1 text-xs font-bold uppercase tracking-wider rounded-full bg-emerald-500/10 text-emerald-700 border border-emerald-500/20">Visual Showcase</span>
+                    <span class="px-3.5 py-1 text-xs font-bold uppercase tracking-wider rounded-full bg-emerald-500/10 text-emerald-700 border border-emerald-500/20">Visual Showcase</span>
                     <h2 class="text-3xl sm:text-4xl font-bold font-outfit mt-4 mb-2 text-slate-900">Modern Django Admin Interface</h2>
-                    <p class="text-slate-650 text-sm sm:text-base">
-                        A clean, modern administrative dashboard featuring a progressive layout design and an integrated command palette launcher.
+                    <p class="text-slate-655 text-sm sm:text-base">
+                        Explore the different views and visual enhancements of the theme. Click on the tabs below to switch previews.
                     </p>
                 </div>
 
-                <!-- Showcase Image Container -->
-                <div class="max-w-4xl mx-auto rounded-2xl overflow-hidden border border-slate-200 shadow-2xl bg-white p-2">
-                    <img src="assets/admin_screenshot.png" alt="DjangoAdmin.JS Modern Dashboard Screenshot" class="w-full rounded-xl object-cover">
+                <!-- Tabbed Showcase Component -->
+                <div class="max-w-4xl mx-auto">
+                    <!-- Tabs Header selector -->
+                    <div class="flex flex-wrap justify-center gap-2 mb-6 bg-slate-100 p-1.5 rounded-xl border border-slate-200">
+                        <button onclick="switchShowcase('dashboard', this)" class="showcase-tab px-4 py-2 text-xs sm:text-sm font-semibold rounded-lg transition-all bg-white text-slate-900 shadow-sm border border-slate-200/50">
+                            Dashboard & Search
+                        </button>
+                        <button onclick="switchShowcase('list', this)" class="showcase-tab px-4 py-2 text-xs sm:text-sm font-semibold rounded-lg transition-all text-slate-600 hover:text-slate-900">
+                            Data Tables
+                        </button>
+                        <button onclick="switchShowcase('delete', this)" class="showcase-tab px-4 py-2 text-xs sm:text-sm font-semibold rounded-lg transition-all text-slate-600 hover:text-slate-900">
+                            Action Modals
+                        </button>
+                        <button onclick="switchShowcase('detail', this)" class="showcase-tab px-4 py-2 text-xs sm:text-sm font-semibold rounded-lg transition-all text-slate-600 hover:text-slate-900">
+                            Forms & Toasts
+                        </button>
+                    </div>
+
+                    <!-- Showcase Image Container -->
+                    <div class="rounded-2xl overflow-hidden border border-slate-200 shadow-2xl bg-white p-2">
+                        <img id="showcase-image" src="assets/admin_screenshot.png" alt="DjangoAdmin.JS Modern Dashboard Screenshot" class="w-full rounded-xl object-cover transition-opacity duration-200">
+                    </div>
                 </div>
             </div>
         </section>
+
+        <!-- Showcase Swapping Script -->
+        <script>
+            function switchShowcase(view, tabBtn) {
+                const img = document.getElementById('showcase-image');
+                const tabs = document.querySelectorAll('.showcase-tab');
+                
+                // Reset styling for all tabs
+                tabs.forEach(tab => {
+                    tab.className = "showcase-tab px-4 py-2 text-xs sm:text-sm font-semibold rounded-lg transition-all text-slate-600 hover:text-slate-900";
+                });
+                
+                // Add active styles to chosen tab
+                tabBtn.className = "showcase-tab px-4 py-2 text-xs sm:text-sm font-semibold rounded-lg transition-all bg-white text-slate-900 shadow-sm border border-slate-200/50";
+                
+                // Transition effect for image swap
+                img.style.opacity = '0';
+                setTimeout(() => {
+                    if (view === 'dashboard') {
+                        img.src = 'assets/admin_screenshot.png';
+                    } else if (view === 'list') {
+                        img.src = 'assets/admin_page_list.png';
+                    } else if (view === 'delete') {
+                        img.src = 'assets/admin_delete_modal.png';
+                    } else if (view === 'detail') {
+                        img.src = 'assets/admin_detail_toast.png';
+                    }
+                    img.style.opacity = '1';
+                }, 150);
+            }
+        </script>
 
         <!-- Installation Instructions -->
         <section id="installation" class="py-20 bg-slate-100/40 border-t border-slate-200/80">

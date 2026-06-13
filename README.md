@@ -16,6 +16,8 @@ Features a beautifully redesigned UI, customizable graphic styles (glassmorphism
 
 👉 **[Launch the Live Interactive Demo Page](https://rococo034.github.io/DjangoAdmin.JS/)** to experience it directly in your browser!
 
+![DjangoAdmin.JS Showcase](docs/assets/admin_screenshot.png)
+
 ---
 
 ## ✨ Features & Capabilities

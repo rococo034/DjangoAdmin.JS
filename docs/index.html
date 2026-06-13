@@ -28,6 +28,22 @@
     
     <!-- CSS -->
     <link rel="stylesheet" href="index.css">
+    
+    <!-- Tailwind CSS Play CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        outfit: ['Outfit', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
 
     <!-- Structured Data (JSON-LD) for SEO -->
     <script type="application/ld+json">

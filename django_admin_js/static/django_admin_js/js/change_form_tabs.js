@@ -54,7 +54,7 @@
     });
     
     const tabHeader = document.createElement('div');
-    tabHeader.className = 'change-form-tabs relative flex items-center gap-6 border-b border-gray-200/80 dark:border-gray-800/60 w-full pt-5 pb-3 -mt-6 -mx-6 px-6 mb-6 z-10 bg-slate-50/20 dark:bg-zinc-900/10 rounded-t-2xl';
+    tabHeader.className = 'change-form-tabs relative flex items-center gap-6 border-b border-gray-200/80 dark:border-gray-800/60 pt-5 pb-3 -mt-6 -mx-6 px-6 mb-6 z-10 bg-slate-50/20 dark:bg-zinc-900/10 rounded-t-2xl';
     
     const indicator = document.createElement('div');
     indicator.className = 'absolute bottom-0 h-0.5 bg-apple-blue transition-all duration-200 ease-out z-0';

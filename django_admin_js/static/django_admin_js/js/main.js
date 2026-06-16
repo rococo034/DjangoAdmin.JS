@@ -81,6 +81,106 @@
     });
   };
 
+  window.initCollapsibleSidebarApps = function() {
+    const settings = window.DJANGO_ADMIN_JS_SETTINGS || {};
+    if (!settings.sidebarCollapsible) return;
+
+    document.querySelectorAll('.sidebar-app-header').forEach(header => {
+      if (header.hasAttribute('data-collapsible-init')) return;
+      header.setAttribute('data-collapsible-init', 'true');
+
+      const modelsList = header.nextElementSibling;
+      const chevron = header.querySelector('.sidebar-app-chevron');
+      if (!modelsList || !modelsList.classList.contains('sidebar-models-list')) return;
+
+      // Check if there is an active item inside this app card
+      const hasActive = modelsList.querySelector('.border-l-4') !== null || modelsList.querySelector('[aria-current="page"]') !== null;
+
+      // Handle default collapsed state (unless it has active items)
+      if (settings.sidebarCollapsedDefault && !hasActive) {
+        modelsList.classList.add('hidden');
+        if (chevron) {
+          chevron.style.transform = 'rotate(-90deg)';
+        }
+      }
+
+      // Add click listener
+      header.addEventListener('click', () => {
+        const isCollapsed = modelsList.classList.contains('hidden');
+        if (isCollapsed) {
+          modelsList.classList.remove('hidden');
+          modelsList.classList.add('animate-fade-in');
+          if (chevron) chevron.style.transform = 'rotate(0deg)';
+        } else {
+          modelsList.classList.add('hidden');
+          modelsList.classList.remove('animate-fade-in');
+          if (chevron) chevron.style.transform = 'rotate(-90deg)';
+        }
+      });
+    });
+  };
+
+  window.initPillBreadcrumbs = function() {
+    document.querySelectorAll('.breadcrumbs').forEach(container => {
+      if (container.hasAttribute('data-pills-init')) return;
+      container.setAttribute('data-pills-init', 'true');
+
+      const items = [];
+      container.childNodes.forEach(node => {
+        if (node.nodeType === Node.ELEMENT_NODE) {
+          if (node.tagName === 'A') {
+            items.push({
+              type: 'link',
+              text: node.textContent.trim(),
+              href: node.getAttribute('href')
+            });
+          } else if (node.tagName === 'SPAN') {
+            const text = node.textContent.trim();
+            if (text && text !== '/' && text !== '›' && text !== '»' && text !== '>') {
+              items.push({
+                type: 'text',
+                text: text
+              });
+            }
+          }
+        } else if (node.nodeType === Node.TEXT_NODE) {
+          const text = node.textContent.trim();
+          if (text && text !== '/' && text !== '›' && text !== '»' && text !== '>') {
+            items.push({
+              type: 'text',
+              text: text
+            });
+          }
+        }
+      });
+
+      if (items.length === 0) return;
+
+      container.className = 'breadcrumbs flex flex-wrap items-center gap-2 text-xs font-semibold';
+      container.innerHTML = '';
+
+      items.forEach((item, index) => {
+        if (index > 0) {
+          const sep = document.createElement('span');
+          sep.className = 'text-slate-300 dark:text-zinc-700 mx-0.5 flex items-center shrink-0';
+          sep.innerHTML = '<svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>';
+          container.appendChild(sep);
+        }
+
+        const pill = document.createElement(item.type === 'link' ? 'a' : 'span');
+        pill.textContent = item.text;
+        
+        if (item.type === 'link') {
+          pill.href = item.href;
+          pill.className = 'px-3 py-1.5 rounded-full bg-slate-200/50 dark:bg-zinc-800/50 hover:bg-slate-200 dark:hover:bg-zinc-700 hover:text-apple-blue border border-slate-300/30 dark:border-zinc-700/30 transition-all duration-200 text-zinc-650 dark:text-zinc-350';
+        } else {
+          pill.className = 'px-3 py-1.5 rounded-full bg-apple-blue/10 dark:bg-apple-blue/20 text-apple-blue border border-apple-blue/20';
+        }
+        container.appendChild(pill);
+      });
+    });
+  };
+
   window.reinitializePageComponents = function() {
     if (window.SelectBox && !window.SelectBox.add_to_cache.__patched) {
       const origAddToCache = window.SelectBox.add_to_cache;
@@ -100,6 +200,8 @@
     if (typeof window.initObjectTools === 'function') window.initObjectTools();
     if (typeof window.initChangeFormTabs === 'function') window.initChangeFormTabs();
     if (typeof window.initChangeListTable === 'function') window.initChangeListTable();
+    if (typeof window.initCollapsibleSidebarApps === 'function') window.initCollapsibleSidebarApps();
+    if (typeof window.initPillBreadcrumbs === 'function') window.initPillBreadcrumbs();
   };
 
   document.addEventListener('DOMContentLoaded', () => {

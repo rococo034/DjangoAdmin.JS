@@ -483,6 +483,7 @@ fieldset.module {
   border: none !important;
   margin: 0 !important;
   padding: 0 !important;
+  min-width: 0 !important;
 }
 
 fieldset h2 {
@@ -667,6 +668,8 @@ div.form-row label {
   margin-bottom: 1rem !important;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.02) !important;
   transition: all 0.2s ease !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
 }
 
 .dark .inline-group .inline-related {
@@ -868,6 +871,10 @@ input[type="checkbox"]:checked::after {
 /* Smooth transition for sidebar navigation links */
 #nav-sidebar a {
   transition: background-color 0.15s ease, color 0.15s ease, padding 0.2s ease !important;
+}
+
+#nav-sidebar .border-l-4 {
+  border-left-color: var(--primary-color, #6366f1) !important;
 }
 
 /* Custom smooth easing for sliding active indicator tabs */

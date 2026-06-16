@@ -332,6 +332,26 @@ DJANGO_ADMIN_JS = {
     "THEME_PICKER": True,        # Show the layout/color switcher widget
     "DEFAULT_THEME": "indigo",   # Preset choices: indigo, emerald, rose, amber, ocean, violet
     "THEME_STYLE": "default",    # Layout choices: default, glassmorphism, minimalist
+    "SIDEBAR_COLLAPSIBLE": True, # Enable/disable collapsible sidebar app sections
+    "SIDEBAR_COLLAPSED_DEFAULT": False, # Collapse all sidebar sections by default
+    "SITE_HEADER": "My Custom Admin", # Custom brand header text
+    "SITE_LOGO": "/static/my_app/logo.png", # Custom brand logo image path
+    "CUSTOM_LINKS": {            # Add custom links to existing apps or create new sections
+        "store": [
+            {
+                "name": "Custom Report",
+                "url": "/admin/custom-report/",
+                "icon": "fa-solid fa-chart-line",
+            }
+        ],
+        "external_tools": [
+            {
+                "name": "Google",
+                "url": "https://google.com",
+                "icon": "fa-brands fa-google",
+            }
+        ]
+    },
     "MODEL_ICONS": {             # Map models/apps to FontAwesome classes or Heroicon keys
         "auth.user": "fa-solid fa-user-shield",
         "auth.group": "fa-solid fa-users-gear",

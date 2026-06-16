@@ -82,6 +82,38 @@ DJANGO_ADMIN_JS = {
     # Options: "default", "glassmorphism", "minimalist"
     "THEME_STYLE": "default",
 
+    # Enable/Disable Collapsible Sidebar sections for each application (defaults to True)
+    "SIDEBAR_COLLAPSIBLE": True,
+
+    # Initial collapse state of sidebar app sections (defaults to False)
+    "SIDEBAR_COLLAPSED_DEFAULT": False,
+
+    # Custom text for the admin header branding (defaults to Django administration)
+    "SITE_HEADER": "My Custom Admin",
+
+    # Custom URL or path for the admin header and login logo
+    "SITE_LOGO": "/static/my_app/logo.png",
+
+    # Custom links to show in the sidebar.
+    # If the key matches an existing app label (e.g. "auth"), links are appended to that app.
+    # Otherwise, a brand new app section is created in the sidebar.
+    "CUSTOM_LINKS": {
+        "store": [
+            {
+                "name": "Custom Report",
+                "url": "/admin/custom-report/",
+                "icon": "fa-solid fa-chart-line",
+            }
+        ],
+        "external_tools": [
+            {
+                "name": "Google",
+                "url": "https://google.com",
+                "icon": "fa-brands fa-google",
+            }
+        ]
+    },
+
     # Map models/apps to icons.
     # Supports FontAwesome classes (FontAwesome 6.4.0 is bundled),
     # Heroicon keywords ("user", "users", "group", "site", "cog", "database", "key", "shield", "tag", "folder"),

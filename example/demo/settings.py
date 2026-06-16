@@ -131,6 +131,31 @@ DJANGO_ADMIN_JS = {
     "THEME_PICKER": True,
     "DEFAULT_THEME": "emerald",
     "THEME_STYLE": "glassmorphism",
+    "SIDEBAR_COLLAPSIBLE": True,
+    "SIDEBAR_COLLAPSED_DEFAULT": False,
+    "SITE_HEADER": "DjangoAdmin.JS Example",
+    "SITE_LOGO": "/static/django_admin_js/logo.png", # You can use any URL or custom static path
+    "CUSTOM_LINKS": {
+        "store": [
+            {
+                "name": "Custom Report",
+                "url": "/admin/custom-report/",
+                "icon": "fa-solid fa-chart-line",
+            }
+        ],
+        "external_links": [
+            {
+                "name": "GitHub Repository",
+                "url": "https://github.com/rococo034/DjangoAdmin.JS",
+                "icon": "fa-brands fa-github",
+            },
+            {
+                "name": "Django Docs",
+                "url": "https://docs.djangoproject.com",
+                "icon": "fa-solid fa-book",
+            }
+        ]
+    },
     "MODEL_ICONS": {
         "auth.user": "fa-solid fa-user-shield",
         "auth.group": "fa-solid fa-users-gear",

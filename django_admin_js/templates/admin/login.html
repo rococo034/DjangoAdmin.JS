@@ -1,4 +1,5 @@
-{% load i18n static %}
+{% load i18n static admin_stats %}
+{% django_admin_js_settings as js_settings %}
 <!DOCTYPE html>
 <html lang="en" class="h-full">
 <head>
@@ -55,9 +56,15 @@
     
     <div class="text-center space-y-2">
       <!-- Logo/Icon -->
-      <img src="{% static 'django_admin_js/logo.png' %}" alt="Logo" class="mx-auto w-24 h-24 rounded-3xl object-cover shadow-lg shadow-apple-blue/20">
-      <h2 class="text-2xl font-bold tracking-tight bg-gradient-to-r from-apple-text to-slate-500 dark:from-apple-darktext dark:to-slate-400 bg-clip-text text-transparent mt-4">{% translate 'Sign in to Admin' %}</h2>
-      <p class="text-xs text-apple-secondary font-medium">Enter your credentials to access the dashboard</p>
+      {% if js_settings.site_logo %}
+        <img src="{{ js_settings.site_logo }}" alt="Logo" class="mx-auto w-24 h-24 rounded-3xl object-cover shadow-lg shadow-apple-blue/20">
+      {% else %}
+        <img src="{% static 'django_admin_js/logo.png' %}" alt="Logo" class="mx-auto w-24 h-24 rounded-3xl object-cover shadow-lg shadow-apple-blue/20">
+      {% endif %}
+      <h2 class="text-2xl font-bold tracking-tight bg-gradient-to-r from-apple-text to-slate-500 dark:from-apple-darktext dark:to-slate-400 bg-clip-text text-transparent mt-4">
+        {{ js_settings.site_header|default:site_header|default:_('Sign in to Admin') }}
+      </h2>
+      <p class="text-xs text-apple-secondary font-medium">{% translate 'Enter your credentials to access the dashboard' %}</p>
     </div>
 
     <!-- Error Messages -->

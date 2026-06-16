@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.0-beta.5] - 2026-06-16
+### Added
+- Collapsible app sections/groups in the sidebar with collapsible state indicators.
+- Customized dashboard settings `SIDEBAR_COLLAPSIBLE` and `SIDEBAR_COLLAPSED_DEFAULT` to control sidebar collapsible behavior.
+- Support for custom branding text (`SITE_HEADER`) and custom brand logo URL (`SITE_LOGO`) in header and login card.
+- Custom links integration (`CUSTOM_LINKS`) in the sidebar, allowing appending custom links to existing apps or creating entirely new app sections.
+- Reworked site breadcrumbs into modern, clean floating capsule pills.
+- Shared recent actions card component on both dashboard and app index pages.
+
+### Fixed
+- Horizontal scroll overflow-x-auto on TabularInline tables by overriding default browser min-width constraints on fieldsets.
+- Tab headers width stretch issue.
+- Sidebar active item left border indicator color style override conflict with Tailwind.
+- Corrected breadcrumb separator chevron SVG path typo that drew a backslash character.
+
 ## [1.0.0-beta.4] - 2026-06-16
 ### Added
 - Generic Client-side JavaScript API class `DjangoAdminJS` exposed globally.

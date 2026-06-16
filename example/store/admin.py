@@ -20,7 +20,7 @@ class ProductAdmin(admin.ModelAdmin):
 
 class OrderItemInline(admin.TabularInline):
     model = OrderItem
-    extra = 1
+    extra = 3
     raw_id_fields = ('product',)
 
 @admin.register(Customer)

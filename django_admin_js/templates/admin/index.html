@@ -16,53 +16,6 @@
   {% include "admin/includes/dashboard_charts.html" %}
 
   <!-- Actions below -->
-  <div class="bg-white/75 dark:bg-[#111827]/70 backdrop-blur-xl border border-gray-200/50 dark:border-gray-800/80 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all duration-300">
-    <div class="module" id="recent-actions-module">
-        <h2 class="text-lg font-bold tracking-tight text-gray-900 dark:text-white mb-1">{% translate 'Recent actions' %}</h2>
-        <h3 class="text-xs font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-5 border-b border-gray-200/40 dark:border-gray-800/40 pb-2.5">{% translate 'My actions' %}</h3>
-        
-        {% load log %}
-        {% get_admin_log 10 as admin_log for_user user %}
-        {% if not admin_log %}
-            <p class="text-sm text-gray-500">{% translate 'None available' %}</p>
-        {% else %}
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {% for entry in admin_log %}
-            <div class="flex items-start gap-3 text-sm transition-all duration-150 hover:translate-x-0.5 p-3 rounded-xl bg-gray-50/50 dark:bg-black/10 border border-gray-100 dark:border-zinc-800/40">
-                <span class="p-1.5 rounded-lg shrink-0 {% if entry.is_addition %}bg-emerald-500/10 text-emerald-600 dark:text-emerald-400{% endif %}{% if entry.is_change %}bg-blue-500/10 text-blue-600 dark:text-blue-400{% endif %}{% if entry.is_deletion %}bg-rose-500/10 text-rose-600 dark:text-rose-400{% endif %}">
-                  {% if entry.is_addition %}
-                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
-                  {% elif entry.is_change %}
-                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125" /></svg>
-                  {% elif entry.is_deletion %}
-                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" /></svg>
-                  {% endif %}
-                </span>
-                <div class="flex-1 min-w-0">
-                  {% if entry.is_deletion or not entry.get_admin_url %}
-                      <span class="font-semibold text-gray-800 dark:text-gray-250 truncate block">{{ entry.object_repr }}</span>
-                  {% else %}
-                      <a href="{{ entry.get_admin_url }}" class="font-semibold text-gray-800 dark:text-gray-200 hover:text-indigo-500 dark:hover:text-indigo-400 transition-colors truncate block">{{ entry.object_repr }}</a>
-                  {% endif %}
-                  <div class="flex items-center gap-1.5 mt-1">
-                    <span class="text-[10px] font-medium text-gray-400 dark:text-gray-550">
-                      {% if entry.content_type %}
-                          {% filter capfirst %}{{ entry.content_type.name }}{% endfilter %}
-                      {% else %}
-                          {% translate 'Unknown content' %}
-                      {% endif %}
-                    </span>
-                    <span class="text-[9px] text-gray-300 dark:text-zinc-700">&bull;</span>
-                    <span class="text-[10px] font-bold uppercase tracking-wider {% if entry.is_addition %}text-emerald-500/80{% endif %}{% if entry.is_change %}text-blue-500/80{% endif %}{% if entry.is_deletion %}text-rose-500/80{% endif %}">
-                      {% if entry.is_addition %}{% translate 'Added' %}{% elif entry.is_change %}{% translate 'Changed' %}{% else %}{% translate 'Deleted' %}{% endif %}
-                    </span>
-                  </div>
-                </div>
-            </div>
-            {% endfor %}
-            </div>
-        {% endif %}
-    </div>
-  </div>
+  {% include "admin/includes/recent_actions.html" %}
 </div>
 {% endblock %}

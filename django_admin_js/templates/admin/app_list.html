@@ -1,18 +1,23 @@
 {% load i18n admin_stats %}
 
 {% if app_list %}
-  <div class="space-y-8">
+  {% django_admin_js_settings as js_settings %}
+  <div class="space-y-4">
   {% for app in app_list %}
     <div class="app-{{ app.app_label }} bg-white/70 dark:bg-[#111827]/60 backdrop-blur-md border border-gray-200/50 dark:border-gray-800/80 rounded-2xl shadow-sm overflow-hidden hover:shadow-md transition-all duration-300">
-      <div class="px-6 py-4 bg-gray-50/50 dark:bg-black/20 border-b border-gray-200/40 dark:border-gray-800/40 flex items-center justify-between">
-        <a href="{{ app.app_url }}" class="text-xs font-bold uppercase tracking-wider text-gray-500 hover:text-indigo-500 dark:hover:text-indigo-400 transition-colors {% if app.app_url in request.path %}text-indigo-600 dark:text-indigo-400{% endif %}" title="{% blocktranslate with name=app.name %}Models in the {{ name }} application{% endblocktranslate %}">
+      <div class="px-6 py-4 bg-gray-50/50 dark:bg-black/20 border-b border-gray-200/40 dark:border-gray-800/40 flex items-center justify-between {% if js_settings.sidebar_collapsible %}cursor-pointer select-none sidebar-app-header{% endif %}">
+        <a href="{{ app.app_url }}" class="text-xs font-bold uppercase tracking-wider text-gray-500 hover:text-indigo-500 dark:hover:text-indigo-400 transition-colors {% if app.app_url in request.path %}text-indigo-600 dark:text-indigo-400{% endif %}" title="{% blocktranslate with name=app.name %}Models in the {{ name }} application{% endblocktranslate %}" {% if js_settings.sidebar_collapsible %}onclick="event.stopPropagation();"{% endif %}>
           {{ app.name }}
         </a>
-        <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-zinc-800 text-gray-500 dark:text-gray-400">
-          {{ app.models|length }}
-        </span>
+        {% if js_settings.sidebar_collapsible %}
+          <svg class="w-4 h-4 text-gray-400 transition-transform duration-200 transform sidebar-app-chevron" {% if js_settings.sidebar_collapsed_default and app.app_url not in request.path %}style="transform: rotate(-90deg);"{% endif %} fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
+        {% else %}
+          <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-zinc-800 text-gray-500 dark:text-gray-400">
+            {{ app.models|length }}
+          </span>
+        {% endif %}
       </div>
-      <div class="divide-y divide-gray-100 dark:divide-gray-800/50">
+      <div class="divide-y divide-gray-100 dark:divide-gray-800/50 sidebar-models-list {% if js_settings.sidebar_collapsible and js_settings.sidebar_collapsed_default and app.app_url not in request.path %}hidden{% endif %}">
         {% for model in app.models %}
           <div class="model-{{ model.object_name|lower }} px-6 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 {% if model.admin_url in request.path %}bg-indigo-50/20 dark:bg-indigo-950/20 border-l-4 border-indigo-500{% else %}hover:bg-gray-50/40 dark:hover:bg-zinc-850/20{% endif %} transition-all duration-200">
             <div class="flex-1 min-w-0 flex items-center gap-3">
@@ -47,6 +52,60 @@
                   </a>
                 {% endif %}
               {% endif %}
+            </div>
+          </div>
+        {% endfor %}
+        
+        {% get_custom_links app.app_label as app_custom_links %}
+        {% for link in app_custom_links %}
+          <div class="custom-link-{{ link.name|slugify }} px-6 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 {% if link.url in request.path %}bg-indigo-50/20 dark:bg-indigo-950/20 border-l-4 border-indigo-500{% else %}hover:bg-gray-50/40 dark:hover:bg-zinc-850/20{% endif %} transition-all duration-200">
+            <div class="flex-1 min-w-0 flex items-center gap-3">
+              <div class="p-1.5 rounded-lg bg-slate-100/60 dark:bg-zinc-800/50 text-gray-400 dark:text-gray-500 transition-colors">
+                {% if link.icon %}
+                  {% if "<svg" in link.icon %}
+                    {{ link.icon|safe }}
+                  {% else %}
+                    <i class="{{ link.icon }} w-4 h-4 shrink-0 text-center flex items-center justify-center"></i>
+                  {% endif %}
+                {% else %}
+                  <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244" /></svg>
+                {% endif %}
+              </div>
+              <a href="{{ link.url }}" class="text-sm font-semibold {% if link.url in request.path %}text-indigo-600 dark:text-indigo-400{% else %}text-gray-800 dark:text-gray-100{% endif %} hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors break-words" {% if link.url in request.path %} aria-current="page"{% endif %}>{{ link.name }}</a>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  {% endfor %}
+
+  {% get_extra_custom_apps app_list as extra_apps %}
+  {% for app in extra_apps %}
+    <div class="app-{{ app.app_label }} bg-white/70 dark:bg-[#111827]/60 backdrop-blur-md border border-gray-200/50 dark:border-gray-800/80 rounded-2xl shadow-sm overflow-hidden hover:shadow-md transition-all duration-300">
+      <div class="px-6 py-4 bg-gray-50/50 dark:bg-black/20 border-b border-gray-200/40 dark:border-gray-800/40 flex items-center justify-between {% if js_settings.sidebar_collapsible %}cursor-pointer select-none sidebar-app-header{% endif %}">
+        <span class="text-xs font-bold uppercase tracking-wider text-gray-500 hover:text-indigo-500 dark:hover:text-indigo-400 transition-colors">
+          {{ app.name }}
+        </span>
+        {% if js_settings.sidebar_collapsible %}
+          <svg class="w-4 h-4 text-gray-400 transition-transform duration-200 transform sidebar-app-chevron" {% if js_settings.sidebar_collapsed_default and app.app_url not in request.path %}style="transform: rotate(-90deg);"{% endif %} fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
+        {% endif %}
+      </div>
+      <div class="divide-y divide-gray-100 dark:divide-gray-800/50 sidebar-models-list {% if js_settings.sidebar_collapsible and js_settings.sidebar_collapsed_default and app.app_url not in request.path %}hidden{% endif %}">
+        {% for link in app.custom_links %}
+          <div class="custom-link-{{ link.name|slugify }} px-6 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 {% if link.url in request.path %}bg-indigo-50/20 dark:bg-indigo-950/20 border-l-4 border-indigo-500{% else %}hover:bg-gray-50/40 dark:hover:bg-zinc-850/20{% endif %} transition-all duration-200">
+            <div class="flex-1 min-w-0 flex items-center gap-3">
+              <div class="p-1.5 rounded-lg bg-slate-100/60 dark:bg-zinc-800/50 text-gray-400 dark:text-gray-500 transition-colors">
+                {% if link.icon %}
+                  {% if "<svg" in link.icon %}
+                    {{ link.icon|safe }}
+                  {% else %}
+                    <i class="{{ link.icon }} w-4 h-4 shrink-0 text-center flex items-center justify-center"></i>
+                  {% endif %}
+                {% else %}
+                  <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244" /></svg>
+                {% endif %}
+              </div>
+              <a href="{{ link.url }}" class="text-sm font-semibold {% if link.url in request.path %}text-indigo-600 dark:text-indigo-400{% else %}text-gray-800 dark:text-gray-100{% endif %} hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors break-words" {% if link.url in request.path %} aria-current="page"{% endif %}>{{ link.name }}</a>
             </div>
           </div>
         {% endfor %}

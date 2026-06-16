@@ -5,9 +5,13 @@
   <div id="branding" class="flex items-center gap-3 min-w-0">
     <a href="{% url 'admin:index' %}" class="flex items-center gap-2.5 group min-w-0">
       <!-- Premium Logo Icon -->
-      <img src="{% static 'django_admin_js/logo.png' %}" alt="Logo" class="w-8 h-8 md:w-10 md:h-10 rounded-lg object-cover shadow-sm group-hover:scale-105 transition-transform duration-200 shrink-0">
+      {% if js_settings.site_logo %}
+        <img src="{{ js_settings.site_logo }}" alt="Logo" class="w-8 h-8 md:w-10 md:h-10 rounded-lg object-cover shadow-sm group-hover:scale-105 transition-transform duration-200 shrink-0">
+      {% else %}
+        <img src="{% static 'django_admin_js/logo.png' %}" alt="Logo" class="w-8 h-8 md:w-10 md:h-10 rounded-lg object-cover shadow-sm group-hover:scale-105 transition-transform duration-200 shrink-0">
+      {% endif %}
       <span class="text-base md:text-lg font-bold tracking-tight text-zinc-900 dark:text-zinc-100 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors truncate max-w-[150px] sm:max-w-xs md:max-w-none">
-        {{ site_header|default:_('Django administration') }}
+        {{ js_settings.site_header|default:site_header|default:_('Django administration') }}
       </span>
     </a>
   </div>

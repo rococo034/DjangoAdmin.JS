@@ -288,20 +288,22 @@
 <script>
   {% django_admin_js_settings as js_settings %}
   window.DJANGO_ADMIN_JS_SETTINGS = {
-    liveSearch: {{ js_settings.live_search|yesno:"true,false" }}
+    liveSearch: {{ js_settings.live_search|yesno:"true,false" }},
+    sidebarCollapsible: {{ js_settings.sidebar_collapsible|yesno:"true,false" }},
+    sidebarCollapsedDefault: {{ js_settings.sidebar_collapsed_default|yesno:"true,false" }}
   };
 </script>
-<script src="{% static 'django_admin_js/js/theme.js' %}"></script>
-<script src="{% static 'django_admin_js/js/toast.js' %}"></script>
-<script src="{% static 'django_admin_js/js/django_admin_js.js' %}"></script>
-<script src="{% static 'django_admin_js/js/custom_select.js' %}"></script>
-<script src="{% static 'django_admin_js/js/drag_drop_selector.js' %}"></script>
-<script src="{% static 'django_admin_js/js/drag_drop_uploader.js' %}"></script>
-<script src="{% static 'django_admin_js/js/datetime_converter.js' %}"></script>
-<script src="{% static 'django_admin_js/js/change_form_tabs.js' %}"></script>
-<script src="{% static 'django_admin_js/js/popup_hijacker.js' %}"></script>
-<script src="{% static 'django_admin_js/js/navigation.js' %}"></script>
-<script src="{% static 'django_admin_js/js/main.js' %}"></script>
+<script src="{% static 'django_admin_js/js/theme.js' %}?v={% django_admin_js_version %}"></script>
+<script src="{% static 'django_admin_js/js/toast.js' %}?v={% django_admin_js_version %}"></script>
+<script src="{% static 'django_admin_js/js/django_admin_js.js' %}?v={% django_admin_js_version %}"></script>
+<script src="{% static 'django_admin_js/js/custom_select.js' %}?v={% django_admin_js_version %}"></script>
+<script src="{% static 'django_admin_js/js/drag_drop_selector.js' %}?v={% django_admin_js_version %}"></script>
+<script src="{% static 'django_admin_js/js/drag_drop_uploader.js' %}?v={% django_admin_js_version %}"></script>
+<script src="{% static 'django_admin_js/js/datetime_converter.js' %}?v={% django_admin_js_version %}"></script>
+<script src="{% static 'django_admin_js/js/change_form_tabs.js' %}?v={% django_admin_js_version %}"></script>
+<script src="{% static 'django_admin_js/js/popup_hijacker.js' %}?v={% django_admin_js_version %}"></script>
+<script src="{% static 'django_admin_js/js/navigation.js' %}?v={% django_admin_js_version %}"></script>
+<script src="{% static 'django_admin_js/js/main.js' %}?v={% django_admin_js_version %}"></script>
 {% include "admin/includes/command_palette.html" %}
 </body>
 </html>

@@ -90,6 +90,10 @@ def django_admin_js_settings():
         "themes_json": json.dumps(themes),
         "default_theme": config.get("DEFAULT_THEME", "indigo"),
         "theme_style": config.get("THEME_STYLE", "default"),
+        "sidebar_collapsible": config.get("SIDEBAR_COLLAPSIBLE", True),
+        "sidebar_collapsed_default": config.get("SIDEBAR_COLLAPSED_DEFAULT", False),
+        "site_header": config.get("SITE_HEADER", None),
+        "site_logo": config.get("SITE_LOGO", None),
     }
 
 
@@ -259,5 +263,34 @@ def get_model_icon(app_label, model_name):
         return mark_safe('<svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9s2.015-9 4.5-9m0 0a9.004 9.004 0 018.716 2.253M12 3a9.004 9.004 0 00-8.716 2.253m0 0A9.001 9.001 0 003 12c0 2.457.983 4.684 2.58 6.3M18.716 5.253A9.001 9.001 0 0121 12c0 2.457-.983 4.684-2.58 6.3m0 0A9.004 9.004 0 0112 21" /></svg>')
     else:
         return mark_safe('<svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" /></svg>')
+
+
+@register.simple_tag
+def get_custom_links(app_label):
+    config = getattr(settings, "DJANGO_ADMIN_JS", {})
+    custom_links = config.get("CUSTOM_LINKS", {})
+    for key, val in custom_links.items():
+        if key.lower() == app_label.lower():
+            return val
+    return []
+
+
+@register.simple_tag
+def get_extra_custom_apps(app_list):
+    config = getattr(settings, "DJANGO_ADMIN_JS", {})
+    custom_links = config.get("CUSTOM_LINKS", {})
+    existing_app_labels = {app["app_label"].lower() for app in app_list}
+    
+    extra_apps = []
+    for key, val in custom_links.items():
+        if key.lower() not in existing_app_labels:
+            extra_apps.append({
+                "app_label": key.lower(),
+                "name": key.replace("_", " ").replace("-", " ").capitalize(),
+                "app_url": "#",
+                "models": [],
+                "custom_links": val
+            })
+    return extra_apps
 
 

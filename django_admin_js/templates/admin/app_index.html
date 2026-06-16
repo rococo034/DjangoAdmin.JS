@@ -5,16 +5,25 @@
 
 {% if not is_popup %}
 {% block nav-breadcrumbs %}
-  <nav aria-label="{% translate 'Breadcrumbs' %}">
-    <div class="breadcrumbs">
-      <a href="{% url 'admin:index' %}">{% translate 'Home' %}</a>
-      &rsaquo;
+<nav aria-label="{% translate 'Breadcrumbs' %}" class="w-full mb-6">
+  <div class="breadcrumbs flex items-center gap-2 text-xs font-semibold text-apple-secondary">
+    <a href="{% url 'admin:index' %}" class="text-zinc-600 dark:text-zinc-300 hover:text-apple-blue transition-colors">{% translate 'Home' %}</a>
+    <span class="text-slate-300 dark:text-zinc-700">/</span>
+    <span class="text-zinc-800 dark:text-zinc-300">
       {% for app in app_list %}
         {{ app.name }}
       {% endfor %}
-    </div>
-  </nav>
+    </span>
+  </div>
+</nav>
 {% endblock %}
 {% endif %}
 
 {% block sidebar %}{% endblock %}
+
+{% block content_container %}
+<div class="space-y-6">
+  {% include 'admin/app_list.html' with app_list=app_list show_changelinks=True %}
+  {% include "admin/includes/recent_actions.html" %}
+</div>
+{% endblock %}

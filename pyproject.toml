@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "django-admin-js"
-version = "1.0.0b2"
+version = "1.0.0b3"
 authors = [
     { name = "Rocco", email = "rocco@example.com" },
 ]

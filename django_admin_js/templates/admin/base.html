@@ -118,13 +118,13 @@
 {% block blockbots %}<meta name="robots" content="NONE,NOARCHIVE">{% endblock %}
 </head>
 
-<body class="{% if is_popup %}popup {% endif %}{% block bodyclass %}{% endblock %} theme-style-{{ js_settings.theme_style|default:'default' }} h-full text-apple-text dark:text-apple-darktext bg-apple-bg dark:bg-apple-darkbg font-sans antialiased relative overflow-x-hidden" data-admin-utc-offset="{% now "Z" %}">
+<body class="{% if is_popup %}popup {% endif %}{% block bodyclass %}{% endblock %} theme-style-{{ js_settings.theme_style|default:'default' }} h-full text-apple-text dark:text-apple-darktext bg-apple-bg dark:bg-apple-darkbg font-sans antialiased relative overflow-hidden" data-admin-utc-offset="{% now "Z" %}">
 {% include "admin/includes/aurora_bg.html" %}
 
 <a href="#content-start" class="sr-only focus:not-sr-only focus:absolute focus:p-4 focus:bg-apple-card focus:text-apple-blue focus:rounded-lg">{% translate 'Skip to main content' %}</a>
 
 <!-- Main Shell Container -->
-<div id="container" class="flex flex-col min-h-screen relative z-10">
+<div id="container" class="flex flex-col h-screen relative z-10 overflow-hidden">
 
     {% if not is_popup %}
     <!-- Modern Navigation Bar -->
@@ -135,7 +135,7 @@
     {% endif %}
 
     <!-- Main Workspace Area -->
-    <div class="main flex-1 flex flex-col md:flex-row relative mx-4 md:mx-10 lg:mx-20 gap-8 min-w-0" id="main">
+    <div class="main flex-1 flex flex-col md:flex-row relative mx-4 md:mx-10 lg:mx-20 gap-8 min-w-0 overflow-hidden" id="main">
       {% if not is_popup and is_nav_sidebar_enabled %}
         {% block nav-sidebar %}
           {% include "admin/nav_sidebar.html" %}

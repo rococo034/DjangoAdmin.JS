@@ -47,10 +47,7 @@
       });
       
       if (detailUrl && originalLink) {
-        const textSpan = document.createElement('span');
-        textSpan.textContent = originalLink.textContent;
-        textSpan.className = 'text-slate-700 dark:text-zinc-300 font-semibold';
-        originalLink.parentNode.replaceChild(textSpan, originalLink);
+        originalLink.classList.add('font-semibold');
         
         const deleteUrl = detailUrl.replace('/change/', '/delete/');
         

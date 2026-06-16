@@ -62,9 +62,9 @@
       </div>
       
       <div class="space-y-2">
-        <h2 class="text-3xl font-extrabold tracking-tight bg-gradient-to-r from-apple-text to-slate-500 dark:from-apple-darktext dark:to-slate-400 bg-clip-text text-transparent">
+        {% comment %} <h2 class="text-3xl font-extrabold tracking-tight bg-gradient-to-r from-apple-text to-slate-500 dark:from-apple-darktext dark:to-slate-400 bg-clip-text text-transparent">
           {% translate 'Safe & Sound' %}
-        </h2>
+        </h2> {% endcomment %}
         <p class="text-base text-apple-secondary font-medium">
           {% translate 'You have been successfully logged out.' %}
         </p>
@@ -89,4 +89,13 @@
   </div>
 
 </body>
+
+<script>
+  // Optional: Add a fade-in effect for the card on page load
+  document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(() => {
+      window.location.href = "{% url 'admin:index' %}";
+    }, 1000);
+  });
+</script>
 </html>

@@ -74,11 +74,11 @@
       font-size: 0.85rem !important;
     }
     #changelist table tbody th a {
-      color: #6366f1 !important;
+      color: var(--primary-color, #6366f1) !important;
       font-weight: 600 !important;
     }
     .dark #changelist table tbody th a {
-      color: #818cf8 !important;
+      color: var(--primary-hover-color, #818cf8) !important;
     }
     {% if not actions_on_top and not actions_on_bottom %}
       #changelist table thead th:first-child {width: inherit}

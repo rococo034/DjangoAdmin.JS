@@ -121,7 +121,7 @@ body {
   background-color: #ffffff !important;
   border: 1px solid rgba(226, 232, 240, 0.8) !important;
   border-radius: 1rem !important;
-  overflow: hidden !important;
+  overflow: visible !important;
   margin: 1rem 0 !important;
 }
 
@@ -131,7 +131,7 @@ body {
 }
 
 #changelist table thead th {
-  background-color: rgba(99, 102, 241, 0.05) !important;
+  background-color: #f6f8ff !important;
   color: #475569 !important;
   font-weight: 600 !important;
   text-transform: uppercase !important;
@@ -140,10 +140,20 @@ body {
   padding: 0.75rem 1rem !important;
   border-bottom: 1px solid rgba(226, 232, 240, 0.8) !important;
   text-align: left !important;
+  position: sticky !important;
+  top: -1px !important; /* offset slightly to cover top border cleanly */
+  z-index: 20 !important;
+}
+
+#changelist table thead th .text,
+#changelist table thead th a {
+  padding: 0 !important;
+  margin: 0 !important;
+  display: inline-block !important;
 }
 
 .dark #changelist table thead th {
-  background-color: rgba(99, 102, 241, 0.1) !important;
+  background-color: #1e2538 !important;
   color: #94a3b8 !important;
   border-bottom-color: rgba(31, 41, 55, 0.8) !important;
 }
@@ -170,15 +180,40 @@ body {
   font-size: 0.875rem !important;
   color: inherit !important;
   background: transparent !important;
+  text-align: left !important;
 }
 
 #changelist table tbody th a {
   color: var(--primary-color, #6366f1) !important;
-  font-weight: 500 !important;
+  font-weight: 600 !important;
+  text-decoration: none !important;
+}
+
+#changelist table tbody th a:hover {
+  text-decoration: underline !important;
 }
 
 .dark #changelist table tbody th a {
   color: var(--primary-hover-color, #818cf8) !important;
+}
+
+/* Align first column action checkboxes */
+#changelist table thead th.action-checkbox-column,
+#changelist table tbody td.action-checkbox {
+  width: 3rem !important;
+  padding: 0.75rem 0.5rem !important;
+  text-align: center !important;
+  vertical-align: middle !important;
+}
+
+#changelist table thead th.action-checkbox-column .text,
+#changelist table thead th.action-checkbox-column .text span {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  float: none !important;
 }
 
 /* Filter Box Overrides */
@@ -984,6 +1019,12 @@ input[type="checkbox"]:checked::after {
   overflow-x: auto !important;
   max-width: 100% !important;
   display: block !important;
+}
+
+@media (min-width: 768px) {
+  #changelist .overflow-x-auto {
+    overflow: visible !important;
+  }
 }
 
 /* --- MULTIPLE SELECTS & HORIZONTAL SELECTORS STYLING --- */

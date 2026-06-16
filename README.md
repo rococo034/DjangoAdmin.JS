@@ -97,6 +97,30 @@ DJANGO_ADMIN_JS = {
 }
 ```
 
+## 💻 Client-side JavaScript API
+
+DjangoAdmin.JS exposes a global utility helper class `DjangoAdminJS` on the `window` object to allow developer interaction within custom views or Django admin pages:
+
+### Show Alerts (Toasts)
+
+You can programmatically trigger a toast notification from your JavaScript code:
+
+```javascript
+// Show a warning alert
+DjangoAdminJS.showAlert("Attenzione, operazione non consentita!", DjangoAdminJS.ALERT_SEVERITY.WARN);
+```
+
+#### API Signature
+```javascript
+DjangoAdminJS.showAlert(message, severity, duration = 5000);
+```
+
+#### Available Severities (`DjangoAdminJS.ALERT_SEVERITY`)
+* `DjangoAdminJS.ALERT_SEVERITY.INFO` (Default)
+* `DjangoAdminJS.ALERT_SEVERITY.SUCCESS`
+* `DjangoAdminJS.ALERT_SEVERITY.WARN`
+* `DjangoAdminJS.ALERT_SEVERITY.ERROR`
+
 ---
 
 ## 📊 Compatibility

@@ -78,6 +78,7 @@
                 <a href="#features" class="hover:text-indigo-600 transition-colors">Features</a>
                 <a href="#demo" class="hover:text-indigo-600 transition-colors">Preview</a>
                 <a href="#installation" class="hover:text-indigo-600 transition-colors">Installation</a>
+                <a href="#js-api" class="hover:text-indigo-600 transition-colors">JS API</a>
                 <a href="https://github.com/rococo034/DjangoAdmin.JS" class="hover:text-indigo-600 transition-colors" target="_blank">GitHub</a>
             </nav>
             <div class="flex items-center space-x-4">
@@ -336,6 +337,61 @@ DJANGO_ADMIN_JS = {
         "auth.group": "fa-solid fa-users-gear",
     }
 }</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- JavaScript API Section -->
+        <section id="js-api" class="py-20 border-t border-slate-200/80 bg-white">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <span class="px-3.5 py-1 text-xs font-bold uppercase tracking-wider rounded-full bg-indigo-500/10 text-indigo-700 border border-indigo-550/20">Developers</span>
+                    <h2 class="text-3xl font-bold font-outfit mt-4 text-slate-900">Client-side JavaScript API</h2>
+                    <p class="text-slate-655 mt-2">Interact with the DjangoAdmin.JS interface dynamically from your custom scripts.</p>
+                </div>
+
+                <div class="space-y-8">
+                    <div class="bg-slate-50 border border-slate-200 rounded-2xl p-6 shadow-sm">
+                        <h3 class="text-lg font-bold text-slate-900 mb-3 font-outfit">Show Alerts / Toasts</h3>
+                        <p class="text-sm text-slate-650 mb-4">
+                            DjangoAdmin.JS exposes a global class <code class="px-1.5 py-0.5 rounded bg-slate-200/80 text-xs font-mono text-slate-800">DjangoAdminJS</code>. You can programmatically trigger toast notifications matching the dashboard theme directly in your views, custom layouts, or dynamically loaded elements:
+                        </p>
+                        
+                        <div class="bg-slate-950 rounded-xl p-4 border border-slate-800 shadow-md mb-6">
+                            <pre class="font-mono text-xs text-emerald-400 overflow-x-auto">
+// Show a warning alert
+DjangoAdminJS.showAlert("Attenzione, operazione non consentita!", DjangoAdminJS.ALERT_SEVERITY.WARN);</pre>
+                        </div>
+
+                        <h4 class="text-xs font-bold uppercase tracking-wider text-slate-550 mb-2">Signature</h4>
+                        <div class="bg-slate-950 rounded-xl p-4 border border-slate-800 shadow-md mb-6">
+                            <pre class="font-mono text-xs text-slate-300 overflow-x-auto">
+DjangoAdminJS.showAlert(message, severity, duration = 5000)</pre>
+                        </div>
+
+                        <h4 class="text-xs font-bold uppercase tracking-wider text-slate-550 mb-2">Parameters</h4>
+                        <ul class="list-disc pl-5 text-sm text-slate-650 space-y-1.5 mb-6">
+                            <li><strong><code class="font-mono text-xs text-slate-800 bg-slate-200/80 px-1 py-0.5 rounded">message</code></strong> (String): The plain text or HTML content to show in the alert.</li>
+                            <li><strong><code class="font-mono text-xs text-slate-800 bg-slate-200/80 px-1 py-0.5 rounded">severity</code></strong> (String): The alert severity level. Choices are members of <code class="font-mono text-xs text-slate-800 bg-slate-200/80 px-1 py-0.5 rounded">DjangoAdminJS.ALERT_SEVERITY</code>.</li>
+                            <li><strong><code class="font-mono text-xs text-slate-800 bg-slate-200/80 px-1 py-0.5 rounded">duration</code></strong> (Number, optional): Autohide delay in milliseconds. Defaults to <code class="font-mono text-xs text-slate-850">5000</code>.</li>
+                        </ul>
+
+                        <h4 class="text-xs font-bold uppercase tracking-wider text-slate-550 mb-2">Severity Constants</h4>
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                            <div class="p-3 bg-blue-500/10 border border-blue-500/20 text-blue-800 rounded-xl text-center font-semibold text-xs">
+                                .INFO
+                            </div>
+                            <div class="p-3 bg-emerald-500/10 border border-emerald-500/20 text-emerald-800 rounded-xl text-center font-semibold text-xs">
+                                .SUCCESS
+                            </div>
+                            <div class="p-3 bg-amber-500/10 border border-amber-500/20 text-amber-800 rounded-xl text-center font-semibold text-xs">
+                                .WARN
+                            </div>
+                            <div class="p-3 bg-red-500/10 border border-red-500/20 text-red-800 rounded-xl text-center font-semibold text-xs">
+                                .ERROR
+                            </div>
                         </div>
                     </div>
                 </div>

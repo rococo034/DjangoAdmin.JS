@@ -329,7 +329,14 @@ INSTALLED_APPS = [
                             <pre class="font-mono text-xs text-slate-300 leading-relaxed overflow-x-auto">
 DJANGO_ADMIN_JS = {
     "LIVE_SEARCH": True,         # Live filtering as-you-type
+    "LIVE_SEARCH_MIN_CHARS": 3,  # Minimum characters to start search
+    "LIVE_SEARCH_DEBOUNCE_MS": 300, # Debounce delay in ms
     "THEME_PICKER": True,        # Show the layout/color switcher widget
+    "LANGUAGE_SWITCHER": True,   # Show the language switcher widget
+    "LANGUAGES": [
+        ("it", "Italiano", "fi fi-it"),
+        ("en", "English", "fi fi-gb")
+    ], # Available languages (code, name, optional_icon_class_or_emoji)
     "DEFAULT_THEME": "indigo",   # Preset choices: indigo, emerald, rose, amber, ocean, violet
     "THEME_STYLE": "default",    # Layout choices: default, glassmorphism, minimalist
     "SIDEBAR_COLLAPSIBLE": True, # Enable/disable collapsible sidebar app sections
@@ -355,6 +362,17 @@ DJANGO_ADMIN_JS = {
     "MODEL_ICONS": {             # Map models/apps to FontAwesome classes or Heroicon keys
         "auth.user": "fa-solid fa-user-shield",
         "auth.group": "fa-solid fa-users-gear",
+    },
+    "CUSTOM_MODEL_ACTIONS": {    # Custom buttons/actions per model on list views
+        "store.order": [
+            {
+                "name": "Export Report",
+                "url": "/admin/store/order/export/",
+                "icon": "fa-solid fa-file-export",
+                "class": "bg-indigo-650 text-white hover:bg-indigo-700", # Optional CSS classes
+                "target": "_blank", # Optional target attribute
+            }
+        ]
     }
 }</pre>
                         </div>

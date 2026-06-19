@@ -19,8 +19,15 @@ from django.contrib import admin
 from django.urls import include, path
 from django.conf import settings
 
+from django.http import HttpResponse
+
+def export_order_excel(request):
+    return HttpResponse("Sto elaborando l'excel...")
+
 urlpatterns = [
+    path("admin/store/order/export/", export_order_excel, name="export_order_excel"),
     path("admin/", admin.site.urls),
+    path("i18n/", include("django.conf.urls.i18n")),
     path("__reload__/", include("django_browser_reload.urls")),
 ]
 

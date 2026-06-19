@@ -126,10 +126,33 @@
         previewSize.textContent = 'Già salvato (Clicca per aprire)';
         
         const isImage = /\.(jpg|jpeg|png|gif|svg|webp)$/i.test(existingFileUrl);
+        const isPdf = /\.pdf$/i.test(existingFileUrl);
         if (isImage) {
-          previewThumb.innerHTML = `<a href="${existingFileUrl}" target="_blank" class="w-full h-full block"><img src="${existingFileUrl}" class="w-full h-full object-cover hover:opacity-80 transition-opacity"></a>`;
+          previewThumb.innerHTML = `<div class="w-full h-full block cursor-pointer relative group/thumb"><img src="${existingFileUrl}" class="w-full h-full object-cover group-hover/thumb:opacity-90 transition-opacity"><div class="absolute inset-0 bg-black/40 opacity-0 group-hover/thumb:opacity-100 flex items-center justify-center transition-opacity text-white"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.2" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" /></svg></div></div>`;
+          
+          previewThumb.setAttribute('data-lightbox-src', existingFileUrl);
+          previewThumb.setAttribute('data-lightbox-type', 'image');
+          previewThumb.setAttribute('data-lightbox-title', existingFileName);
+        } else if (isPdf) {
+          previewThumb.className = 'w-12 h-12 rounded-lg bg-white dark:bg-zinc-900 border border-gray-150 dark:border-gray-800 flex items-center justify-center overflow-hidden shrink-0 shadow-sm cursor-pointer relative group/thumb';
+          previewThumb.innerHTML = `<svg class="w-6 h-6 text-red-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/></svg><div class="absolute inset-0 bg-black/40 opacity-0 group-hover/thumb:opacity-100 flex items-center justify-center transition-opacity text-white"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.2" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" /></svg></div>`;
+          
+          previewThumb.setAttribute('data-lightbox-src', existingFileUrl);
+          previewThumb.setAttribute('data-lightbox-type', 'pdf');
+          previewThumb.setAttribute('data-lightbox-title', existingFileName);
         }
       }
+
+      // Dynamic single click event listener on previewThumb using data attributes
+      previewThumb.addEventListener('click', (e) => {
+        const src = previewThumb.getAttribute('data-lightbox-src');
+        const title = previewThumb.getAttribute('data-lightbox-title');
+        if (src) {
+          e.preventDefault();
+          e.stopPropagation();
+          showLightboxModal(src, title);
+        }
+      });
 
       dropzone.addEventListener('click', () => {
         input.click();
@@ -169,11 +192,32 @@
           if (file.type.startsWith('image/')) {
             const reader = new FileReader();
             reader.onload = (e) => {
-              previewThumb.innerHTML = `<img src="${e.target.result}" class="w-full h-full object-cover">`;
+              previewThumb.className = 'w-12 h-12 rounded-lg bg-white dark:bg-zinc-900 border border-gray-150 dark:border-gray-800 flex items-center justify-center overflow-hidden shrink-0 shadow-sm cursor-pointer relative group/thumb';
+              previewThumb.innerHTML = `<img src="${e.target.result}" class="w-full h-full object-cover group-hover/thumb:opacity-90 transition-opacity"><div class="absolute inset-0 bg-black/40 opacity-0 group-hover/thumb:opacity-100 flex items-center justify-center transition-opacity text-white"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.2" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" /></svg></div>`;
+              
+              previewThumb.setAttribute('data-lightbox-src', e.target.result);
+              previewThumb.setAttribute('data-lightbox-type', 'image');
+              previewThumb.setAttribute('data-lightbox-title', file.name);
+            };
+            reader.readAsDataURL(file);
+          } else if (file.type === 'application/pdf') {
+            // PDF file loaded locally
+            const reader = new FileReader();
+            reader.onload = (e) => {
+              previewThumb.className = 'w-12 h-12 rounded-lg bg-white dark:bg-zinc-900 border border-gray-150 dark:border-gray-800 flex items-center justify-center overflow-hidden shrink-0 shadow-sm cursor-pointer relative group/thumb';
+              previewThumb.innerHTML = `<svg class="w-6 h-6 text-red-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/></svg><div class="absolute inset-0 bg-black/40 opacity-0 group-hover/thumb:opacity-100 flex items-center justify-center transition-opacity text-white"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.2" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" /></svg></div>`;
+              
+              previewThumb.setAttribute('data-lightbox-src', e.target.result);
+              previewThumb.setAttribute('data-lightbox-type', 'pdf');
+              previewThumb.setAttribute('data-lightbox-title', file.name);
             };
             reader.readAsDataURL(file);
           } else {
+            previewThumb.className = 'w-12 h-12 rounded-lg bg-white dark:bg-zinc-900 border border-gray-150 dark:border-gray-800 flex items-center justify-center overflow-hidden shrink-0 shadow-sm';
             previewThumb.innerHTML = `<svg class="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/></svg>`;
+            previewThumb.removeAttribute('data-lightbox-src');
+            previewThumb.removeAttribute('data-lightbox-type');
+            previewThumb.removeAttribute('data-lightbox-title');
           }
         }
       });
@@ -189,7 +233,61 @@
         preview.classList.add('hidden');
         dropzone.classList.remove('hidden');
         previewThumb.innerHTML = '';
+        previewThumb.removeAttribute('data-lightbox-src');
+        previewThumb.removeAttribute('data-lightbox-type');
+        previewThumb.removeAttribute('data-lightbox-title');
       });
     });
+  };
+
+  function showLightboxModal(src, title, type = 'image') {
+    // Check type dynamically from attribute if available
+    const modalType = document.querySelector('[data-lightbox-src="' + src.replace(/"/g, '\\"') + '"]')?.getAttribute('data-lightbox-type') || type;
+    
+    let modal = document.getElementById('django-admin-js-lightbox');
+    if (!modal) {
+      modal = document.createElement('div');
+      modal.id = 'django-admin-js-lightbox';
+      modal.className = 'fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 backdrop-blur-md opacity-0 pointer-events-none transition-all duration-300 p-4';
+      document.body.appendChild(modal);
+    }
+
+    modal.innerHTML = `
+      <div class="absolute inset-0 cursor-zoom-out" onclick="closeLightboxModal()"></div>
+      <div class="relative bg-white dark:bg-zinc-900 border border-slate-200/50 dark:border-zinc-800/50 rounded-3xl shadow-2xl overflow-hidden w-full max-w-4xl h-[85vh] flex flex-col transform scale-95 transition-all duration-300 z-10">
+        <div class="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-zinc-850 shrink-0">
+          <h3 class="text-sm font-bold text-slate-800 dark:text-zinc-200 truncate pr-4" id="lightbox-title"></h3>
+          <button onclick="closeLightboxModal()" class="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-zinc-800 transition-all cursor-pointer">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+        <div class="flex-1 p-2 bg-slate-50 dark:bg-zinc-950/40 min-h-[300px] flex items-center justify-center overflow-hidden">
+          ${modalType === 'pdf' 
+            ? `<iframe src="${src}" class="w-full h-full rounded-xl border-0 bg-white" type="application/pdf"></iframe>`
+            : `<img id="lightbox-img" src="${src}" class="max-w-full max-h-[70vh] object-contain rounded-xl shadow-md">`
+          }
+        </div>
+      </div>
+    `;
+    
+    document.getElementById('lightbox-title').textContent = title || 'Visualizzatore File';
+    
+    // Animate open
+    modal.classList.remove('opacity-0', 'pointer-events-none');
+    setTimeout(() => {
+      modal.querySelector('.transform').classList.remove('scale-95');
+      modal.querySelector('.transform').classList.add('scale-100');
+    }, 10);
+  }
+
+  window.closeLightboxModal = function() {
+    const modal = document.getElementById('django-admin-js-lightbox');
+    if (modal) {
+      modal.querySelector('.transform').classList.remove('scale-100');
+      modal.querySelector('.transform').classList.add('scale-95');
+      modal.classList.add('opacity-0', 'pointer-events-none');
+    }
   };
 })();

@@ -28,6 +28,55 @@
                 {% include "admin/color_picker.html" %}
             {% endif %}
 
+            <!-- Language Switcher -->
+            {% if js_settings.language_switcher %}
+            <div class="relative" id="language-switcher-container">
+              <button type="button" id="language-switcher-btn" class="p-2 rounded-xl bg-white/80 dark:bg-zinc-800/40 text-zinc-650 hover:text-zinc-950 dark:text-zinc-350 dark:hover:text-white hover:bg-white dark:hover:bg-zinc-800 transition-all duration-150 flex items-center gap-1.5 cursor-pointer text-sm font-semibold border border-slate-250/60 dark:border-zinc-800" title="{% translate 'Change language' %}">
+                {% if js_settings.current_language_icon %}
+                  {% if "fa-" in js_settings.current_language_icon or "fi-" in js_settings.current_language_icon or " " in js_settings.current_language_icon %}
+                    <i class="{{ js_settings.current_language_icon }} w-4.5 h-3.5 rounded-sm shadow-sm text-zinc-500 dark:text-zinc-400 flex items-center justify-center shrink-0 object-cover"></i>
+                  {% else %}
+                    <span class="text-sm shrink-0 mr-0.5">{{ js_settings.current_language_icon }}</span>
+                  {% endif %}
+                {% else %}
+                  <svg class="w-4 h-4 text-zinc-500 dark:text-zinc-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 21l5.25-11.25L21 21m-9-3h7.5M3 5.621a48.474 48.474 0 016-.371m0 0c1.12 0 2.233.038 3.334.114M9 5.25V3m3.334 2.364C11.176 10.658 7.69 15.08 3 17.502m9.334-12.138A14.37 14.37 0 009 5.25M9 5.25c-1.287 3.837-4.14 7.602-8.299 9.224" />
+                  </svg>
+                {% endif %}
+                {% get_current_language as CURRENT_LANGUAGE_CODE %}
+                <span class="uppercase font-bold text-xs">{{ CURRENT_LANGUAGE_CODE }}</span>
+              </button>
+              
+              <div id="language-switcher-dropdown" class="hidden absolute right-0 mt-2 w-44 bg-white dark:bg-zinc-900 border border-slate-250 dark:border-zinc-850 rounded-xl shadow-lg z-50 py-1">
+                <form action="{% url 'set_language' %}" method="post" id="language-switcher-form">
+                  {% csrf_token %}
+                  <input name="next" type="hidden" value="{{ request.get_full_path }}">
+                  <input name="language" id="language-switcher-input" type="hidden" value="">
+                  
+                  {% for lang in js_settings.languages %}
+                  <button type="button" onclick="document.getElementById('language-switcher-input').value='{{ lang.code }}'; document.getElementById('language-switcher-form').submit();" class="w-full text-left px-4 py-2.5 text-xs font-semibold text-zinc-700 dark:text-zinc-300 hover:bg-slate-50 dark:hover:bg-zinc-800/50 hover:text-indigo-650 dark:hover:text-indigo-400 transition-colors flex items-center justify-between {% if lang.code == CURRENT_LANGUAGE_CODE %}bg-indigo-50/50 dark:bg-indigo-950/20 text-indigo-600 dark:text-indigo-400{% endif %}">
+                    <div class="flex items-center gap-2">
+                      {% if lang.icon %}
+                        {% if "fa-" in lang.icon or "fi-" in lang.icon or " " in lang.icon %}
+                          <i class="{{ lang.icon }} text-xs w-4.5 h-3.5 rounded-sm shadow-sm text-center shrink-0 object-cover"></i>
+                        {% else %}
+                          <span class="text-xs w-4.5 text-center shrink-0">{{ lang.icon }}</span>
+                        {% endif %}
+                      {% endif %}
+                      <span>{{ lang.name }}</span>
+                    </div>
+                    {% if lang.code == CURRENT_LANGUAGE_CODE %}
+                    <svg class="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                    </svg>
+                    {% endif %}
+                  </button>
+                  {% endfor %}
+                </form>
+              </div>
+            </div>
+            {% endif %}
+
             <!-- Documentation -->
             {% if user.is_active and user.is_staff %}
                 {% url 'django-admindocs-docroot' as docsroot %}

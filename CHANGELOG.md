@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.0-beta.6] - 2026-06-19
+### Added
+- Header Language Switcher widget (`LANGUAGE_SWITCHER`) with custom languages list support (`LANGUAGES`).
+- Graphical flag icons integration in the language switcher using the `flag-icons` SVG library (via classes like `fi fi-*` or emojis).
+- Interactive double-chevron sorting indicator (`⇅`) on unsorted table column headers, highlighting on hover.
+- Custom settings `LIVE_SEARCH_MIN_CHARS` and `LIVE_SEARCH_DEBOUNCE_MS` to optimize live search queries.
+
+### Fixed
+- Stale search requests in live search when deleting characters rapidly by clearing pending timeouts immediately.
+- ForeignKey widget wrapper action buttons styling, colors, and PJAX re-binding lifecycle (using warn/orange for change, primary/blue for view, green for add, and red for delete).
+- Nested card border/background double nesting on the recent actions widget by removing the redundant `.module` class.
+- Spacing leakage and horizontal scrollbar in custom select dropdowns by resetting `.custom-select-options` padding/margin styles.
+- Tab layout preservation on form validation submit errors.
+
 ## [1.0.0-beta.5] - 2026-06-16
 ### Added
 - Collapsible app sections/groups in the sidebar with collapsible state indicators.

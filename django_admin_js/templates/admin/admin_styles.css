@@ -1557,6 +1557,282 @@ select[multiple] option:checked {
   }
 }
 
+/* --- Premium Changelist Action Buttons --- */
+.actions-header {
+  width: 120px !important;
+  text-align: right !important;
+}
+
+.actions-cell {
+  text-align: right !important;
+  vertical-align: middle !important;
+  white-space: nowrap !important;
+  width: 120px !important;
+  padding: 0.5rem 1rem !important;
+}
+
+.action-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 38px !important;
+  height: 38px !important;
+  border-radius: 10px !important;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  border: 1px solid transparent !important;
+  cursor: pointer !important;
+  color: inherit !important;
+  vertical-align: middle !important;
+}
+
+/* Edit / Detail (Pencil) Button */
+.action-btn-edit {
+  color: #007aff !important; /* Apple Blue */
+  background-color: rgba(0, 122, 255, 0.08) !important;
+}
+
+.dark .action-btn-edit {
+  color: #0a84ff !important;
+  background-color: rgba(10, 132, 255, 0.15) !important;
+}
+
+.action-btn-edit:hover {
+  background-color: rgba(0, 122, 255, 0.16) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 12px rgba(0, 122, 255, 0.15) !important;
+}
+
+.dark .action-btn-edit:hover {
+  background-color: rgba(10, 132, 255, 0.25) !important;
+  box-shadow: 0 4px 12px rgba(10, 132, 255, 0.2) !important;
+}
+
+/* Delete / Trash Button */
+.action-btn-delete {
+  color: #ff3b30 !important; /* Apple Red */
+  background-color: rgba(255, 59, 48, 0.08) !important;
+}
+
+.dark .action-btn-delete {
+  color: #ff453a !important;
+  background-color: rgba(255, 69, 58, 0.15) !important;
+}
+
+.action-btn-delete:hover {
+  background-color: rgba(255, 59, 48, 0.16) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 12px rgba(255, 59, 48, 0.15) !important;
+}
+
+.dark .action-btn-delete:hover {
+  background-color: rgba(255, 69, 58, 0.25) !important;
+  box-shadow: 0 4px 12px rgba(255, 69, 58, 0.2) !important;
+}
+
+/* Warning / Orange Button */
+.action-btn-warn {
+  color: #ff9500 !important; /* Apple Orange */
+  background-color: rgba(255, 149, 0, 0.08) !important;
+}
+
+.dark .action-btn-warn {
+  color: #ff9f0a !important;
+  background-color: rgba(255, 159, 10, 0.15) !important;
+}
+
+.action-btn-warn:hover {
+  background-color: rgba(255, 149, 0, 0.16) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 12px rgba(255, 149, 0, 0.15) !important;
+}
+
+.dark .action-btn-warn:hover {
+  background-color: rgba(255, 159, 10, 0.25) !important;
+  box-shadow: 0 4px 12px rgba(255, 159, 10, 0.2) !important;
+}
+
+/* Success / Green Button */
+.action-btn-success {
+  color: #34c759 !important; /* Apple Green */
+  background-color: rgba(52, 199, 89, 0.08) !important;
+}
+
+.dark .action-btn-success {
+  color: #30d158 !important;
+  background-color: rgba(48, 209, 88, 0.15) !important;
+}
+
+.action-btn-success:hover {
+  background-color: rgba(52, 199, 89, 0.16) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 12px rgba(52, 199, 89, 0.15) !important;
+}
+
+.dark .action-btn-success:hover {
+  background-color: rgba(48, 209, 88, 0.25) !important;
+  box-shadow: 0 4px 12px rgba(48, 209, 88, 0.2) !important;
+}
+
+.action-btn:active {
+  transform: scale(0.95) !important;
+}
+
+.action-btn svg {
+  width: 20px !important;
+  height: 20px !important;
+  display: block !important;
+  stroke-width: 2.2 !important;
+}
+
+/* Premium Change List Column Sorting Styling */
+#result_list th.sortable {
+  position: relative !important;
+}
+
+#result_list th.sortable .text {
+  display: inline-block !important;
+  padding-right: 0 !important;
+  vertical-align: middle !important;
+}
+
+/* Double-chevron indicator for unsorted sortable columns */
+#result_list th.sortable:not(.sorted) .text a::after {
+  content: "" !important;
+  display: inline-block !important;
+  width: 10px !important;
+  height: 10px !important;
+  margin-left: 6px !important;
+  vertical-align: middle !important;
+  opacity: 0.3 !important;
+  background-color: currentColor !important;
+  transition: opacity 0.2s, color 0.2s !important;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M8.25 15L12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9'/%3E%3C/svg%3E") no-repeat center !important;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M8.25 15L12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9'/%3E%3C/svg%3E") no-repeat center !important;
+}
+
+#result_list th.sortable:not(.sorted):hover .text a::after {
+  opacity: 0.8 !important;
+  color: #6366f1 !important;
+}
+
+.dark #result_list th.sortable:not(.sorted):hover .text a::after {
+  color: #818cf8 !important;
+}
+
+#result_list th.sortable .sortoptions {
+  position: static !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0.35rem !important;
+  margin-left: 0.5rem !important;
+  vertical-align: middle !important;
+  float: none !important;
+}
+
+/* Hide default Django sorting background icons */
+#result_list th.sortable .sortremove,
+#result_list th.sortable .toggle {
+  background: none !important;
+}
+
+/* Sort Priority Number Badge (Pill Style) */
+#result_list th.sortable .sortpriority {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-width: 18px !important;
+  height: 18px !important;
+  padding: 0 5px !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
+  color: #6366f1 !important;
+  background-color: rgba(99, 102, 241, 0.1) !important;
+  border-radius: 9999px !important;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
+}
+
+.dark #result_list th.sortable .sortpriority {
+  color: #818cf8 !important;
+  background-color: rgba(129, 140, 248, 0.18) !important;
+}
+
+/* Sort direction toggle arrow */
+#result_list th.sortable .toggle {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 20px !important;
+  height: 20px !important;
+  color: #4b5563 !important;
+  border-radius: 6px !important;
+  transition: all 0.2s !important;
+}
+
+.dark #result_list th.sortable .toggle {
+  color: #9ca3af !important;
+}
+
+#result_list th.sortable .toggle:hover {
+  background-color: rgba(0, 0, 0, 0.05) !important;
+  color: #111827 !important;
+}
+
+.dark #result_list th.sortable .toggle:hover {
+  background-color: rgba(255, 255, 255, 0.08) !important;
+  color: #f9fafb !important;
+}
+
+#result_list th.sortable .toggle::after {
+  content: "" !important;
+  display: inline-block !important;
+  width: 6px !important;
+  height: 6px !important;
+  border-right: 2px solid currentColor !important;
+  border-bottom: 2px solid currentColor !important;
+  transition: transform 0.2s !important;
+}
+
+#result_list th.sortable .toggle.ascending::after {
+  transform: rotate(-135deg) translateY(1px) !important;
+}
+
+#result_list th.sortable .toggle.descending::after {
+  transform: rotate(45deg) translateY(-1px) !important;
+}
+
+/* Sort removal (close button), appears on header hover */
+#result_list th.sortable .sortremove {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 0 !important;
+  height: 20px !important;
+  color: #ef4444 !important;
+  border-radius: 6px !important;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  opacity: 0 !important;
+  overflow: hidden !important;
+}
+
+#result_list th.sortable:hover .sortremove {
+  opacity: 0.8 !important;
+  width: 20px !important;
+}
+
+#result_list th.sortable .sortremove:hover {
+  opacity: 1 !important;
+  background-color: rgba(239, 68, 68, 0.1) !important;
+}
+
+#result_list th.sortable .sortremove::after {
+  content: "×" !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  line-height: 1 !important;
+}
+
+
 
 
 

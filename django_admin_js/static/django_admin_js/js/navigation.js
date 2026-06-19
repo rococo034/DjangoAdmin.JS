@@ -167,7 +167,8 @@
 
     let searchDebounceTimeout = null;
     document.addEventListener('input', (e) => {
-      if (!window.DJANGO_ADMIN_JS_SETTINGS || !window.DJANGO_ADMIN_JS_SETTINGS.liveSearch) return;
+      const settings = window.DJANGO_ADMIN_JS_SETTINGS || {};
+      if (!settings.liveSearch) return;
       const searchbar = e.target.closest('#searchbar');
       if (!searchbar) return;
 
@@ -178,13 +179,21 @@
       const cursorEnd = searchbar.selectionEnd;
       const value = searchbar.value;
 
+      const minChars = typeof settings.liveSearchMinChars === 'number' ? settings.liveSearchMinChars : 3;
+      const debounceMs = typeof settings.liveSearchDebounceMs === 'number' ? settings.liveSearchDebounceMs : 300;
+
       if (searchDebounceTimeout) clearTimeout(searchDebounceTimeout);
+
+      // Only perform search if value is empty (to reset/clear search) OR >= minChars
+      if (value.length > 0 && value.length < minChars) {
+        return;
+      }
 
       searchDebounceTimeout = setTimeout(() => {
         const formData = new FormData(form);
         const params = new URLSearchParams();
-        for (const [key, value] of formData.entries()) {
-          if (value) params.append(key, value);
+        for (const [key, val] of formData.entries()) {
+          if (val) params.append(key, val);
         }
         const url = window.location.pathname + '?' + params.toString();
 
@@ -194,7 +203,7 @@
           cursorEnd,
           value
         });
-      }, 300);
+      }, debounceMs);
     });
 
     document.addEventListener('click', (e) => {
@@ -258,6 +267,19 @@
       const submitButtons = form.querySelectorAll('button[type="submit"], input[type="submit"]');
       submitButtons.forEach(btn => btn.disabled = true);
 
+      // Clean up extra forms and adjust TOTAL_FORMS for inline formsets
+      form.querySelectorAll('.inline-group').forEach(group => {
+        const totalFormsInput = group.querySelector('input[name$="-TOTAL_FORMS"]');
+        if (totalFormsInput) {
+          // Count only non-hidden rows (original ones)
+          const rows = group.querySelectorAll('tbody tr:not(.hidden)');
+          totalFormsInput.value = rows.length;
+          
+          // Remove the hidden extra rows completely from the DOM so they aren't submitted
+          group.querySelectorAll('tr.hidden').forEach(r => r.remove());
+        }
+      });
+
       const formData = new FormData(form);
       const clickedBtn = form._clickedSubmitButton;
       if (clickedBtn && clickedBtn.name) {
@@ -287,6 +309,10 @@
           const newForm = doc.querySelector('form[id$="_form"]');
           if (newForm) {
             form.replaceWith(newForm);
+          }
+
+          if (typeof window.reinitializePageComponents === 'function') {
+            window.reinitializePageComponents();
           }
 
           if (typeof window.showToastsFromDocument === 'function') {

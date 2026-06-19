@@ -47,6 +47,7 @@ MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django_browser_reload.middleware.BrowserReloadMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -128,7 +129,15 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # Django Admin JS Settings Container
 DJANGO_ADMIN_JS = {
     "LIVE_SEARCH": True,
+    "LIVE_SEARCH_MIN_CHARS": 3, # Minimum characters required to start live search
+    "LIVE_SEARCH_DEBOUNCE_MS": 300, # Debounce time in ms before reloading
     "THEME_PICKER": True,
+    "LANGUAGE_SWITCHER": True,
+    "LANGUAGES": [
+        ("it", "Italiano", "fi fi-it"),
+        ("en", "English", "fi fi-gb"),
+        ("es", "Español", "fi fi-es"),
+    ],
     "DEFAULT_THEME": "emerald",
     "THEME_STYLE": "glassmorphism",
     "SIDEBAR_COLLAPSIBLE": True,
@@ -167,6 +176,22 @@ DJANGO_ADMIN_JS = {
         "store.customer": "fa-solid fa-user-tag",
         "store.order": "fa-solid fa-receipt",
         "store.orderitem": "fa-solid fa-dolly",
+    },
+    "CUSTOM_MODEL_ACTIONS": {
+        "store.order": [
+            {
+                "name": "Export Report",
+                "url": "/admin/store/order/export/",
+                "icon": "fa-solid fa-file-export",
+                "class": "bg-indigo-600 hover:bg-indigo-700 text-white border-transparent",
+            },
+            {
+                "name": "More information",
+                "url": "https://github.com/rococo034/DjangoAdmin.JS",
+                "icon": "fa-brands fa-github",
+                "target": "_blank",
+            },
+        ]
     }
 }
 

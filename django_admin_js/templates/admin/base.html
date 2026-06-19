@@ -9,6 +9,8 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <!-- Font Awesome CDN -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<!-- Flag Icons CDN -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.2.3/css/flag-icons.min.css">
 <script>
   // Apply theme and custom colors immediately to prevent flashing of un-themed content
   (function() {
@@ -280,6 +282,13 @@
     z-index: 99999 !important;
   }
   
+  .custom-select-options {
+    margin: 0 !important;
+    padding: 0 !important;
+    list-style: none !important;
+    list-style-type: none !important;
+  }
+  
   .custom-select-container.z-50 {
     z-index: 99999 !important;
   }
@@ -289,6 +298,8 @@
   {% django_admin_js_settings as js_settings %}
   window.DJANGO_ADMIN_JS_SETTINGS = {
     liveSearch: {{ js_settings.live_search|yesno:"true,false" }},
+    liveSearchMinChars: {{ js_settings.live_search_min_chars }},
+    liveSearchDebounceMs: {{ js_settings.live_search_debounce_ms }},
     sidebarCollapsible: {{ js_settings.sidebar_collapsible|yesno:"true,false" }},
     sidebarCollapsedDefault: {{ js_settings.sidebar_collapsed_default|yesno:"true,false" }}
   };

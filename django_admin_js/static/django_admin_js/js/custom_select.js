@@ -19,7 +19,15 @@
     const selects = document.querySelectorAll('select:not([multiple]):not([data-custom-select])');
     
     selects.forEach(select => {
-      if (select.closest('#nav-filter') || select.id === 'nav-filter' || select.closest('.nav-filter')) {
+      // Exclude filter boxes, autocomplete select2 widgets, and standard admin raw id fields
+      if (
+        select.closest('#nav-filter') || 
+        select.id === 'nav-filter' || 
+        select.closest('.nav-filter') ||
+        select.classList.contains('admin-autocomplete') ||
+        select.getAttribute('data-autocomplete-light-url') ||
+        select.classList.contains('select2-hidden-accessible')
+      ) {
         return;
       }
       
@@ -29,8 +37,8 @@
       const container = document.createElement('div');
       container.className = 'custom-select-container relative w-full inline-block min-w-[200px]';
       
+      // Insert container right BEFORE the select, keeping the select in its original spot so nextAll works
       select.parentNode.insertBefore(container, select);
-      container.appendChild(select);
       
       const trigger = document.createElement('button');
       trigger.type = 'button';
@@ -104,6 +112,9 @@
             e.stopPropagation();
             select.selectedIndex = index;
             select.dispatchEvent(new Event('change', { bubbles: true }));
+            if (window.django && window.django.jQuery) {
+              window.django.jQuery(select).trigger('change');
+            }
             updateTriggerLabel();
             closeDropdown();
           });
@@ -165,9 +176,18 @@
         });
       }
       
-      const observer = new MutationObserver(() => {
-        buildOptions();
-        updateTriggerLabel();
+      const observer = new MutationObserver((mutations) => {
+        // Only rebuild if the options elements inside the select actually changed
+        let optionsChanged = false;
+        mutations.forEach(mut => {
+          if (mut.type === 'childList') {
+            optionsChanged = true;
+          }
+        });
+        if (optionsChanged) {
+          buildOptions();
+          updateTriggerLabel();
+        }
       });
       observer.observe(select, { childList: true });
       
@@ -184,6 +204,11 @@
           }
         });
       });
+
+      // Force triggering Django's jQuery change listener to update sibling action links (add/change/delete/view)
+      if (window.django && window.django.jQuery) {
+        window.django.jQuery(select).trigger('change');
+      }
     });
   };
 })();

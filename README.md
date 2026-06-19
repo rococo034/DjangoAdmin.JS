@@ -71,8 +71,27 @@ DJANGO_ADMIN_JS = {
     # Enable/Disable Live Search (As-You-Type instant filtering in list views)
     "LIVE_SEARCH": True,
 
+    # Minimum characters required to trigger live search (defaults to 3)
+    "LIVE_SEARCH_MIN_CHARS": 3,
+
+    # Debounce delay in milliseconds before triggering search (defaults to 300)
+    "LIVE_SEARCH_DEBOUNCE_MS": 300,
+
     # Enable/Disable the Header Theme & Layout Switcher popover widget
     "THEME_PICKER": True,
+
+    # Enable/Disable the Header Language Switcher widget (defaults to False)
+    # Note: Requires i18n URL patterns path("i18n/", include("django.conf.urls.i18n")) to be defined in urls.py
+    "LANGUAGE_SWITCHER": True,
+
+    # List of languages available in the switcher (defaults to settings.LANGUAGES)
+    # Each language is a tuple: (code, name, optional_icon_class_or_emoji)
+    # Supports FontAwesome classes (e.g. "fa-solid fa-globe") and flag-icons (e.g. "fi fi-it")
+    "LANGUAGES": [
+        ("it", "Italiano", "fi fi-it"),
+        ("en", "English", "fi fi-gb"),
+        ("es", "Español", "fi fi-es"),
+    ],
 
     # Initial color theme preset (defaults to "indigo" if not specified)
     # Built-in presets: "indigo", "emerald", "amber", "rose", "violet", "ocean"
@@ -125,6 +144,19 @@ DJANGO_ADMIN_JS = {
         "management.project": "fa-solid fa-diagram-project",
         "store.product": "fa-solid fa-box-open",
         # Case-insensitive, supports either <app_label>.<model_name> or just <model_name>
+    },
+
+    # Custom Model Actions (rendered as buttons on the opposite side of default list actions)
+    "CUSTOM_MODEL_ACTIONS": {
+        "store.order": [
+            {
+                "name": "Export Report",
+                "url": "/admin/store/order/export/",
+                "icon": "fa-solid fa-file-export",
+                "class": "bg-indigo-600 hover:bg-indigo-700 text-white border-transparent", # Optional CSS classes
+                "target": "_blank", # Optional target attribute
+            }
+        ]
     }
 }
 ```

@@ -34,7 +34,7 @@
     if (form.querySelector('.change-form-tabs')) return;
     
     const inlines = Array.from(form.querySelectorAll('.inline-group'));
-    const fieldsetsContainer = form.querySelector('div > div.bg-white, div > div.dark\\:bg-apple-darkcard');
+    const fieldsetsContainer = form.querySelector('.change-form-card');
     
     if (!fieldsetsContainer || inlines.length === 0) return;
     
@@ -83,7 +83,30 @@
       indicator.style.width = `${btn.offsetWidth}px`;
     }
     
+    const savedTabName = sessionStorage.getItem('django_admin_active_tab_' + window.location.pathname);
+    
+    // Detect if any tab has errors and prioritize making it active
+    let errorTabIndex = -1;
     tabItems.forEach((tab, index) => {
+      if (tab && tab.element && typeof tab.element.querySelector === 'function') {
+        if (tab.element.querySelector('.errorlist, .errors, .errornote')) {
+          errorTabIndex = index;
+        }
+      }
+    });
+    
+    let activeIndex = 0;
+    if (errorTabIndex !== -1) {
+      activeIndex = errorTabIndex;
+    } else if (savedTabName) {
+      const foundIdx = tabItems.findIndex(t => t && t.name === savedTabName);
+      if (foundIdx !== -1) {
+        activeIndex = foundIdx;
+      }
+    }
+
+    tabItems.forEach((tab, index) => {
+      if (!tab) return;
       const btn = document.createElement('button');
       btn.type = 'button';
       btn.textContent = tab.name;
@@ -105,27 +128,38 @@
         updateBtnStyle(btn, true);
         moveIndicator(btn);
         
+        sessionStorage.setItem('django_admin_active_tab_' + window.location.pathname, tab.name);
+        
         tabItems.forEach(t => {
+          if (!t || !t.element) return;
           if (t === tab) {
             t.element.classList.remove('hidden');
             t.element.classList.add('animate-fade-in');
+            t.element.style.setProperty('display', 'block', 'important');
           } else {
             t.element.classList.add('hidden');
             t.element.classList.remove('animate-fade-in');
+            t.element.style.setProperty('display', 'none', 'important');
           }
         });
       });
       
       tabHeader.appendChild(btn);
       
-      if (index === 0) {
+      if (index === activeIndex) {
         btn.classList.add('active-tab');
         updateBtnStyle(btn, true);
-        tab.element.classList.remove('hidden');
+        if (tab.element) {
+          tab.element.classList.remove('hidden');
+          tab.element.style.setProperty('display', 'block', 'important');
+        }
         setTimeout(() => moveIndicator(btn), 50);
       } else {
         updateBtnStyle(btn, false);
-        tab.element.classList.add('hidden');
+        if (tab.element) {
+          tab.element.classList.add('hidden');
+          tab.element.style.setProperty('display', 'none', 'important');
+        }
       }
     });
     

@@ -23,6 +23,12 @@ class OrderItemInline(admin.TabularInline):
     extra = 3
     raw_id_fields = ('product',)
 
+@admin.register(OrderItem)
+class OrderItemAdmin(admin.ModelAdmin):
+    list_display = ('order', 'product', 'quantity', 'price')
+    search_fields = ('product__name',)
+
+
 @admin.register(Customer)
 class CustomerAdmin(admin.ModelAdmin):
     list_display = ('first_name', 'last_name', 'email', 'tier', 'registered_at')

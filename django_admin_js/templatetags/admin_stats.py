@@ -83,9 +83,29 @@ def django_admin_js_settings():
         }
     ]
     themes = config.get("THEMES", default_themes)
+    languages_config = config.get("LANGUAGES", getattr(settings, "LANGUAGES", []))
+    formatted_languages = []
+    for item in languages_config:
+        if isinstance(item, (list, tuple)) and len(item) >= 2:
+            icon = item[2] if len(item) >= 3 else None
+            formatted_languages.append({"code": item[0], "name": item[1], "icon": icon})
+
+    from django.utils import translation
+    current_lang_code = translation.get_language()
+    current_lang_icon = None
+    for lang in formatted_languages:
+        if lang["code"] == current_lang_code:
+            current_lang_icon = lang["icon"]
+            break
+
     return {
         "live_search": config.get("LIVE_SEARCH", True),
+        "live_search_min_chars": config.get("LIVE_SEARCH_MIN_CHARS", 3),
+        "live_search_debounce_ms": config.get("LIVE_SEARCH_DEBOUNCE_MS", 300),
         "theme_picker": config.get("THEME_PICKER", False),
+        "language_switcher": config.get("LANGUAGE_SWITCHER", False),
+        "languages": formatted_languages,
+        "current_language_icon": current_lang_icon,
         "themes": themes,
         "themes_json": json.dumps(themes),
         "default_theme": config.get("DEFAULT_THEME", "indigo"),
@@ -292,5 +312,99 @@ def get_extra_custom_apps(app_list):
                 "custom_links": val
             })
     return extra_apps
+
+
+@register.simple_tag
+def get_custom_model_actions(app_label, model_name):
+    config = getattr(settings, "DJANGO_ADMIN_JS", {})
+    custom_actions = config.get("CUSTOM_MODEL_ACTIONS", {})
+    
+    lookup_keys = [
+        f"{app_label}.{model_name}".lower(),
+        model_name.lower(),
+    ]
+    
+    for key in lookup_keys:
+        for conf_key, val in custom_actions.items():
+            if conf_key.lower() == key:
+                # Ensure it's safe if HTML/svg is used
+                for action in val:
+                    if "icon" in action and action["icon"] and action["icon"].strip().startswith("<svg"):
+                        action["icon"] = mark_safe(action["icon"])
+                return val
+    return []
+
+
+@register.filter
+def get_inline_field_display(instance, field_name):
+    if not instance or not field_name:
+        return ""
+    
+    # Check if field_name is direct attribute
+    if not hasattr(instance, field_name):
+        return ""
+        
+    # Check if there is a get_FOO_display method for ChoiceFields
+    display_method = getattr(instance, f"get_{field_name}_display", None)
+    if display_method:
+        return display_method()
+        
+    value = getattr(instance, field_name)
+    if value is None:
+        return ""
+        
+    # Handle relationships/related managers
+    if hasattr(value, "all"):
+        return ", ".join(str(obj) for obj in value.all())
+        
+    # Format boolean
+    if isinstance(value, bool):
+        return "Yes" if value else "No"
+        
+    return str(value)
+
+
+@register.filter
+def get_model_meta(opts_or_model):
+    if hasattr(opts_or_model, "model"):
+        return opts_or_model.model._meta
+    if hasattr(opts_or_model, "_meta"):
+        return opts_or_model._meta
+    return opts_or_model
+
+
+from django.urls import reverse
+
+@register.simple_tag
+def get_inline_add_url(inline_admin_formset, parent_pk):
+    try:
+        opts = inline_admin_formset.opts.model._meta
+        url_name = f"admin:{opts.app_label}_{opts.model_name}_add"
+        fk_name = inline_admin_formset.opts.fk_name
+        if not fk_name:
+            parent_model = inline_admin_formset.opts.parent_model
+            for field in opts.get_fields():
+                if field.is_relation and field.many_to_one and field.related_model == parent_model:
+                    fk_name = field.name
+                    break
+        base_url = reverse(url_name)
+        return f"{base_url}?_popup=1&{fk_name}={parent_pk}"
+    except Exception as e:
+        return "#"
+
+@register.simple_tag
+def get_inline_change_url(inline_admin_form):
+    try:
+        opts = inline_admin_form.model_admin.model._meta
+        url_name = f"admin:{opts.app_label}_{opts.model_name}_change"
+        pk = inline_admin_form.original.pk
+        base_url = reverse(url_name, args=[pk])
+        return f"{base_url}?_popup=1"
+    except Exception as e:
+        return "#"
+
+
+
+
 
 

@@ -1,6 +1,6 @@
 {% load i18n %}
 <div class="bg-white/75 dark:bg-[#111827]/70 backdrop-blur-xl border border-gray-200/50 dark:border-gray-800/80 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all duration-300">
-  <div class="module" id="recent-actions-module">
+  <div class="recent-actions-inner" id="recent-actions-module">
       <h2 class="text-lg font-bold tracking-tight text-gray-900 dark:text-white mb-1">{% translate 'Recent actions' %}</h2>
       <h3 class="text-xs font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-5 border-b border-gray-200/40 dark:border-gray-800/40 pb-2.5">{% translate 'My actions' %}</h3>
       
@@ -9,9 +9,9 @@
       {% if not admin_log %}
           <p class="text-sm text-gray-500">{% translate 'None available' %}</p>
       {% else %}
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-3">
           {% for entry in admin_log %}
-          <div class="flex items-start gap-3 text-sm transition-all duration-150 hover:translate-x-0.5 p-3 rounded-xl bg-gray-50/50 dark:bg-black/10 border border-gray-100 dark:border-zinc-800/40">
+          <div class="flex items-start gap-3 text-sm transition-all duration-150 hover:translate-x-0.5 py-1">
               <span class="p-1.5 rounded-lg shrink-0 {% if entry.is_addition %}bg-emerald-500/10 text-emerald-600 dark:text-emerald-400{% endif %}{% if entry.is_change %}bg-blue-500/10 text-blue-600 dark:text-blue-400{% endif %}{% if entry.is_deletion %}bg-rose-500/10 text-rose-600 dark:text-rose-400{% endif %}">
                 {% if entry.is_addition %}
                   <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>

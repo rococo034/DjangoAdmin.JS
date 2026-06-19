@@ -173,51 +173,7 @@
         
         <div style="width: 100% !important;" class="changelist-form-container bg-white dark:bg-apple-darkcard border border-apple-border/40 dark:border-apple-darkborder/40 rounded-2xl shadow-sm p-6 space-y-6">
           {% block search %}
-            {% if cl.search_fields %}
-            <div id="toolbar" class="mb-6">
-              <form id="changelist-search" method="get" role="search" class="space-y-2">
-                <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-                  <div class="relative flex-1 flex items-center h-11 bg-apple-bg dark:bg-black/30 border border-apple-border/50 dark:border-apple-darkborder/50 rounded-lg shadow-sm focus-within:ring-2 focus-within:ring-apple-blue/20 focus-within:border-apple-blue transition-all px-3 py-1">
-                    <div class="flex items-center pointer-events-none">
-                      <svg class="h-4.5 w-4.5 text-slate-400 dark:text-slate-500" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                      </svg>
-                    </div>
-                    <input type="text" size="40" name="q" value="{{ cl.query }}" id="searchbar" {% if cl.search_help_text %} aria-describedby="searchbar_helptext"{% endif %} placeholder="{% translate 'Search database...' %}" class="w-full bg-transparent border-none outline-none text-sm font-medium text-apple-text dark:text-apple-darktext placeholder:text-apple-secondary/50 focus:ring-0" style="border: none !important; box-shadow: none !important; padding: 0 !important; margin-left: 0.65rem !important;">
-                  </div>
-                  
-                  <button type="submit" class="inline-flex items-center justify-center gap-2 h-11 px-6 bg-apple-blue hover:bg-apple-blue-hover text-white rounded-lg text-sm font-semibold transition-all duration-150 shadow-sm shadow-apple-blue/10 hover:shadow-apple-blue/20 cursor-pointer">
-                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                    </svg>
-                    <span>{% translate 'Search' %}</span>
-                  </button>
-
-                  {% if has_add_permission %}
-                    {% url cl.opts|admin_urlname:'add' as add_url %}
-                    <a href="{% add_preserved_filters add_url is_popup to_field %}" class="inline-flex items-center justify-center h-11 w-11 bg-green-500 hover:bg-green-600 text-white rounded-lg shadow-sm shadow-green-500/10 hover:shadow-green-500/20 transition-all duration-150 cursor-pointer shrink-0" title="{% blocktranslate with cl.opts.verbose_name as name %}Add {{ name }}{% endblocktranslate %}">
-                      <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
-                    </a>
-                  {% endif %}
-
-                  {% if cl.result_count != cl.result_list|length %}
-                    <span class="text-xs font-semibold bg-white dark:bg-black/40 border border-apple-border/50 dark:border-apple-darkborder/50 h-11 px-4 rounded-lg text-apple-secondary flex items-center gap-2 self-center sm:ml-2 shadow-sm">
-                      <span class="w-1.5 h-1.5 rounded-full bg-apple-blue"></span>
-                      {% blocktranslate count counter=cl.result_count %}{{ counter }} result{% plural %}{{ counter }} results{% endblocktranslate %} 
-                      (<a href="?{% if cl.is_popup %}{{ is_popup_var }}=1{% if cl.add_facets %}&{% endif %}{% endif %}{% if cl.add_facets %}{{ is_facets_var }}{% endif %}" class="text-apple-blue hover:underline font-bold">{% if cl.show_full_result_count %}{% blocktranslate with full_result_count=cl.full_result_count %}{{ full_result_count }} total{% endblocktranslate %}{% else %}{% translate "Show all" %}{% endif %}</a>)
-                    </span>
-                  {% endif %}
-
-                  {% for pair in cl.params.items %}
-                      {% if pair.0 != 'q' %}<input type="hidden" name="{{ pair.0 }}" value="{{ pair.1 }}">{% endif %}
-                  {% endfor %}
-                </div>
-                {% if cl.search_help_text %}
-                  <p class="text-xs text-apple-secondary pl-1" id="searchbar_helptext">{{ cl.search_help_text }}</p>
-                {% endif %}
-              </form>
-            </div>
-            {% endif %}
+            {% search_form cl %}
           {% endblock %}
           {% block date_hierarchy %}{% if cl.date_hierarchy %}{% date_hierarchy cl %}{% endif %}{% endblock %}
 

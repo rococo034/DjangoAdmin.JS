@@ -6,40 +6,40 @@
         {% if not is_hidden %}
         <div class="flex items-center gap-1.5 shrink-0">
             {% if can_change_related %}
-            <a class="related-widget-wrapper-link change-related p-1.5 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md transition-all flex items-center justify-center cursor-pointer" id="change_id_{{ name }}"
+            <a class="action-btn action-btn-warn related-widget-wrapper-link change-related" id="change_id_{{ name }}"
                 data-href-template="{{ change_related_template_url }}?{{ url_params }}"
                 data-popup="yes"
                 title="{% blocktranslate %}Change selected {{ model }}{% endblocktranslate %}">
-                <svg class="w-5 h-5 text-gray-500 hover:text-indigo-600 dark:text-gray-400 dark:hover:text-indigo-400 transition-colors duration-150" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
                 </svg>
             </a>
             {% endif %}
             {% if can_add_related %}
-            <a class="related-widget-wrapper-link add-related p-1.5 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md transition-all flex items-center justify-center cursor-pointer" id="add_id_{{ name }}"
+            <a class="action-btn action-btn-success related-widget-wrapper-link add-related" id="add_id_{{ name }}"
                 data-popup="yes"
                 href="{{ add_related_url }}?{{ url_params }}"
                 title="{% blocktranslate %}Add another {{ model }}{% endblocktranslate %}">
-                <svg class="w-5 h-5 text-emerald-600 hover:text-emerald-700 dark:text-emerald-400 dark:hover:text-emerald-300 transition-colors duration-150" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M12 4v16m8-8H4" />
                 </svg>
             </a>
             {% endif %}
             {% if can_delete_related %}
-            <a class="related-widget-wrapper-link delete-related p-1.5 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md transition-all flex items-center justify-center cursor-pointer" id="delete_id_{{ name }}"
+            <a class="action-btn action-btn-delete related-widget-wrapper-link delete-related" id="delete_id_{{ name }}"
                 data-href-template="{{ delete_related_template_url }}?{{ url_params }}"
                 data-popup="yes"
                 title="{% blocktranslate %}Delete selected {{ model }}{% endblocktranslate %}">
-                <svg class="w-5 h-5 text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-300 transition-colors duration-150" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
                 </svg>
             </a>
             {% endif %}
             {% if can_view_related %}
-              <a class="related-widget-wrapper-link view-related p-1.5 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md transition-all flex items-center justify-center cursor-pointer" id="view_id_{{ name }}"
+              <a class="action-btn action-btn-edit related-widget-wrapper-link view-related" id="view_id_{{ name }}"
                  data-href-template="{{ change_related_template_url }}?{{ view_related_url_params }}"
                  title="{% blocktranslate %}View selected {{ model }}{% endblocktranslate %}">
-                <svg class="w-5 h-5 text-gray-500 hover:text-indigo-600 dark:text-gray-400 dark:hover:text-indigo-400 transition-colors duration-150" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                 </svg>

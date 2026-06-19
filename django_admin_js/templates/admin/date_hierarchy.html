@@ -1,14 +1,32 @@
 {% if show %}
-<nav class="toplinks">
-{% block date-hierarchy-toplinks %}
-{% block date-hierarchy-back %}
-{% if back %}<a href="{{ back.link }}" class="date-back">&lsaquo; {{ back.title }}</a>{% endif %}
-{% endblock %}
-{% block date-hierarchy-choices %}
-{% for choice in choices %}
-{% if choice.link %}<a href="{{ choice.link }}">{{ choice.title }}</a>{% else %}{{ choice.title }}{% endif %}
-{% endfor %}
-{% endblock %}
-{% endblock %}
+<nav class="flex flex-wrap items-center gap-2 p-3 bg-apple-bg/50 dark:bg-black/20 border border-apple-border/20 dark:border-apple-darkborder/20 rounded-xl text-sm font-medium mb-4">
+  {% block date-hierarchy-toplinks %}
+    {% block date-hierarchy-back %}
+      {% if back %}
+        <a href="{{ back.link }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white dark:bg-apple-darkcard border border-apple-border/50 dark:border-apple-darkborder/50 hover:border-apple-blue/50 dark:hover:border-apple-blue/50 hover:bg-apple-bg dark:hover:bg-black/30 text-apple-text dark:text-apple-darktext text-xs font-semibold rounded-lg shadow-sm transition-all duration-150 mr-2">
+          <svg class="w-3.5 h-3.5 text-apple-secondary" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+          </svg>
+          {{ back.title }}
+        </a>
+      {% endif %}
+    {% endblock %}
+    
+    {% block date-hierarchy-choices %}
+      <div class="flex flex-wrap items-center gap-1.5">
+        {% for choice in choices %}
+          {% if choice.link %}
+            <a href="{{ choice.link }}" class="inline-flex items-center px-3 py-1.5 text-xs text-apple-secondary hover:text-apple-blue hover:bg-apple-blue/5 dark:hover:bg-apple-blue/10 rounded-lg transition-all duration-150">
+              {{ choice.title }}
+            </a>
+          {% else %}
+            <span class="inline-flex items-center px-3 py-1.5 text-xs font-bold text-apple-blue bg-apple-blue/10 dark:bg-apple-blue/20 rounded-lg border border-apple-blue/20">
+              {{ choice.title }}
+            </span>
+          {% endif %}
+        {% endfor %}
+      </div>
+    {% endblock %}
+  {% endblock %}
 </nav>
 {% endif %}

@@ -147,3 +147,5 @@ cython_debug/
 
 # VS Code
 .vscode/
+
+example/products

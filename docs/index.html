@@ -240,6 +240,9 @@
                         <button onclick="switchShowcase('detail', this)" class="showcase-tab px-4 py-2 text-xs sm:text-sm font-semibold rounded-lg transition-all text-slate-600 hover:text-slate-900">
                             Forms & Toasts
                         </button>
+                        <button onclick="switchShowcase('inline', this)" class="showcase-tab px-4 py-2 text-xs sm:text-sm font-semibold rounded-lg transition-all text-slate-600 hover:text-slate-900">
+                            Inline Forms
+                        </button>
                     </div>
 
                     <!-- Showcase Image Container -->
@@ -275,6 +278,8 @@
                         img.src = 'assets/admin_delete_modal.png';
                     } else if (view === 'detail') {
                         img.src = 'assets/admin_detail_toast.png';
+                    } else if (view === 'inline') {
+                        img.src = 'assets/admin_tabular_inline.png';
                     }
                     img.style.opacity = '1';
                 }, 150);

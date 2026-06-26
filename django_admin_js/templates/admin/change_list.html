@@ -106,7 +106,13 @@
 {% endblock %}
 {% endif %}
 
-{% block object-tools %}{% endblock %}
+{% block object-tools %}
+  <ul class="object-tools flex gap-3">
+    {% block object-tools-items %}
+      {% change_list_object_tools %}
+    {% endblock %}
+  </ul>
+{% endblock %}
 
 {% block content_width_class %}w-full max-w-none{% endblock %}
 

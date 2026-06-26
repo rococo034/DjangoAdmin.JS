@@ -125,7 +125,7 @@
                {% for fieldset in inline_admin_form %}
                  {% for line in fieldset %}
                    {% for field in line %}
-                     <td class="p-4 align-middle {% if field.field.name %}field-{{ field.field.name }}{% endif %}{% if field.field.is_hidden %} hidden{% endif %}">
+                     <td class="p-4 align-middle {% if field.field.name %}field-{{ field.field.name }}{% endif %}{% if field.field.is_hidden %} hidden{% endif %}{% if field.field.errors %} errors{% endif %}">
                        {% if field.is_readonly %}
                          <p class="text-sm text-slate-700 dark:text-zinc-300 font-medium">{{ field.contents }}</p>
                        {% else %}

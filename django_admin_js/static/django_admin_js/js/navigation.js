@@ -318,6 +318,11 @@
           if (typeof window.showToastsFromDocument === 'function') {
             window.showToastsFromDocument(doc);
           }
+
+          const contentStart = document.getElementById('content-start');
+          if (contentStart) {
+            contentStart.scrollTo({ top: 0, behavior: 'smooth' });
+          }
         } else {
           if (typeof window.showToastsFromDocument === 'function') {
             window.showToastsFromDocument(doc);

@@ -348,6 +348,85 @@ input[type="text"]:focus, input[type="password"]:focus, input[type="email"]:focu
   box-shadow: 0 0 0 2px rgba(var(--primary-color-rgb, 129, 140, 248), 0.3) !important;
 }
 
+/* Error & Validation Styling */
+.errorlist {
+  list-style: none !important;
+  padding: 0 !important;
+  margin: 0.25rem 0 0.5rem 0 !important;
+  color: #ef4444 !important; /* text-red-500 */
+  font-size: 0.75rem !important; /* text-xs */
+  font-weight: 500 !important;
+}
+
+.dark .errorlist {
+  color: #f87171 !important; /* text-red-400 */
+}
+
+.errorlist li {
+  margin-bottom: 0.125rem !important;
+}
+
+/* Invalid inputs styling */
+.errors input[type="text"],
+.errors input[type="password"],
+.errors input[type="email"],
+.errors input[type="url"],
+.errors input[type="number"],
+.errors input[type="tel"],
+.errors input[type="date"],
+.errors input[type="time"],
+.errors input[type="datetime-local"],
+.errors textarea,
+.errors select {
+  border-color: #ef4444 !important; /* border-red-500 */
+  background-color: #fef2f2 !important; /* bg-red-50 */
+}
+
+.dark .errors input[type="text"],
+.dark .errors input[type="password"],
+.dark .errors input[type="email"],
+.dark .errors input[type="url"],
+.dark .errors input[type="number"],
+.dark .errors input[type="tel"],
+.dark .errors input[type="date"],
+.dark .errors input[type="time"],
+.dark .errors input[type="datetime-local"],
+.dark .errors textarea,
+.dark .errors select {
+  border-color: #f87171 !important; /* border-red-400 */
+  background-color: rgba(239, 68, 68, 0.05) !important; /* bg-red-500/5 */
+}
+
+.errors input[type="text"]:focus,
+.errors input[type="password"]:focus,
+.errors input[type="email"]:focus,
+.errors input[type="url"]:focus,
+.errors input[type="number"]:focus,
+.errors input[type="tel"]:focus,
+.errors input[type="date"]:focus,
+.errors input[type="time"]:focus,
+.errors input[type="datetime-local"]:focus,
+.errors textarea:focus,
+.errors select:focus {
+  border-color: #ef4444 !important;
+  box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2) !important;
+}
+
+.dark .errors input[type="text"]:focus,
+.dark .errors input[type="password"]:focus,
+.dark .errors input[type="email"]:focus,
+.dark .errors input[type="url"]:focus,
+.dark .errors input[type="number"]:focus,
+.dark .errors input[type="tel"]:focus,
+.dark .errors input[type="date"]:focus,
+.dark .errors input[type="time"]:focus,
+.dark .errors input[type="datetime-local"]:focus,
+.dark .errors textarea:focus,
+.dark .errors select:focus {
+  border-color: #f87171 !important;
+  box-shadow: 0 0 0 2px rgba(248, 113, 113, 0.2) !important;
+}
+
 /* Auto-span main content to full width if sidebar block is empty */
 .grid > .lg\:col-span-3:last-child {
   grid-column: span 4 / span 4 !important;

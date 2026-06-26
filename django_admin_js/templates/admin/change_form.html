@@ -49,6 +49,22 @@
           {% blocktranslate count counter=errors|length %}Please correct the error below.{% plural %}Please correct the errors below.{% endblocktranslate %}
           {{ adminform.form.non_field_errors }}
         </div>
+        <script>
+          if ('scrollRestoration' in history) {
+            history.scrollRestoration = 'manual';
+          }
+          function scrollToTop() {
+            const mainContent = document.getElementById('content-start');
+            if (mainContent) {
+              mainContent.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+          }
+          scrollToTop();
+          document.addEventListener('DOMContentLoaded', scrollToTop);
+          window.addEventListener('load', scrollToTop);
+          setTimeout(scrollToTop, 50);
+          setTimeout(scrollToTop, 150);
+        </script>
       {% endif %}
 
       <div class="change-form-card bg-white dark:bg-apple-darkcard border border-apple-border/40 dark:border-apple-darkborder/40 rounded-2xl shadow-sm p-6 space-y-6">

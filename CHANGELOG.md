@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.0-beta.7] - 2026-06-26
+### Added
+- CSS styling for validation errors (`.errorlist` list formatting and red/soft-red border/focus ring styles for invalid inputs, selects, and textareas) in change forms and inline formsets.
+- Automatic smooth-scrolling to the top of the main content container (`#content-start`) when validation errors are present on both traditional page reloads and AJAX/fetch form submissions.
+
+### Fixed
+- Date and time inputs value discarding issue: parsed and converted localized date/time strings (like Italian `DD/MM/YYYY` or `12h AM/PM`) into ISO format (`YYYY-MM-DD` / `HH:MM:SS`) before converting HTML input types to `date`/`time`, avoiding data loss on page initialization and form submit.
+- Missing "Add" button on the change list view by restoring the standard `object-tools` block rendering in the page header.
+
 ## [1.0.0-beta.6] - 2026-06-19
 ### Added
 - Header Language Switcher widget (`LANGUAGE_SWITCHER`) with custom languages list support (`LANGUAGES`).

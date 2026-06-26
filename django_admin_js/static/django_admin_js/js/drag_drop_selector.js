@@ -10,6 +10,21 @@
       
       if (!availableSelect || !chosenSelect) return;
       
+      // Clone buttons to strip legacy event listeners
+      const oldAddBtn = selector.querySelector('.selector-add');
+      const oldRemoveBtn = selector.querySelector('.selector-remove');
+      let addBtn = oldAddBtn;
+      let removeBtn = oldRemoveBtn;
+      
+      if (oldAddBtn) {
+        addBtn = oldAddBtn.cloneNode(true);
+        oldAddBtn.parentNode.replaceChild(addBtn, oldAddBtn);
+      }
+      if (oldRemoveBtn) {
+        removeBtn = oldRemoveBtn.cloneNode(true);
+        oldRemoveBtn.parentNode.replaceChild(removeBtn, oldRemoveBtn);
+      }
+      
       const availableList = document.createElement('ul');
       availableList.className = 'custom-drag-list space-y-1.5 p-2 bg-slate-50 dark:bg-black/20 border border-gray-200 dark:border-gray-800/80 rounded-xl min-h-[200px] max-h-60 overflow-y-auto w-full mt-2';
       
@@ -24,6 +39,27 @@
       
       let lastClickedIndex = null;
       let lastClickedList = null;
+      
+      const updateButtonStates = () => {
+        if (addBtn) {
+          const hasSelectedAvailable = availableList.querySelectorAll('.is-selected').length > 0;
+          addBtn.disabled = !hasSelectedAvailable;
+          if (hasSelectedAvailable) {
+            addBtn.removeAttribute('disabled');
+          } else {
+            addBtn.setAttribute('disabled', '');
+          }
+        }
+        if (removeBtn) {
+          const hasSelectedChosen = chosenList.querySelectorAll('.is-selected').length > 0;
+          removeBtn.disabled = !hasSelectedChosen;
+          if (hasSelectedChosen) {
+            removeBtn.removeAttribute('disabled');
+          } else {
+            removeBtn.setAttribute('disabled', '');
+          }
+        }
+      };
       
       const renderList = (selectElement, listElement, targetSelectElement) => {
         listElement.innerHTML = '';
@@ -64,6 +100,7 @@
             
             lastClickedIndex = index;
             lastClickedList = listElement;
+            updateButtonStates();
           });
           
           li.addEventListener('dblclick', (e) => {
@@ -133,6 +170,7 @@
       const syncLists = () => {
         renderList(availableSelect, availableList, chosenSelect);
         renderList(chosenSelect, chosenList, availableSelect);
+        updateButtonStates();
       };
       
       const setupDragOver = (listElement, selectElement, targetSelectElement) => {
@@ -164,6 +202,31 @@
           }
         });
       };
+      
+      // Bind click handlers to the cloned buttons
+      if (addBtn) {
+        addBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          if (addBtn.disabled) return;
+          const selectedItems = Array.from(availableList.querySelectorAll('.is-selected'));
+          if (selectedItems.length > 0) {
+            const values = selectedItems.map(item => item.getAttribute('data-value'));
+            moveMultipleItems(values, availableSelect, chosenSelect);
+          }
+        });
+      }
+      
+      if (removeBtn) {
+        removeBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          if (removeBtn.disabled) return;
+          const selectedItems = Array.from(chosenList.querySelectorAll('.is-selected'));
+          if (selectedItems.length > 0) {
+            const values = selectedItems.map(item => item.getAttribute('data-value'));
+            moveMultipleItems(values, chosenSelect, availableSelect);
+          }
+        });
+      }
       
       setupDragOver(availableList, availableSelect, chosenSelect);
       setupDragOver(chosenList, chosenSelect, availableSelect);

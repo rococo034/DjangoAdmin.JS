@@ -147,7 +147,17 @@
       <main id="content-start" class="content flex-1 min-w-0 pt-4 pb-8 px-0 overflow-y-auto space-y-6" tabindex="-1">
         {% if not is_popup %}
           {% block nav-breadcrumbs %}
-            {% include "admin/includes/breadcrumbs.html" %}
+            <nav aria-label="{% translate 'Breadcrumbs' %}" class="w-full">
+              {% block breadcrumbs %}
+                <div class="breadcrumbs flex items-center gap-2 text-xs font-semibold text-apple-secondary">
+                  <a href="{% url 'admin:index' %}" class="text-zinc-600 dark:text-zinc-300 hover:text-apple-blue transition-colors">{% translate 'Home' %}</a>
+                  {% if title %}
+                    <span class="text-slate-300 dark:text-zinc-700">/</span>
+                    <span class="text-zinc-800 dark:text-zinc-300">{{ title }}</span>
+                  {% endif %}
+                </div>
+              {% endblock %}
+            </nav>
           {% endblock %}
         {% endif %}
         {% block messages %}

@@ -1052,6 +1052,42 @@ input[type="checkbox"]:checked::after {
   z-index: 99999 !important;
 }
 
+/* General buttons styling (e.g. .button class anchors/buttons) */
+a.button, button.button, input[type="button"].button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border-radius: 0.5rem;
+  transition: all 0.15s ease-in-out;
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  background-color: #ffffff;
+  color: #334155;
+  text-decoration: none;
+}
+
+.dark a.button, .dark button.button, .dark input[type="button"].button {
+  background-color: #1f2937;
+  border-color: rgba(255, 255, 255, 0.08);
+  color: #f1f5f9;
+}
+
+a.button:hover, button.button:hover, input[type="button"].button:hover {
+  background-color: #f8fafc;
+  border-color: rgba(203, 213, 225, 0.8);
+  color: var(--primary-color, #6366f1);
+}
+
+.dark a.button:hover, .dark button.button:hover, .dark input[type="button"].button:hover {
+  background-color: #374151;
+  border-color: rgba(255, 255, 255, 0.15);
+  color: var(--primary-hover-color, #818cf8);
+}
+
 .dark .submit-row {
   background-color: #111827 !important;
   border-color: rgba(31, 41, 55, 0.8) !important;
@@ -1210,9 +1246,7 @@ select[multiple] option:checked {
   width: 2.25rem !important;
   height: 2.25rem !important;
   border-radius: 0.75rem !important;
-  background-color: #ffffff !important;
-  border: 1px solid rgba(226, 232, 240, 0.8) !important;
-  color: #64748b !important;
+  background-image: none !important; /* Remove legacy SVG sprite */
   font-weight: 700 !important;
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
   cursor: pointer !important;
@@ -1221,26 +1255,79 @@ select[multiple] option:checked {
   position: relative !important;
 }
 
-.dark .selector-add, .dark .selector-remove {
-  background-color: #111827 !important;
-  border-color: rgba(31, 41, 55, 0.8) !important;
-  color: #94a3b8 !important;
+/* Green design for add (->) */
+.selector-add {
+  background-color: #f0fdf4 !important;
+  border: 1px solid rgba(16, 185, 129, 0.3) !important;
+  color: #16a34a !important;
 }
 
-.selector-add:hover, .selector-remove:hover {
+/* Red design for remove (<-) */
+.selector-remove {
+  background-color: #fef2f2 !important;
+  border: 1px solid rgba(239, 68, 68, 0.3) !important;
+  color: #dc2626 !important;
+}
+
+/* Dark mode colors */
+.dark .selector-add {
+  background-color: rgba(16, 185, 129, 0.1) !important;
+  border-color: rgba(16, 185, 129, 0.3) !important;
+  color: #4ade80 !important;
+}
+
+.dark .selector-remove {
+  background-color: rgba(239, 68, 68, 0.1) !important;
+  border-color: rgba(239, 68, 68, 0.3) !important;
+  color: #f87171 !important;
+}
+
+/* Disabled states - reset colors and remove pointers */
+.selector-add[disabled], .selector-remove[disabled],
+.selector-add:disabled, .selector-remove:disabled {
+  opacity: 0.4 !important;
+  cursor: not-allowed !important;
   background-color: #f1f5f9 !important;
-  color: #6366f1 !important;
-  border-color: rgba(99, 102, 241, 0.4) !important;
+  border-color: rgba(226, 232, 240, 0.8) !important;
+  color: #94a3b8 !important;
+  transform: none !important;
+}
+
+.dark .selector-add[disabled], .dark .selector-remove[disabled],
+.dark .selector-add:disabled, .dark .selector-remove:disabled {
+  background-color: #1f2937 !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  color: #4b5563 !important;
+}
+
+/* Hover effects when enabled */
+.selector-add:not([disabled]):hover {
+  background-color: #16a34a !important;
+  border-color: #16a34a !important;
+  color: #ffffff !important;
   transform: scale(1.05) !important;
 }
 
-.dark .selector-add:hover, .dark .selector-remove:hover {
-  background-color: rgba(255, 255, 255, 0.05) !important;
-  color: #818cf8 !important;
-  border-color: rgba(129, 140, 248, 0.4) !important;
+.selector-remove:not([disabled]):hover {
+  background-color: #dc2626 !important;
+  border-color: #dc2626 !important;
+  color: #ffffff !important;
+  transform: scale(1.05) !important;
 }
 
-.selector-add:active, .selector-remove:active {
+.dark .selector-add:not([disabled]):hover {
+  background-color: #22c55e !important;
+  border-color: #22c55e !important;
+  color: #ffffff !important;
+}
+
+.dark .selector-remove:not([disabled]):hover {
+  background-color: #ef4444 !important;
+  border-color: #ef4444 !important;
+  color: #ffffff !important;
+}
+
+.selector-add:not([disabled]):active, .selector-remove:not([disabled]):active {
   transform: scale(0.95) !important;
 }
 
@@ -1257,6 +1344,80 @@ select[multiple] option:checked {
   text-indent: 0 !important;
   position: absolute !important;
   font-size: 1.15rem !important;
+}
+
+/* Choose all and Clear all links styling */
+.selector-chooseall, .selector-clearall {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin-top: 1rem !important;
+  font-size: 0.875rem !important;
+  font-weight: 600 !important;
+  text-decoration: none !important;
+  background-image: none !important; /* Remove legacy background icons */
+  padding: 0.75rem 1.5rem !important;
+  border-radius: 0.375rem !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) !important;
+  cursor: pointer !important;
+  transition: all 0.15s ease-in-out !important;
+  border: none !important;
+  gap: 0.5rem !important;
+}
+
+.selector-chooseall::before {
+  content: "\f00c" !important; /* fa-check */
+  font-family: "Font Awesome 6 Free" !important;
+  font-weight: 900 !important;
+  font-size: 0.875rem !important;
+  margin-right: 0 !important;
+}
+
+.selector-clearall::before {
+  content: "\f2ed" !important; /* fa-trash-can */
+  font-family: "Font Awesome 6 Free" !important;
+  font-weight: 900 !important;
+  font-size: 0.875rem !important;
+  margin-right: 0 !important;
+}
+
+/* Green design for Choose all */
+.selector-chooseall {
+  background-color: #10b981 !important; /* Emerald green */
+  color: #ffffff !important;
+}
+
+.selector-chooseall:hover {
+  background-color: #059669 !important;
+}
+
+/* Red design for Clear all */
+.selector-clearall {
+  background-color: #ef4444 !important; /* Red */
+  color: #ffffff !important;
+}
+
+.selector-clearall:hover {
+  background-color: #dc2626 !important;
+}
+
+/* Dark mode colors */
+.dark .selector-chooseall {
+  background-color: #059669 !important;
+  color: #ffffff !important;
+}
+
+.dark .selector-chooseall:hover {
+  background-color: #047857 !important;
+}
+
+.dark .selector-clearall {
+  background-color: #dc2626 !important;
+  color: #ffffff !important;
+}
+
+.dark .selector-clearall:hover {
+  background-color: #b91c1c !important;
 }
 
 /* Styling for search inputs inside selector lists if horizontal filter search is enabled */
@@ -1909,6 +2070,106 @@ select[multiple] option:checked {
   font-size: 14px !important;
   font-weight: 600 !important;
   line-height: 1 !important;
+}
+
+/* Breadcrumbs Custom Styling */
+.breadcrumbs {
+  display: inline-flex !important;
+  align-items: center !important;
+  flex-wrap: wrap !important;
+  gap: 0.25rem !important;
+  padding: 0.4rem 0.875rem !important;
+  background-color: rgba(241, 245, 249, 0.4) !important; /* Soft gray capsule background */
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  border: 1px solid rgba(226, 232, 240, 0.6) !important;
+  border-radius: 9999px !important; /* Pill shape */
+  font-size: 0 !important; /* Hide raw text separators like &rsaquo; */
+  margin-bottom: 1.25rem !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02) !important;
+  width: max-content !important;
+  max-width: 100% !important;
+}
+
+.dark .breadcrumbs {
+  background-color: rgba(31, 41, 55, 0.25) !important;
+  border-color: rgba(55, 65, 81, 0.4) !important;
+}
+
+/* Home Icon before the first link */
+.breadcrumbs a:first-of-type::before {
+  content: "\f015" !important; /* fa-home */
+  font-family: "Font Awesome 6 Free" !important;
+  font-weight: 900 !important;
+  margin-right: 0.375rem !important;
+  font-size: 0.8125rem !important;
+  color: inherit !important;
+  vertical-align: middle !important;
+}
+
+.breadcrumbs a,
+.breadcrumbs span {
+  font-size: 0.75rem !important; /* text-xs */
+  font-weight: 500 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  color: #64748b !important; /* slate-500 */
+  text-decoration: none !important;
+  transition: all 0.15s ease-in-out !important;
+  line-height: 1.25rem !important;
+}
+
+.dark .breadcrumbs a,
+.dark .breadcrumbs span {
+  color: #94a3b8 !important; /* slate-400 */
+}
+
+/* Hover effects for breadcrumb links */
+.breadcrumbs a:hover {
+  color: var(--primary-color, #6366f1) !important;
+}
+
+.dark .breadcrumbs a:hover {
+  color: var(--primary-hover-color, #818cf8) !important;
+}
+
+/* separator icons using ::after on links */
+.breadcrumbs a::after {
+  content: "\f105" !important; /* fa-angle-right */
+  font-family: "Font Awesome 6 Free" !important;
+  font-weight: 900 !important;
+  font-size: 0.6875rem !important;
+  color: #94a3b8 !important; /* slate-400 */
+  margin-left: 0.375rem !important;
+  margin-right: 0.125rem !important;
+  display: inline-block !important;
+  pointer-events: none !important;
+}
+
+.dark .breadcrumbs a::after {
+  color: #4b5563 !important; /* gray-600 */
+}
+
+/* Style the last element (current page) as active */
+.breadcrumbs span:last-child,
+.breadcrumbs .active,
+.breadcrumbs span:not(:has(a)) {
+  color: #0f172a !important;
+  font-weight: 600 !important;
+}
+
+.dark .breadcrumbs span:last-child,
+.dark .breadcrumbs .active,
+.dark .breadcrumbs span:not(:has(a)) {
+  color: #f8fafc !important;
+}
+
+/* Prevent showing legacy separators (inline SVGs or text spans) */
+.breadcrumbs span.text-slate-300,
+.breadcrumbs span.text-apple-secondary,
+.breadcrumbs span:empty,
+.breadcrumbs svg {
+  display: none !important;
 }
 
 

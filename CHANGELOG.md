@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.0-beta.8] - 2026-06-26
+### Added
+- Capsule-style pill container layout for breadcrumbs, complete with a FontAwesome home icon, angle-right chevron separators, and distinct styles for active/hover states.
+- Color-coded solid button styling and FontAwesome icons for Choose all (green with check icon) and Clear all (red with trash-can icon) actions in selectors.
+- General style overrides for `.button` class links (e.g. password resets), designed as fallbacks to allow Tailwind utility overrides.
+
+### Fixed
+- Django template block inheritance bug by inlining the breadcrumbs structure in `base.html`, enabling child templates to successfully override the full breadcrumbs path (e.g. Home > App > Model > Detail).
+- Cloned and rebound events for `.selector-add` and `.selector-remove` buttons in the custom drag-and-drop selector widget (`drag_drop_selector.js`), allowing them to dynamically toggle active/disabled states and execute move commands.
+
 ## [1.0.0-beta.7] - 2026-06-26
 ### Added
 - CSS styling for validation errors (`.errorlist` list formatting and red/soft-red border/focus ring styles for invalid inputs, selects, and textareas) in change forms and inline formsets.

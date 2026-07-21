@@ -142,6 +142,7 @@ DJANGO_ADMIN_JS = {
     "THEME_STYLE": "glassmorphism",
     "SIDEBAR_COLLAPSIBLE": True,
     "SIDEBAR_COLLAPSED_DEFAULT": False,
+    "DISABLE_CLIENT_ROUTING": False, # Set to True to disable client-side SPA routing (useful for widgets like CKEditor/TinyMCE that need full DOM reloads)
     "SITE_HEADER": "DjangoAdmin.JS Example",
     "SITE_LOGO": "/static/django_admin_js/logo.png", # You can use any URL or custom static path
     "CUSTOM_LINKS": {

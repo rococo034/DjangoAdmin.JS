@@ -311,7 +311,8 @@
     liveSearchMinChars: {{ js_settings.live_search_min_chars }},
     liveSearchDebounceMs: {{ js_settings.live_search_debounce_ms }},
     sidebarCollapsible: {{ js_settings.sidebar_collapsible|yesno:"true,false" }},
-    sidebarCollapsedDefault: {{ js_settings.sidebar_collapsed_default|yesno:"true,false" }}
+    sidebarCollapsedDefault: {{ js_settings.sidebar_collapsed_default|yesno:"true,false" }},
+    disableClientRouting: {{ js_settings.disable_client_routing|yesno:"true,false" }}
   };
 </script>
 <script src="{% static 'django_admin_js/js/theme.js' %}?v={% django_admin_js_version %}"></script>
@@ -323,7 +324,9 @@
 <script src="{% static 'django_admin_js/js/datetime_converter.js' %}?v={% django_admin_js_version %}"></script>
 <script src="{% static 'django_admin_js/js/change_form_tabs.js' %}?v={% django_admin_js_version %}"></script>
 <script src="{% static 'django_admin_js/js/popup_hijacker.js' %}?v={% django_admin_js_version %}"></script>
+{% if not js_settings.disable_client_routing %}
 <script src="{% static 'django_admin_js/js/navigation.js' %}?v={% django_admin_js_version %}"></script>
+{% endif %}
 <script src="{% static 'django_admin_js/js/main.js' %}?v={% django_admin_js_version %}"></script>
 {% include "admin/includes/command_palette.html" %}
 </body>

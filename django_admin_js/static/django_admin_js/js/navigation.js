@@ -67,6 +67,11 @@
   }
 
   window.loadAdminPage = function(url, pushToHistory = true, restoreState = null) {
+    const settings = window.DJANGO_ADMIN_JS_SETTINGS || {};
+    if (settings.disableClientRouting) {
+      window.location.href = url;
+      return;
+    }
     const contentStart = document.getElementById('content-start');
     if (!contentStart) {
       window.location.href = url;
@@ -161,6 +166,9 @@
   };
 
   document.addEventListener('DOMContentLoaded', () => {
+    const settings = window.DJANGO_ADMIN_JS_SETTINGS || {};
+    if (settings.disableClientRouting) return;
+
     if (!window.history.state) {
       window.history.replaceState({ pjax: true, url: window.location.href }, '', window.location.href);
     }
@@ -207,6 +215,9 @@
     });
 
     document.addEventListener('click', (e) => {
+      const settings = window.DJANGO_ADMIN_JS_SETTINGS || {};
+      if (settings.disableClientRouting) return;
+
       if (window.location.search.includes('_popup=1') || document.body.classList.contains('popup')) {
         return;
       }
@@ -243,6 +254,9 @@
     });
 
     document.addEventListener('submit', (e) => {
+      const settings = window.DJANGO_ADMIN_JS_SETTINGS || {};
+      if (settings.disableClientRouting) return;
+
       if (window.location.search.includes('_popup=1') || document.body.classList.contains('popup')) {
         return;
       }

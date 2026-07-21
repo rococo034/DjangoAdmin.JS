@@ -112,6 +112,7 @@ def django_admin_js_settings():
         "theme_style": config.get("THEME_STYLE", "default"),
         "sidebar_collapsible": config.get("SIDEBAR_COLLAPSIBLE", True),
         "sidebar_collapsed_default": config.get("SIDEBAR_COLLAPSED_DEFAULT", False),
+        "disable_client_routing": config.get("DISABLE_CLIENT_ROUTING", False),
         "site_header": config.get("SITE_HEADER", None),
         "site_logo": config.get("SITE_LOGO", None),
     }

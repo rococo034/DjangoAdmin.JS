@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.1] - 2026-07-21
+### Added
+- Added custom setting `DISABLE_CLIENT_ROUTING` (defaults to `False`) to disable client-side SPA routing and restore standard Django admin navigation when set to `True` (useful for third-party JS widgets requiring full DOM reloads, like CKEditor or TinyMCE).
+
 ## [1.0.0] - 2026-07-14
 ### Changed
 - Official stable release of DjangoAdmin.JS v1.0.0.

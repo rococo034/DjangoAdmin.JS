@@ -103,6 +103,11 @@ DJANGO_ADMIN_JS = {
     # Initial collapse state of sidebar app sections (defaults to False)
     "SIDEBAR_COLLAPSED_DEFAULT": False,
 
+    # Enable/Disable Client-Side AJAX SPA Routing (defaults to False).
+    # Useful when using third-party JavaScript widgets/plugins that require full DOM reloads
+    # to re-initialize scripts (e.g. CKEditor, TinyMCE, custom complex JS widgets).
+    "DISABLE_CLIENT_ROUTING": False,
+
     # Custom text for the admin header branding (defaults to Django administration)
     "SITE_HEADER": "My Custom Admin",
 

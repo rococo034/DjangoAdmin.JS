@@ -14,7 +14,7 @@ import django_admin_js
 
 @register.simple_tag
 def django_admin_js_version():
-    return getattr(django_admin_js, "__version__", "1.0.0b1")
+    return getattr(django_admin_js, "__version__", "1.0.1")
 
 @register.simple_tag
 def django_admin_js_settings():

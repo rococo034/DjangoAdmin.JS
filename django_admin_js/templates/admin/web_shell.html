@@ -1,0 +1,361 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block content_title %}{% endblock %}
+{% block content_subtitle %}{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+  /* Hide default admin title container */
+  #content > div:first-of-type {
+    display: none !important;
+  }
+  .terminal-container {
+    background: #0d1117;
+    border: 1px solid #30363d;
+    border-radius: 12px;
+    font-family: ui-monospace, SFMono-Regular, SF Pro Icons, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    color: #c9d1d9;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    overflow: hidden;
+    transition: all 0.2s ease-in-out;
+  }
+  /* Fullscreen classes */
+  .terminal-fullscreen {
+    position: fixed !important;
+    top: 20px !important;
+    left: 20px !important;
+    right: 20px !important;
+    bottom: 20px !important;
+    z-index: 9999 !important;
+    max-width: none !important;
+    margin: 0 !important;
+    border-radius: 12px !important;
+  }
+  .terminal-fullscreen .terminal-body {
+    height: calc(100vh - 100px) !important;
+  }
+  .terminal-header {
+    background: #161b22;
+    padding: 12px 16px;
+    border-bottom: 1px solid #30363d;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .terminal-dots {
+    display: flex;
+    gap: 6px;
+  }
+  .terminal-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    transition: filter 0.1s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 8px;
+    font-weight: bold;
+    color: rgba(0, 0, 0, 0.5);
+    user-select: none;
+  }
+  .terminal-dot.red { background: #ff5f56; cursor: pointer; }
+  .terminal-dot.yellow { background: #ffbd2e; cursor: not-allowed; }
+  .terminal-dot.green { background: #27c93f; cursor: pointer; }
+  .terminal-dot .dot-icon {
+    opacity: 0;
+    transition: opacity 0.15s ease;
+  }
+  .terminal-dots:hover .dot-icon {
+    opacity: 1;
+  }
+  .terminal-dot:hover {
+    filter: brightness(1.1);
+  }
+  .terminal-title {
+    color: #8b949e;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .terminal-body {
+    padding: 20px;
+    height: 550px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 14px;
+    line-height: 1.5;
+    transition: height 0.2s ease-in-out;
+  }
+  .terminal-output {
+    white-space: pre-wrap;
+    word-break: break-all;
+  }
+  .terminal-output.stdin {
+    color: #58a6ff;
+    font-weight: 600;
+  }
+  .terminal-output.stdout {
+    color: #c9d1d9;
+  }
+  .terminal-output.stderr {
+    color: #f85149;
+  }
+  .terminal-input-line {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    position: relative;
+    font-size: 14px;
+    line-height: 20px;
+  }
+  .terminal-prompt {
+    color: #58a6ff;
+    font-weight: bold;
+    user-select: none;
+    line-height: 20px;
+  }
+  .terminal-input-wrapper {
+    flex: 1;
+    display: inline;
+    white-space: pre-wrap;
+    word-break: break-all;
+    line-height: 20px;
+  }
+  .terminal-display-input {
+    color: #c9d1d9;
+    font-family: inherit;
+    font-size: inherit;
+    line-height: 20px;
+    display: inline;
+    white-space: pre-wrap;
+    word-break: break-all;
+  }
+  .terminal-cursor {
+    color: #58a6ff;
+    font-weight: bold;
+    animation: blink 1s step-end infinite;
+    user-select: none;
+    line-height: 20px;
+    margin-left: 0px;
+    display: inline;
+  }
+  @keyframes blink {
+    from, to { color: transparent }
+    50% { color: #58a6ff }
+  }
+</style>
+{% endblock %}
+
+{% block content_container %}
+<div class="max-w-4xl mx-auto space-y-6">
+  <div class="terminal-container">
+    <div class="terminal-header">
+      <div class="terminal-dots">
+        <span class="terminal-dot red" title="{% translate 'Chiudi' %}"><span class="dot-icon">✕</span></span>
+        <span class="terminal-dot yellow"><span class="dot-icon">─</span></span>
+        <span class="terminal-dot green" title="{% translate 'Schermo intero' %}"><span class="dot-icon">⤢</span></span>
+      </div>
+      <div class="terminal-title">django_admin_js - python manage.py shell</div>
+      <button type="button" id="terminal-clear-btn" class="p-1 rounded-lg text-zinc-500 hover:text-zinc-300 transition-colors cursor-pointer flex items-center justify-center" title="{% translate 'Pulisci terminale' %}">
+        <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+        </svg>
+      </button>
+    </div>
+    <div class="terminal-body" id="terminal-body">
+      <div class="terminal-output stdout">Python {{ py_version }} Web Shell
+Digita il codice python e premi Invio per eseguirlo. Puoi usare Shift+Invio per andare a capo.
+I modelli registrati sono già importati e pronti all'uso.</div>
+      <div class="terminal-input-line">
+        <span class="terminal-prompt">&gt;&gt;&gt;</span>
+        <div class="terminal-input-wrapper"><span id="terminal-display-input" class="terminal-display-input"></span><span class="terminal-cursor">|</span></div>
+        <textarea id="terminal-textarea" style="position: absolute; opacity: 0; pointer-events: none; width: 1px; height: 1px;" autocomplete="off" autoconsec="off" spellcheck="false"></textarea>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function initWebShell() {
+  const body = document.getElementById("terminal-body");
+  const textarea = document.getElementById("terminal-textarea");
+  if (!body || !textarea) return; // Prevent executing if not on the web shell page
+  
+  let history = [];
+  let historyIndex = -1;
+
+  const displayInput = document.getElementById("terminal-display-input");
+  const cursor = document.querySelector(".terminal-cursor");
+
+  function updateDisplay() {
+    const val = textarea.value;
+    const selStart = textarea.selectionStart;
+    
+    const before = val.substring(0, selStart);
+    const after = val.substring(selStart);
+    
+    displayInput.textContent = before;
+    
+    let afterSpan = document.getElementById("terminal-after-input");
+    if (!afterSpan) {
+      afterSpan = document.createElement("span");
+      afterSpan.id = "terminal-after-input";
+      afterSpan.className = "terminal-display-input";
+      cursor.parentNode.insertBefore(afterSpan, cursor.nextSibling);
+    }
+    afterSpan.textContent = after;
+  }
+
+  // Red dot: Close/Redirect to admin index page
+  const redDot = document.querySelector(".terminal-dot.red");
+  if (redDot && !redDot.dataset.init) {
+    redDot.dataset.init = "true";
+    redDot.addEventListener("click", (e) => {
+      e.stopPropagation();
+      window.location.href = "{% url 'admin:index' %}";
+    });
+  }
+
+  // Green dot: Toggle Fullscreen mode
+  const greenDot = document.querySelector(".terminal-dot.green");
+  const container = document.querySelector(".terminal-container");
+  if (greenDot && container && !greenDot.dataset.init) {
+    greenDot.dataset.init = "true";
+    greenDot.addEventListener("click", (e) => {
+      e.stopPropagation();
+      container.classList.toggle("terminal-fullscreen");
+      textarea.focus();
+    });
+  }
+
+  // Clear button handler
+  const clearBtn = document.getElementById("terminal-clear-btn");
+  if (clearBtn && !clearBtn.dataset.init) {
+    clearBtn.dataset.init = "true";
+    clearBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const outputs = body.querySelectorAll(".terminal-output");
+      outputs.forEach(el => el.remove());
+      textarea.focus();
+    });
+  }
+
+  // Keep display input synchronized
+  textarea.addEventListener("input", updateDisplay);
+  textarea.addEventListener("selectionchange", updateDisplay);
+  textarea.addEventListener("click", updateDisplay);
+  textarea.addEventListener("keyup", updateDisplay);
+
+  // Focus textarea when clicking inside the terminal body
+  body.addEventListener("click", () => {
+    textarea.focus();
+    updateDisplay();
+  });
+  
+  // Initial focus
+  textarea.focus();
+  updateDisplay();
+
+  // Handle keys
+  textarea.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      const code = textarea.value;
+      if (!code.trim()) return;
+
+      // Add to command history
+      history.push(code);
+      historyIndex = history.length;
+
+      // Print input command
+      printLine(code, "stdin", ">>> ");
+
+      // Send to execute view via fetch
+      executeCode(code);
+
+      // Reset textarea
+      textarea.value = "";
+      updateDisplay();
+    } else if (e.key === "Tab") {
+      e.preventDefault();
+      const start = textarea.selectionStart;
+      const end = textarea.selectionEnd;
+      const val = textarea.value;
+      
+      textarea.value = val.substring(0, start) + "    " + val.substring(end);
+      textarea.selectionStart = textarea.selectionEnd = start + 4;
+      updateDisplay();
+    } else if (e.key === "ArrowUp") {
+      // History up
+      if (history.length > 0 && historyIndex > 0) {
+        historyIndex--;
+        textarea.value = history[historyIndex];
+        updateDisplay();
+      }
+      e.preventDefault();
+    } else if (e.key === "ArrowDown") {
+      // History down
+      if (historyIndex < history.length - 1) {
+        historyIndex++;
+        textarea.value = history[historyIndex];
+        updateDisplay();
+      } else {
+        historyIndex = history.length;
+        textarea.value = "";
+        updateDisplay();
+      }
+      e.preventDefault();
+    }
+  });
+
+  textarea.addEventListener("paste", (e) => {
+    setTimeout(updateDisplay, 10);
+  });
+
+  function printLine(text, className, prefix = "") {
+    const inputLine = textarea.closest(".terminal-input-line");
+    const div = document.createElement("div");
+    div.className = `terminal-output ${className}`;
+    div.textContent = prefix + text;
+    body.insertBefore(div, inputLine);
+    body.scrollTop = body.scrollHeight;
+  }
+
+  function executeCode(code) {
+    const formData = new FormData();
+    formData.append("code", code);
+    
+    const csrfToken = "{{ csrf_token }}";
+
+    fetch("{% url 'admin:web_shell_execute' %}", {
+      method: "POST",
+      headers: {
+        "X-CSRFToken": csrfToken
+      },
+      body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.error) {
+        printLine(data.error, "stderr");
+      }
+      if (data.output) {
+        printLine(data.output, "stdout");
+      }
+    })
+    .catch(err => {
+      printLine("Errore di rete o server irraggiungibile.", "stderr");
+    });
+  }
+}
+
+// Initialize on standard load
+document.addEventListener("DOMContentLoaded", initWebShell);
+// Initialize on SPA AJAX page updates
+document.addEventListener("page:updated", initWebShell);
+</script>
+{% endblock %}

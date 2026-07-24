@@ -33,6 +33,7 @@ classifiers = [
 ]
 dependencies = [
     "django>=5.0",
+    "qrcode>=8.2",
 ]
 
 [project.urls]

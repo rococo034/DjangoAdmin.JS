@@ -1,0 +1,82 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block content_container %}
+<div class="max-w-md mx-auto my-12 bg-white/70 dark:bg-[#111827]/60 backdrop-blur-md border border-gray-200/50 dark:border-gray-800/80 rounded-2xl shadow-xl p-8 space-y-6">
+  <div class="text-center space-y-2">
+    <div class="inline-flex p-3 rounded-2xl bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400">
+      <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
+      </svg>
+    </div>
+    <h2 class="text-xl font-bold tracking-tight text-gray-800 dark:text-zinc-100">Attiva la 2FA per la Web Shell</h2>
+    <p class="text-sm text-gray-500 dark:text-zinc-400">Scansiona il codice QR con Google Authenticator, Microsoft Authenticator o simili per associare il tuo account.</p>
+  </div>
+
+  <!-- QR Code display area -->
+  <div class="flex flex-col items-center justify-center p-4 bg-white dark:bg-zinc-950 rounded-2xl border border-gray-150 dark:border-zinc-850">
+    <div id="qrcode-canvas" class="p-2 bg-white rounded-lg"></div>
+    <div class="text-center mt-3">
+      <span class="text-[10px] uppercase font-bold tracking-wider text-gray-400">Chiave manuale</span>
+      <p class="text-xs font-semibold font-mono tracking-widest text-indigo-600 dark:text-indigo-400 select-all mt-1">{{ secret }}</p>
+    </div>
+  </div>
+
+  {% if error_msg %}
+    <div class="p-3 bg-red-500/10 border border-red-500/30 text-red-700 dark:text-red-400 rounded-xl text-sm font-semibold">
+      {{ error_msg }}
+    </div>
+  {% endif %}
+
+  <form method="post" class="space-y-4">
+    {% csrf_token %}
+    <div>
+      <label for="token" class="block text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-zinc-400 mb-2">Codice di verifica a 6 cifre</label>
+      <input type="text" name="token" id="token" maxlength="6" pattern="[0-9]{6}" required class="w-full text-center tracking-[0.75em] text-lg font-bold p-3.5 rounded-xl border border-gray-250 dark:border-zinc-800 bg-white/50 dark:bg-zinc-900/40 text-gray-800 dark:text-zinc-100 focus:outline-none focus:border-indigo-500 transition-colors" placeholder="000000" autocomplete="one-time-code">
+    </div>
+    <button type="submit" class="w-full py-3.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-bold shadow-md hover:shadow-lg transition-all duration-150 cursor-pointer">
+      Attiva e Procedi
+    </button>
+  </form>
+</div>
+
+<!-- QRious CDN for generating QR Codes dynamically client side without server-side library overhead -->
+<script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js" integrity="sha256-25ncr0CpJhgbzkUiR3wu/Fkk9sSykRG2qX+upHfJUos=" crossorigin="anonymous"></script>
+<script>
+  (function() {
+    function initQR() {
+      if (typeof QRious === 'undefined') {
+        // Wait briefly if library is still loading
+        setTimeout(initQR, 50);
+        return;
+      }
+      const qrElement = document.getElementById("qrcode-canvas");
+      if (!qrElement) return;
+      
+      // Prevent duplicating canvas if init runs twice
+      if (qrElement.querySelector("canvas")) return;
+      
+      const canvas = document.createElement("canvas");
+      qrElement.appendChild(canvas);
+      
+      new QRious({
+        element: canvas,
+        value: "{{ otp_uri }}",
+        size: 180,
+        background: '#ffffff',
+        foreground: '#000000',
+        level: 'H'
+      });
+      
+      const tokenInput = document.getElementById("token");
+      if (tokenInput) tokenInput.focus();
+    }
+
+    if (document.readyState === "complete" || document.readyState === "interactive") {
+      initQR();
+    } else {
+      document.addEventListener("DOMContentLoaded", initQR);
+    }
+  })();
+</script>
+{% endblock %}

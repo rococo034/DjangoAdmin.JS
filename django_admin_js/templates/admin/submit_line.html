@@ -1,6 +1,11 @@
 {% load i18n admin_urls %}
 <div class="submit-row flex flex-wrap gap-3.5 items-center justify-end p-5 bg-white dark:bg-[#111827] border border-gray-200 dark:border-gray-800/80 rounded-xl shadow-md mt-8">
 {% block submit-row %}
+<div class="flex items-center gap-4 text-xs text-gray-400 dark:text-zinc-500 mr-auto select-none">
+    <span class="inline-flex items-center gap-1"><i class="fa-solid fa-keyboard opacity-60 mr-0.5"></i> <kbd class="px-1.5 py-0.5 rounded bg-gray-100 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700/60 font-mono text-[10px] text-gray-600 dark:text-zinc-400">Ctrl+S</kbd> {% translate 'Salva e continua' %}</span>
+    <span class="inline-flex items-center gap-1"><kbd class="px-1.5 py-0.5 rounded bg-gray-100 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700/60 font-mono text-[10px] text-gray-600 dark:text-zinc-400">Alt+N</kbd> {% translate 'Salva e aggiungi' %}</span>
+</div>
+
 {% if show_delete_link and original %}
     {% url opts|admin_urlname:'delete' original.pk|admin_urlquote as delete_url %}
     <a href="{% add_preserved_filters delete_url %}" class="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-semibold text-red-600 dark:text-red-400 bg-white dark:bg-[#1f2937] border border-red-200 dark:border-red-900/60 hover:bg-red-50 dark:hover:bg-red-950/20 active:bg-red-100 dark:active:bg-red-950/40 rounded-lg shadow-sm transition-all duration-150 cursor-pointer">

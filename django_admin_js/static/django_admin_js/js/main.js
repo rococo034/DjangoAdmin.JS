@@ -101,6 +101,35 @@
     });
   };
 
+  window.initUserListAvatars = function() {
+    const fields = document.querySelectorAll('#result_list th.field-username, #result_list td.field-username');
+    if (fields.length === 0) return;
+    
+    fields.forEach(td => {
+      if (td.querySelector('.user-avatar')) return;
+      
+      const link = td.querySelector('a');
+      const text = (link ? link.textContent : td.textContent).trim();
+      if (!text) return;
+      
+      const avatar = document.createElement('img');
+      avatar.className = 'user-avatar w-8 h-8 rounded-lg shrink-0 mr-3 shadow-lg border border-slate-200/50 dark:border-zinc-800/80 select-none object-cover';
+      avatar.style.verticalAlign = 'middle';
+      avatar.src = `https://api.dicebear.com/7.x/identicon/svg?seed=${encodeURIComponent(text)}`;
+      avatar.alt = text;
+      
+      if (link) {
+        link.style.display = 'inline-flex';
+        link.style.alignItems = 'center';
+        link.insertBefore(avatar, link.firstChild);
+      } else {
+        td.insertBefore(avatar, td.firstChild);
+        td.style.display = 'inline-flex';
+        td.style.alignItems = 'center';
+      }
+    });
+  };
+
   window.initCollapsibleSidebarApps = function() {
     const settings = window.DJANGO_ADMIN_JS_SETTINGS || {};
     if (!settings.sidebarCollapsible) return;
@@ -137,6 +166,43 @@
           if (chevron) chevron.style.transform = 'rotate(-90deg)';
         }
       });
+    });
+  };
+
+  window.initFormShortcuts = function() {
+    const isChangeForm = document.body.classList.contains('change-form');
+    if (!isChangeForm) return;
+
+    if (window._formShortcutsBound) return;
+    window._formShortcutsBound = true;
+
+    document.addEventListener('keydown', (e) => {
+      // 1. Save and Continue Editing (Ctrl+S / Cmd+S)
+      if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+        const btn = document.querySelector('input[name="_continue"], button[name="_continue"]');
+        if (btn) {
+          e.preventDefault();
+          btn.click();
+        }
+      }
+      
+      // 2. Save and Add Another (Alt+N)
+      if (e.altKey && e.key.toLowerCase() === 'n') {
+        const btn = document.querySelector('input[name="_addanother"], button[name="_addanother"]');
+        if (btn) {
+          e.preventDefault();
+          btn.click();
+        }
+      }
+
+      // 3. Save (Alt+C)
+      if (e.altKey && e.key.toLowerCase() === 'c') {
+        const btn = document.querySelector('input[name="_save"], button[name="_save"]');
+        if (btn) {
+          e.preventDefault();
+          btn.click();
+        }
+      }
     });
   };
 
@@ -230,6 +296,8 @@
     safeCall(window.initObjectTools, 'initObjectTools');
     safeCall(window.initChangeFormTabs, 'initChangeFormTabs');
     safeCall(window.initChangeListTable, 'initChangeListTable');
+    safeCall(window.initUserListAvatars, 'initUserListAvatars');
+    safeCall(window.initFormShortcuts, 'initFormShortcuts');
     safeCall(window.initCollapsibleSidebarApps, 'initCollapsibleSidebarApps');
     safeCall(window.initPillBreadcrumbs, 'initPillBreadcrumbs');
     safeCall(window.initLanguageSwitcher, 'initLanguageSwitcher');

@@ -1,0 +1,509 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-07-24 10:02+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: templates/admin/404.html:4 templates/admin/404.html:16
+msgid "Page not found"
+msgstr ""
+
+#: templates/admin/404.html:17
+msgid "We’re sorry, but the page you are looking for could not be found."
+msgstr ""
+
+#: templates/admin/404.html:22 templates/admin/500.html:29
+msgid "Go back home"
+msgstr ""
+
+#: templates/admin/500.html:6 templates/admin/app_index.html:10
+#: templates/admin/auth/user/change_password.html:10
+#: templates/admin/base.html:153 templates/admin/change_form.html:20
+#: templates/admin/change_list.html:100
+#: templates/admin/delete_confirmation.html:14
+#: templates/admin/delete_selected_confirmation.html:14
+#: templates/admin/includes/breadcrumbs.html:5
+#: templates/admin/invalid_setup.html:6 templates/admin/object_history.html:6
+msgid "Home"
+msgstr ""
+
+#: templates/admin/500.html:7
+msgid "Server error"
+msgstr ""
+
+#: templates/admin/500.html:11
+msgid "Server error (500)"
+msgstr ""
+
+#: templates/admin/500.html:23
+msgid "Server Error (500)"
+msgstr ""
+
+#: templates/admin/500.html:24
+msgid ""
+"There’s been an error. It’s been reported to the site administrators and "
+"should be fixed shortly. Thanks for your patience."
+msgstr ""
+
+#: templates/admin/actions.html:16
+msgid "Run the selected action"
+msgstr ""
+
+#: templates/admin/actions.html:18
+msgid "Go"
+msgstr ""
+
+#: templates/admin/actions.html:27
+msgid "Click here to select the objects across all pages"
+msgstr ""
+
+#: templates/admin/actions.html:27
+#, python-format
+msgid "Select all %(total_count)s %(module_name)s"
+msgstr ""
+
+#: templates/admin/actions.html:29
+msgid "Clear selection"
+msgstr ""
+
+#: templates/admin/app_index.html:8 templates/admin/base.html:150
+#: templates/admin/includes/breadcrumbs.html:2
+msgid "Breadcrumbs"
+msgstr ""
+
+#: templates/admin/app_list.html:9
+#, python-format
+msgid "Models in the %(name)s application"
+msgstr ""
+
+#: templates/admin/app_list.html:37
+msgid "Add"
+msgstr ""
+
+#: templates/admin/app_list.html:46 templates/admin/edit_inline/stacked.html:30
+msgid "View"
+msgstr ""
+
+#: templates/admin/app_list.html:51 templates/admin/edit_inline/stacked.html:30
+#: templates/admin/edit_inline/tabular.html:63
+msgid "Change"
+msgstr ""
+
+#: templates/admin/app_list.html:118
+msgid "You don’t have permission to view or edit anything."
+msgstr ""
+
+#: templates/admin/auth/user/add_form.html:6
+msgid ""
+"First, enter a username and password. Then, you’ll be able to edit more user "
+"options."
+msgstr ""
+
+#: templates/admin/auth/user/add_form.html:8
+msgid "Enter a username and password."
+msgstr ""
+
+#: templates/admin/auth/user/change_password.html:14
+#: templates/admin/auth/user/change_password.html:52
+#: templates/admin/includes/header.html:113
+msgid "Change password"
+msgstr ""
+
+#: templates/admin/auth/user/change_password.html:25
+#: templates/admin/change_form.html:49 templates/admin/change_list.html:175
+#: templates/admin/login.html:81
+msgid "Please correct the error below."
+msgid_plural "Please correct the errors below."
+msgstr[0] ""
+msgstr[1] ""
+
+#: templates/admin/auth/user/change_password.html:29
+#, python-format
+msgid "Enter a new password for the user <strong>%(username)s</strong>."
+msgstr ""
+
+#: templates/admin/base.html:126
+msgid "Skip to main content"
+msgstr ""
+
+#: templates/admin/base_site.html:4
+msgid "Django site admin"
+msgstr ""
+
+#: templates/admin/base_site.html:9 templates/admin/includes/header.html:14
+msgid "Django administration"
+msgstr ""
+
+#: templates/admin/change_form.html:23
+#: templates/admin/change_list_object_tools.html:9
+#: templates/admin/search_form.html:24
+#, python-format
+msgid "Add %(name)s"
+msgstr ""
+
+#: templates/admin/change_form_object_tools.html:5
+#: templates/admin/object_history.html:10
+msgid "History"
+msgstr ""
+
+#: templates/admin/change_form_object_tools.html:7
+#: templates/admin/edit_inline/stacked.html:37
+msgid "View on site"
+msgstr ""
+
+#: templates/admin/change_list.html:127
+msgid "Filters"
+msgstr ""
+
+#: templates/admin/change_list.html:129
+msgid "Active"
+msgstr ""
+
+#: templates/admin/change_list.html:139
+msgid "Hide counts"
+msgstr ""
+
+#: templates/admin/change_list.html:144
+msgid "Show counts"
+msgstr ""
+
+#: templates/admin/change_list.html:151
+msgid "Clear all"
+msgstr ""
+
+#: templates/admin/change_list_results.html:16
+msgid "Remove from sorting"
+msgstr ""
+
+#: templates/admin/change_list_results.html:17
+#, python-format
+msgid "Sorting priority: %(priority_number)s"
+msgstr ""
+
+#: templates/admin/change_list_results.html:18
+msgid "Toggle sorting"
+msgstr ""
+
+#: templates/admin/change_list_results.html:43
+msgid "No results found"
+msgstr "Nessun risultato trovato"
+
+#: templates/admin/change_list_results.html:44
+msgid ""
+"Try adjusting your search query or filters to find what you are looking for."
+msgstr "Prova a modificare la query di ricerca o i filtri per trovare quello che stai cercando."
+
+#: templates/admin/color_theme_toggle.html:7
+msgid "Light theme"
+msgstr ""
+
+#: templates/admin/color_theme_toggle.html:15
+msgid "System theme"
+msgstr ""
+
+#: templates/admin/color_theme_toggle.html:24
+msgid "Dark theme"
+msgstr ""
+
+#: templates/admin/delete_confirmation.html:18
+#: templates/admin/edit_inline/tabular.html:74
+#: templates/admin/submit_line.html:8
+msgid "Delete"
+msgstr ""
+
+#: templates/admin/delete_confirmation.html:32
+msgid "Confirm Deletion"
+msgstr ""
+
+#: templates/admin/delete_confirmation.html:33
+#: templates/admin/delete_selected_confirmation.html:32
+msgid "This action cannot be undone."
+msgstr ""
+
+#: templates/admin/delete_confirmation.html:42
+#, python-format
+msgid ""
+"Deleting the %(object_name)s '%(escaped_object)s' would result in deleting "
+"related objects, but your account doesn't have permission to delete the "
+"following types of objects:"
+msgstr ""
+
+#: templates/admin/delete_confirmation.html:49
+#, python-format
+msgid ""
+"Deleting the %(object_name)s '%(escaped_object)s' would require deleting the "
+"following protected related objects:"
+msgstr ""
+
+#: templates/admin/delete_confirmation.html:55
+#, python-format
+msgid ""
+"Are you sure you want to delete the %(object_name)s \"%(escaped_object)s\"? "
+"All of the following related items will be deleted:"
+msgstr ""
+
+#: templates/admin/delete_confirmation.html:61
+#: templates/admin/delete_selected_confirmation.html:55
+msgid "Objects to be deleted"
+msgstr ""
+
+#: templates/admin/delete_confirmation.html:73
+#: templates/admin/delete_selected_confirmation.html:73
+msgid "No, take me back"
+msgstr ""
+
+#: templates/admin/delete_confirmation.html:74
+#: templates/admin/delete_selected_confirmation.html:74
+msgid "Yes, I’m sure"
+msgstr ""
+
+#: templates/admin/delete_selected_confirmation.html:17
+msgid "Delete multiple objects"
+msgstr ""
+
+#: templates/admin/delete_selected_confirmation.html:31
+msgid "Confirm Deletion of Multiple Objects"
+msgstr ""
+
+#: templates/admin/delete_selected_confirmation.html:40
+#, python-format
+msgid ""
+"Deleting the selected %(objects_name)s would result in deleting related "
+"objects, but your account doesn't have permission to delete the following "
+"types of objects:"
+msgstr ""
+
+#: templates/admin/delete_selected_confirmation.html:45
+#, python-format
+msgid ""
+"Deleting the selected %(objects_name)s would require deleting the following "
+"protected related objects:"
+msgstr ""
+
+#: templates/admin/delete_selected_confirmation.html:49
+#, python-format
+msgid ""
+"Are you sure you want to delete the selected %(objects_name)s? All of the "
+"following objects and their related items will be deleted:"
+msgstr ""
+
+#: templates/admin/edit_inline/tabular.html:113
+msgid "Delete?"
+msgstr ""
+
+#: templates/admin/filter.html:4
+#, python-format
+msgid "By %(filter_title)s"
+msgstr ""
+
+#: templates/admin/includes/header.html:34
+msgid "Change language"
+msgstr ""
+
+#: templates/admin/includes/header.html:88
+msgid "Documentation"
+msgstr ""
+
+#: templates/admin/includes/header.html:123
+msgid "Log out"
+msgstr ""
+
+#: templates/admin/includes/object_delete_summary.html:2
+msgid "Summary"
+msgstr ""
+
+#: templates/admin/includes/recent_actions.html:4
+msgid "Recent actions"
+msgstr ""
+
+#: templates/admin/includes/recent_actions.html:5
+msgid "My actions"
+msgstr ""
+
+#: templates/admin/includes/recent_actions.html:10
+msgid "None available"
+msgstr ""
+
+#: templates/admin/includes/recent_actions.html:35
+msgid "Unknown content"
+msgstr ""
+
+#: templates/admin/includes/recent_actions.html:40
+msgid "Added"
+msgstr ""
+
+#: templates/admin/includes/recent_actions.html:40
+msgid "Changed"
+msgstr ""
+
+#: templates/admin/includes/recent_actions.html:40
+msgid "Deleted"
+msgstr ""
+
+#: templates/admin/invalid_setup.html:12
+msgid ""
+"Something’s wrong with your database installation. Make sure the appropriate "
+"database tables have been created, and make sure the database is readable by "
+"the appropriate user."
+msgstr ""
+
+#: templates/admin/login.html:8 templates/admin/login.html:147
+msgid "Log in"
+msgstr ""
+
+#: templates/admin/login.html:73
+msgid "Sign in to Admin"
+msgstr ""
+
+#: templates/admin/login.html:75
+msgid "Enter your credentials to access the dashboard"
+msgstr ""
+
+#: templates/admin/login.html:95
+#, python-format
+msgid ""
+"You are authenticated as %(username)s, but are not authorized to access this "
+"page. Would you like to login to a different account?"
+msgstr ""
+
+#: templates/admin/login.html:106
+msgid "Username"
+msgstr ""
+
+#: templates/admin/login.html:113
+msgid "Enter username"
+msgstr ""
+
+#: templates/admin/login.html:120
+msgid "Password"
+msgstr ""
+
+#: templates/admin/login.html:123
+msgid "Forgot?"
+msgstr ""
+
+#: templates/admin/nav_sidebar.html:3
+msgid "Sidebar"
+msgstr ""
+
+#: templates/admin/object_history.html:17
+msgid "Change History"
+msgstr ""
+
+#: templates/admin/object_history.html:24
+msgid "Date/time"
+msgstr ""
+
+#: templates/admin/object_history.html:25
+msgid "User"
+msgstr ""
+
+#: templates/admin/object_history.html:26
+msgid "Action"
+msgstr ""
+
+#: templates/admin/object_history.html:56
+msgid "entry"
+msgid_plural "entries"
+msgstr[0] ""
+msgstr[1] ""
+
+#: templates/admin/object_history.html:61
+msgid ""
+"This object doesn’t have a change history. It probably wasn’t added via this "
+"admin site."
+msgstr ""
+
+#: templates/admin/pagination.html:10 templates/admin/search_form.html:33
+msgid "Show all"
+msgstr ""
+
+#: templates/admin/pagination.html:11 templates/admin/submit_line.html:37
+msgid "Save"
+msgstr ""
+
+#: templates/admin/popup_response.html:3
+msgid "Popup closing…"
+msgstr ""
+
+#: templates/admin/search_form.html:12
+msgid "Search database..."
+msgstr ""
+
+#: templates/admin/search_form.html:19
+msgid "Search"
+msgstr ""
+
+#: templates/admin/search_form.html:32
+#, python-format
+msgid "%(counter)s result"
+msgid_plural "%(counter)s results"
+msgstr[0] ""
+msgstr[1] ""
+
+#: templates/admin/search_form.html:33
+#, python-format
+msgid "%(full_result_count)s total"
+msgstr ""
+
+#: templates/admin/submit_line.html:15
+msgid "Save as new"
+msgstr ""
+
+#: templates/admin/submit_line.html:22
+msgid "Save and add another"
+msgstr ""
+
+#: templates/admin/submit_line.html:30
+msgid "Close"
+msgstr ""
+
+#: templates/admin/widgets/related_widget_wrapper.html:12
+#, python-format
+msgid "Change selected %(model)s"
+msgstr ""
+
+#: templates/admin/widgets/related_widget_wrapper.html:22
+#, python-format
+msgid "Add another %(model)s"
+msgstr ""
+
+#: templates/admin/widgets/related_widget_wrapper.html:32
+#, python-format
+msgid "Delete selected %(model)s"
+msgstr ""
+
+#: templates/admin/widgets/related_widget_wrapper.html:41
+#, python-format
+msgid "View selected %(model)s"
+msgstr ""
+
+#: templates/registration/logged_out.html:7
+msgid "Logged out"
+msgstr ""
+
+#: templates/registration/logged_out.html:70
+msgid "You have been successfully logged out."
+msgstr ""
+
+#: templates/registration/logged_out.html:77
+msgid "Thank you for using our administration interface. Have a wonderful day!"
+msgstr ""
+
+#: templates/registration/logged_out.html:86
+msgid "Log in again"
+msgstr ""

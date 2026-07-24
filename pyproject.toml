@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "django-admin-js"
-version = "1.0.2"
+version = "1.0.3"
 authors = [
     { name = "Rocco", email = "rocco@example.com" },
 ]
@@ -44,4 +44,4 @@ where = ["."]
 include = ["django_admin_js*"]
 
 [tool.setuptools.package-data]
-django_admin_js = ["templates/**/*.html", "templates/**/*.css", "templates/**/*.js", "static/**/*"]
+django_admin_js = ["templates/**/*.html", "templates/**/*.css", "templates/**/*.js", "static/**/*", "locale/**/*.mo"]

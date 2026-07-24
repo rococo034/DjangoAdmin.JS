@@ -1,0 +1,40 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block content_container %}
+<div class="max-w-md mx-auto my-12 bg-white/70 dark:bg-[#111827]/60 backdrop-blur-md border border-gray-200/50 dark:border-gray-800/80 rounded-2xl shadow-xl p-8 space-y-6">
+  <div class="text-center space-y-2">
+    <div class="inline-flex p-3 rounded-2xl bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400">
+      <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+      </svg>
+    </div>
+    <h2 class="text-xl font-bold tracking-tight text-gray-800 dark:text-zinc-100">Verifica 2FA</h2>
+    <p class="text-sm text-gray-500 dark:text-zinc-400">Inserisci il codice temporaneo generato dalla tua app di autenticazione per accedere alla Web Shell.</p>
+  </div>
+
+  {% if error_msg %}
+    <div class="p-3 bg-red-500/10 border border-red-500/30 text-red-700 dark:text-red-400 rounded-xl text-sm font-semibold">
+      {{ error_msg }}
+    </div>
+  {% endif %}
+
+  <form method="post" class="space-y-4">
+    {% csrf_token %}
+    <div>
+      <label for="token" class="block text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-zinc-400 mb-2">Codice 2FA a 6 cifre</label>
+      <input type="text" name="token" id="token" maxlength="6" pattern="[0-9]{6}" required class="w-full text-center tracking-[0.75em] text-lg font-bold p-3.5 rounded-xl border border-gray-250 dark:border-zinc-800 bg-white/50 dark:bg-zinc-900/40 text-gray-800 dark:text-zinc-100 focus:outline-none focus:border-indigo-500 transition-colors" placeholder="000000" autocomplete="one-time-code">
+    </div>
+    <button type="submit" class="w-full py-3.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-bold shadow-md hover:shadow-lg transition-all duration-150 cursor-pointer">
+      Verifica e Accedi
+    </button>
+  </form>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    // Auto-focus input
+    document.getElementById("token").focus();
+  });
+</script>
+{% endblock %}

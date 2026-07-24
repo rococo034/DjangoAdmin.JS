@@ -248,6 +248,19 @@
                             Refined multi-column sorting layout. Shows clear priority badges and direction indicators, with an optional reset button appearing elegantly on hover.
                         </p>
                     </div>
+
+                    <!-- Feature 10: Secure Web Shell -->
+                    <div class="p-6 rounded-2xl bg-white border border-slate-200/85 hover:border-red-500/50 hover:shadow-lg transition-all duration-300 group">
+                        <div class="w-12 h-12 rounded-xl bg-red-500/10 flex items-center justify-center text-red-650 mb-4 group-hover:scale-110 transition-transform">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-bold mb-2 font-outfit text-slate-900">Secure Python Web Shell</h3>
+                        <p class="text-sm text-slate-650 leading-relaxed">
+                            Run Python commands in real-time. Armored with console-provisioned Time-based One-Time Password (TOTP 2FA) to block unauthorized execution.
+                        </p>
+                    </div>
                 </div>
             </div>
         </section>
@@ -281,6 +294,9 @@
                         </button>
                         <button onclick="switchShowcase('inline', this)" class="showcase-tab px-4 py-2 text-xs sm:text-sm font-semibold rounded-lg transition-all text-slate-600 hover:text-slate-900">
                             Inline Forms
+                        </button>
+                        <button onclick="switchShowcase('webshell', this)" class="showcase-tab px-4 py-2 text-xs sm:text-sm font-semibold rounded-lg transition-all text-slate-600 hover:text-slate-900">
+                            Interactive Web Shell
                         </button>
                     </div>
 
@@ -319,6 +335,8 @@
                         img.src = 'assets/admin_detail_toast.png';
                     } else if (view === 'inline') {
                         img.src = 'assets/admin_tabular_inline.png';
+                    } else if (view === 'webshell') {
+                        img.src = 'assets/admin_web_shell.png';
                     }
                     img.style.opacity = '1';
                 }, 150);

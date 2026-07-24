@@ -1,1 +1,1 @@
-# Create your models here.
+# Create empty models.py file for core app

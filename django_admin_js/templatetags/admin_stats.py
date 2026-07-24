@@ -116,6 +116,7 @@ def django_admin_js_settings():
         "site_header": config.get("SITE_HEADER", None),
         "site_logo": config.get("SITE_LOGO", None),
         "django_debug": settings.DEBUG,
+        "django_web_shell": config.get("DJANGO_WEB_SHELL", False),
     }
 
 

@@ -228,7 +228,7 @@
       const href = link.getAttribute('href');
       if (!href || href.startsWith('#') || href.startsWith('javascript:')) return;
 
-      if (href.includes('/logout/') || href.includes('/login/') || href.includes('/password_change/')) {
+      if (href.includes('/logout/') || href.includes('/login/') || href.includes('/password_change/') || href.includes('/web-shell')) {
         return;
       }
 

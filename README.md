@@ -28,6 +28,7 @@ Features a beautifully redesigned UI, customizable graphic styles (glassmorphism
   - `glassmorphism`: Frosty translucent glass panels with real-time backdrop blur.
   - `minimalist`: High-contrast, borders-first layout with focused input outlines.
 - 🔍 **Raycast/Spotlight Command Palette (`Ctrl+K` / `Cmd+K`)**: Live search bar with instant actions, styled command triggers (e.g. `/style glassmorphism`, `/color emerald`, `/mode dark`), and quick view routes.
+- 💻 **Secure Interactive Web Shell**: A sandboxed Python command-line console directly inside your admin dashboard. Exclusively accessible by authorized superusers and armored with native Time-based One-Time Password (2FA) verification setup securely via SSH.
 
 ---
 
@@ -48,6 +49,7 @@ Add `django_admin_js` to your `INSTALLED_APPS` **before** `django.contrib.admin`
 ```python
 INSTALLED_APPS = [
     "django_admin_js",  # Must be before admin
+    # "django_admin_js.web_shell", # Optional: Only if you want to use the Interactive Web Shell (requires migrate)
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -129,6 +131,15 @@ DJANGO_ADMIN_JS = {
 
     # Custom URL or path for the admin header and login logo
     "SITE_LOGO": "/static/my_app/logo.png",
+
+    # Enable/Disable the Interactive Python Web Shell (defaults to False)
+    "DJANGO_WEB_SHELL": False,
+
+    # Lifespan duration in seconds for the Web Shell 2FA verified session (defaults to 3600 / 1 hour)
+    "DJANGO_WEB_SHELL_2FA_LIFESPAN": 3600,
+
+    # Enable/Disable the Web Shell 2FA model visibility inside the Django Admin panel (defaults to False)
+    "DJANGO_WEB_SHELL_ADMIN": False,
 
     # Custom links to show in the sidebar.
     # If the key matches an existing app label (e.g. "auth"), links are appended to that app.

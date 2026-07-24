@@ -1,0 +1,31 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block content_container %}
+<div class="max-w-md mx-auto my-12 bg-white/70 dark:bg-[#111827]/60 backdrop-blur-md border border-gray-200/50 dark:border-gray-800/80 rounded-2xl shadow-xl p-8 space-y-6">
+  <div class="text-center space-y-2">
+    <div class="inline-flex p-3 rounded-2xl bg-red-50 dark:bg-red-950/40 text-red-650 dark:text-red-400">
+      <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+      </svg>
+    </div>
+    <h2 class="text-xl font-bold tracking-tight text-gray-850 dark:text-zinc-100">Accesso alla Shell Bloccato</h2>
+    <p class="text-sm text-gray-500 dark:text-zinc-400">L'autenticazione a due fattori (2FA) non è ancora configurata per il tuo utente.</p>
+  </div>
+
+  <div class="p-4 bg-yellow-500/10 border border-yellow-500/30 text-yellow-800 dark:text-yellow-400 rounded-xl text-xs space-y-2">
+    <p class="font-bold">⚠️ Nota di sicurezza:</p>
+    <p>Per impedire configurazioni illecite dal browser, non è possibile attivare la 2FA direttamente dal web.</p>
+    <p class="font-medium">Chiedi all'amministratore di sistema di abilitare la 2FA per il tuo account eseguendo il comando sul server:</p>
+    <div class="bg-black/10 dark:bg-black/30 p-2 rounded font-mono text-[10px] select-all select-none">
+      python manage.py setup_web_shell_2fa {{ user.get_username }}
+    </div>
+  </div>
+
+  <div class="pt-4 text-center">
+    <a href="{% url 'admin:index' %}" class="inline-block px-6 py-2.5 bg-zinc-200 dark:bg-zinc-800 hover:bg-zinc-300 dark:hover:bg-zinc-700 text-zinc-850 dark:text-zinc-100 rounded-xl text-xs font-bold transition-all">
+      Torna alla Dashboard
+    </a>
+  </div>
+</div>
+{% endblock %}

@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     "django_admin_js",
+    "django_admin_js.web_shell",
     "django_browser_reload",
     "store",
     "management",
@@ -195,6 +196,11 @@ DJANGO_ADMIN_JS = {
                 "target": "_blank",
             },
         ]
-    }
+    },
+    
+    # Web Shell & 2FA Configuration
+    "DJANGO_WEB_SHELL": True,
+    "DJANGO_WEB_SHELL_ADMIN": True,
+    "DJANGO_WEB_SHELL_2FA_LIFESPAN": 3600, # 1 hour lifespan
 }
 

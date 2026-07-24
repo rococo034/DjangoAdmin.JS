@@ -71,7 +71,7 @@
             <div class="flex items-center space-x-3">
                 <img src="assets/logo.png" alt="Logo" class="w-8 h-8 rounded-lg object-cover shadow-sm">
                 <span class="text-2xl font-bold bg-gradient-to-r from-indigo-600 via-purple-655 to-pink-655 bg-clip-text text-transparent font-outfit">DjangoAdmin.JS</span>
-                <span class="px-2.5 py-0.5 text-xs font-semibold rounded-full bg-indigo-500/10 text-indigo-655 border border-indigo-500/20">v1.0.1</span>
+                <span class="px-2.5 py-0.5 text-xs font-semibold rounded-full bg-indigo-500/10 text-indigo-655 border border-indigo-500/20">v1.0.2</span>
                 <span class="px-2.5 py-0.5 text-xs font-semibold rounded-full bg-emerald-500/10 text-emerald-700 border border-emerald-500/20">STABLE</span>
             </div>
             <nav class="hidden md:flex items-center space-x-8 text-sm font-medium text-slate-600">
@@ -100,7 +100,7 @@
                     <img src="assets/logo.png" alt="DjangoAdmin.JS Logo" class="w-32 h-32 md:w-36 md:h-36 rounded-[2rem] object-cover shadow-xl hover:scale-105 transition-transform duration-300">
                 </div>
                 <div class="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-emerald-500/10 text-emerald-800 border border-emerald-500/20 text-xs font-medium mb-6">
-                    <span>✨ DjangoAdmin.JS v1.0.1 is officially released!</span>
+                    <span>✨ DjangoAdmin.JS v1.0.2 is officially released!</span>
                 </div>
                 <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight font-outfit mb-6 text-slate-900">
                     Redesign your <span class="bg-gradient-to-r from-emerald-500 to-teal-500 bg-clip-text text-transparent">Django Admin</span> experience.
@@ -351,16 +351,28 @@
                     <!-- Step 2 -->
                     <div class="relative pl-16 group">
                         <div class="absolute left-3.5 top-0 w-9 h-9 rounded-full bg-indigo-655 text-white flex items-center justify-center font-bold text-sm shadow-md shadow-indigo-600/10 transition-transform group-hover:scale-105">2</div>
-                        <h3 class="text-lg font-bold text-slate-900 mb-2 font-outfit">Register in INSTALLED_APPS</h3>
-                        <p class="text-sm text-slate-650 mb-4">Add the package name to your registered applications dictionary inside your project's <code class="px-1.5 py-0.5 rounded bg-slate-200/60 text-xs font-mono text-slate-700">settings.py</code> file. **Important:** It must be placed before <code class="px-1.5 py-0.5 rounded bg-slate-200/60 text-xs font-mono text-slate-700">django.contrib.admin</code>:</p>
-                        <div class="bg-slate-900 rounded-xl p-4 border border-slate-800 shadow-md">
-                            <pre class="font-mono text-xs text-slate-300 leading-relaxed overflow-x-auto">
+                        <h3 class="text-lg font-bold text-slate-900 mb-2 font-outfit">Register App &amp; Middleware</h3>
+                        <p class="text-sm text-slate-650 mb-4">Update your <code class="px-1.5 py-0.5 rounded bg-slate-200/60 text-xs font-mono text-slate-700">settings.py</code> file. First, add <code class="px-1.5 py-0.5 rounded bg-slate-200/60 text-xs font-mono text-slate-700">django_admin_js</code> before <code class="px-1.5 py-0.5 rounded bg-slate-200/60 text-xs font-mono text-slate-700">django.contrib.admin</code>. Then, add the middleware to the beginning of your <code class="px-1.5 py-0.5 rounded bg-slate-200/60 text-xs font-mono text-slate-700">MIDDLEWARE</code> list:</p>
+                        <div class="bg-slate-900 rounded-xl p-4 border border-slate-800 shadow-md space-y-4">
+                            <div>
+                                <div class="text-[10px] text-slate-500 font-bold uppercase tracking-wider mb-1.5">Installed Apps</div>
+                                <pre class="font-mono text-xs text-slate-300 leading-relaxed overflow-x-auto">
 INSTALLED_APPS = [
     <span class="text-emerald-400">"django_admin_js",</span>  # Add this before Django Admin
     "django.contrib.admin",
     "django.contrib.auth",
     ...
 ]</pre>
+                            </div>
+                            <div class="border-t border-slate-800 pt-3">
+                                <div class="text-[10px] text-slate-500 font-bold uppercase tracking-wider mb-1.5">Middleware</div>
+                                <pre class="font-mono text-xs text-slate-300 leading-relaxed overflow-x-auto">
+MIDDLEWARE = [
+    <span class="text-emerald-400">"django_admin_js.middleware.DjangoAdminJSMiddleware",</span>  # Add at the top
+    "django.middleware.security.SecurityMiddleware",
+    ...
+]</pre>
+                            </div>
                         </div>
                     </div>
 
@@ -372,6 +384,7 @@ INSTALLED_APPS = [
                         <div class="bg-slate-900 rounded-xl p-4 border border-slate-800 shadow-md">
                             <pre class="font-mono text-xs text-slate-300 leading-relaxed overflow-x-auto">
 DJANGO_ADMIN_JS = {
+    "ERROR_LEVEL": "title",      # Error display level: generic, title (default), stacktrace
     "LIVE_SEARCH": True,         # Live filtering as-you-type
     "LIVE_SEARCH_MIN_CHARS": 3,  # Minimum characters to start search
     "LIVE_SEARCH_DEBOUNCE_MS": 300, # Debounce delay in ms

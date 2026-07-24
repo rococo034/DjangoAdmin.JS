@@ -14,7 +14,7 @@ import django_admin_js
 
 @register.simple_tag
 def django_admin_js_version():
-    return getattr(django_admin_js, "__version__", "1.0.1")
+    return getattr(django_admin_js, "__version__", "1.0.2")
 
 @register.simple_tag
 def django_admin_js_settings():
@@ -115,6 +115,7 @@ def django_admin_js_settings():
         "disable_client_routing": config.get("DISABLE_CLIENT_ROUTING", False),
         "site_header": config.get("SITE_HEADER", None),
         "site_logo": config.get("SITE_LOGO", None),
+        "django_debug": settings.DEBUG,
     }
 
 

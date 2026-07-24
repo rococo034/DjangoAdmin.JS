@@ -305,7 +305,60 @@
         body: formData
       })
       .then(res => {
-        if (!res.ok) throw new Error('Submission failed');
+        if (!res.ok) {
+          return res.text().then(text => {
+            let parsedJson = null;
+            try {
+              parsedJson = JSON.parse(text);
+            } catch (e) {
+              // Not JSON
+            }
+
+            if (parsedJson) {
+              let errorMsg = parsedJson.error || parsedJson.message || 'An error occurred during submission';
+              
+              if (parsedJson.stacktrace && Array.isArray(parsedJson.stacktrace)) {
+                const stackHtml = parsedJson.stacktrace.map(line => {
+                  return line.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                }).join('\n');
+                
+                errorMsg = `
+                  <div class="space-y-2">
+                    <div class="font-bold">${errorMsg}</div>
+                    <details class="text-[11px] opacity-90 cursor-pointer" ontoggle="const toast = this.closest('.django-toast'); if (toast) { if (this.open) { toast.classList.remove('max-w-sm'); toast.classList.add('max-w-3xl'); } else { toast.classList.remove('max-w-3xl'); toast.classList.add('max-w-sm'); } }">
+                      <summary class="font-semibold select-none text-red-650 dark:text-red-400 hover:underline">Mostra Stacktrace</summary>
+                      <pre class="mt-2.5 p-3 bg-slate-950 border border-slate-800 text-slate-200 rounded-lg whitespace-pre-wrap font-mono text-xs leading-relaxed max-w-full shadow-inner">${stackHtml}</pre>
+                    </details>
+                  </div>
+                `;
+              }
+
+              if (typeof window.showCustomToast === 'function') {
+                window.showCustomToast(errorMsg, 'error', 15000, 'max-w-sm transition-all duration-300');
+              } else {
+                alert(parsedJson.error || 'Submission failed');
+              }
+            } else {
+              const settings = window.DJANGO_ADMIN_JS_SETTINGS || {};
+              if (settings.djangoDebug) {
+                document.open();
+                document.write(text);
+                document.close();
+              } else {
+                let errorMsg = 'An error occurred during submission (500 Internal Server Error)';
+                if (text && text.length < 200 && !text.includes('<html')) {
+                  errorMsg = text;
+                }
+                if (typeof window.showCustomToast === 'function') {
+                  window.showCustomToast(errorMsg, 'error');
+                } else {
+                  alert(errorMsg);
+                }
+              }
+            }
+            throw new Error('Submission failed');
+          });
+        }
         return res.text().then(html => ({ url: res.url, html }));
       })
       .then(({ url, html }) => {

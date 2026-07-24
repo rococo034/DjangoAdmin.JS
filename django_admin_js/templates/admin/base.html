@@ -163,9 +163,9 @@
         {% block messages %}
           {% if messages %}
             <!-- Toast Notification Container -->
-            <div id="toast-container" class="fixed top-2 right-2 z-[99999] flex flex-col gap-2 w-full max-w-sm pointer-events-none px-4 sm:px-0">
+            <div id="toast-container" class="fixed top-2 right-2 z-[99999] flex flex-col items-end gap-2 w-full max-w-full pointer-events-none px-4 sm:px-0">
               {% for message in messages %}
-                <div class="django-toast pointer-events-auto flex items-start p-4 rounded-xl border shadow-xl backdrop-blur-md transition-all duration-300 ease-out transform translate-x-[120%] opacity-0 {% if 'error' in message.tags %}bg-red-500/10 border-red-500/30 text-red-800 dark:text-red-300 dark:bg-red-950/20{% elif 'success' in message.tags %}bg-emerald-500/10 border-emerald-500/30 text-emerald-800 dark:text-emerald-300 dark:bg-emerald-950/20{% else %}bg-blue-500/10 border-blue-500/30 text-blue-800 dark:text-blue-300 dark:bg-blue-950/20{% endif %}" data-duration="8000">
+                <div class="django-toast pointer-events-auto flex items-start p-4 rounded-xl border shadow-xl backdrop-blur-md transition-all duration-300 ease-out transform translate-x-[120%] opacity-0 w-full max-w-sm {% if 'error' in message.tags %}bg-red-500/10 border-red-500/30 text-red-800 dark:text-red-300 dark:bg-red-950/20{% elif 'success' in message.tags %}bg-emerald-500/10 border-emerald-500/30 text-emerald-800 dark:text-emerald-300 dark:bg-emerald-950/20{% else %}bg-blue-500/10 border-blue-500/30 text-blue-800 dark:text-blue-300 dark:bg-blue-950/20{% endif %}" data-duration="8000">
                   <div class="mr-3 mt-0.5 shrink-0">
                     {% if 'error' in message.tags %}
                       <svg class="w-5 h-5 text-red-500 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
@@ -312,7 +312,8 @@
     liveSearchDebounceMs: {{ js_settings.live_search_debounce_ms }},
     sidebarCollapsible: {{ js_settings.sidebar_collapsible|yesno:"true,false" }},
     sidebarCollapsedDefault: {{ js_settings.sidebar_collapsed_default|yesno:"true,false" }},
-    disableClientRouting: {{ js_settings.disable_client_routing|yesno:"true,false" }}
+    disableClientRouting: {{ js_settings.disable_client_routing|yesno:"true,false" }},
+    djangoDebug: {{ js_settings.django_debug|yesno:"true,false" }}
   };
 </script>
 <script src="{% static 'django_admin_js/js/theme.js' %}?v={% django_admin_js_version %}"></script>

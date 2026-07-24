@@ -58,12 +58,28 @@ INSTALLED_APPS = [
 ]
 ```
 
+Add `DjangoAdminJSMiddleware` to the beginning of your `MIDDLEWARE` list to capture AJAX exception tracebacks and display them inside toasts:
+
+```python
+MIDDLEWARE = [
+    "django_admin_js.middleware.DjangoAdminJSMiddleware",  # Add at the top
+    "django.middleware.security.SecurityMiddleware",
+    # ... other middlewares
+]
+```
+
 ### 3. Customization Options (Optional)
 
 You can customize behaviors, visual styles, and color themes of DjangoAdmin.JS by adding the `DJANGO_ADMIN_JS` settings dictionary in your `settings.py`:
 
 ```python
 DJANGO_ADMIN_JS = {
+    # Error display level on AJAX failure. Options:
+    # - "generic": Shows a generic 500 error toast
+    # - "title": Shows only the exception message string in the toast (default)
+    # - "stacktrace": Shows both the exception message and the scrollable stacktrace inside the toast
+    "ERROR_LEVEL": "title",
+
     # Enable/Disable Live Search (As-You-Type instant filtering in list views)
     "LIVE_SEARCH": True,
 

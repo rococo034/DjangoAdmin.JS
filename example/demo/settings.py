@@ -44,6 +44,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "django_admin_js.middleware.DjangoAdminJSMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django_browser_reload.middleware.BrowserReloadMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -128,6 +129,7 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # Django Admin JS Settings Container
 DJANGO_ADMIN_JS = {
+    "ERROR_LEVEL": "title",  # Levels: 'generic' (generic 500), 'title' (only exception message), 'stacktrace' (full traceback)
     "LIVE_SEARCH": True,
     "LIVE_SEARCH_MIN_CHARS": 3, # Minimum characters required to start live search
     "LIVE_SEARCH_DEBOUNCE_MS": 300, # Debounce time in ms before reloading

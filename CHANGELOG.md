@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.8] - 2026-07-24
+### Added
+- GitLab-style username avatars in Django admin list views using deterministic DiceBear identicons generated from usernames.
+- Automatic detection of username columns (`field-username`) with premium avatar styling, including rounded corners, subtle borders, and drop shadows.
+- Power-user keyboard shortcuts for Django admin add/change forms:
+  - `Ctrl` + `S` / `Cmd` + `S` → **Save and continue editing**
+  - `Alt` + `N` / `Option` + `N` → **Save and add another**
+  - `Alt` + `C` / `Option` + `C` → **Save**
+- Keyboard shortcuts legend integrated into the form action bar with visual key badges for improved discoverability.
+
+### Changed
+- Enhanced the submit action bar layout to accommodate the shortcuts legend while keeping action buttons right-aligned.
+- Integrated form shortcuts with native Django submit buttons to preserve validation, redirects, custom save logic, and file upload compatibility.
+
 ## [1.0.7] - 2026-07-24
 ### Changed
 - Version bump to bypass PyPI release filename reuse collision.

@@ -202,5 +202,6 @@ DJANGO_ADMIN_JS = {
     "DJANGO_WEB_SHELL": True,
     "DJANGO_WEB_SHELL_ADMIN": True,
     "DJANGO_WEB_SHELL_2FA_LIFESPAN": 3600, # 1 hour lifespan
+    "DJANGO_FILE_MANAGER": True,
 }
 

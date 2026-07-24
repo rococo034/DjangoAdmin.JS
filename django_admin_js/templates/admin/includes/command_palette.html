@@ -173,6 +173,19 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
+        // File Manager Command
+        const fileManagerEnabled = {% if js_settings.django_file_manager %}true{% else %}false{% endif %};
+        if (fileManagerEnabled && isSuperUser) {
+            items.push({
+                category: 'Azioni (Comandi)',
+                type: 'navigation',
+                name: '/files',
+                subtitle: 'Apri il Gestore File',
+                url: '/admin/file-manager/',
+                icon: `<svg class="h-4 w-4 text-indigo-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" /></svg>`
+            });
+        }
+
         // Theme Mode commands (Dark / Light)
         items.push({
             category: 'Impostazioni Schermo',

@@ -115,6 +115,7 @@ def django_admin_js_settings():
         "disable_client_routing": config.get("DISABLE_CLIENT_ROUTING", False),
         "site_header": config.get("SITE_HEADER", None),
         "site_logo": config.get("SITE_LOGO", None),
+        "django_debug": settings.DEBUG,
     }
 
 

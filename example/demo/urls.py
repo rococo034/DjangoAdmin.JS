@@ -35,3 +35,15 @@ if settings.DEBUG:
     from django.conf.urls.static import static
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+else:
+    from django.contrib.staticfiles.views import serve
+    from django.urls import re_path
+    from django.views.static import serve as django_serve
+    
+    urlpatterns += [
+        re_path(r'^static/(?P<path>.*)$', serve, {'insecure': True}),
+    ]
+    if hasattr(settings, 'MEDIA_ROOT') and settings.MEDIA_ROOT:
+        urlpatterns += [
+            re_path(r'^media/(?P<path>.*)$', django_serve, {'document_root': settings.MEDIA_ROOT}),
+        ]

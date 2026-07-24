@@ -71,7 +71,7 @@
             <div class="flex items-center space-x-3">
                 <img src="assets/logo.png" alt="Logo" class="w-8 h-8 rounded-lg object-cover shadow-sm">
                 <span class="text-2xl font-bold bg-gradient-to-r from-indigo-600 via-purple-655 to-pink-655 bg-clip-text text-transparent font-outfit">DjangoAdmin.JS</span>
-                <span class="px-2.5 py-0.5 text-xs font-semibold rounded-full bg-indigo-500/10 text-indigo-655 border border-indigo-500/20">v1.0.4</span>
+                <span class="px-2.5 py-0.5 text-xs font-semibold rounded-full bg-indigo-500/10 text-indigo-655 border border-indigo-500/20">v1.0.5</span>
                 <span class="px-2.5 py-0.5 text-xs font-semibold rounded-full bg-emerald-500/10 text-emerald-700 border border-emerald-500/20">STABLE</span>
             </div>
             <nav class="hidden md:flex items-center space-x-8 text-sm font-medium text-slate-600">
@@ -86,21 +86,21 @@
             </div>
         </div>
     </header>
-
+ 
     <main>
         <!-- Hero Section -->
         <section class="relative overflow-hidden pt-20 pb-16 lg:pt-32 lg:pb-24">
             <!-- Background lights -->
             <div class="absolute top-0 left-1/4 w-96 h-96 bg-indigo-500/5 rounded-full blur-3xl -z-10"></div>
             <div class="absolute top-1/3 right-1/4 w-96 h-96 bg-pink-500/5 rounded-full blur-3xl -z-10"></div>
-
+ 
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
                 <!-- Large Center Logo -->
                 <div class="flex justify-center mb-8">
                     <img src="assets/logo.png" alt="DjangoAdmin.JS Logo" class="w-32 h-32 md:w-36 md:h-36 rounded-[2rem] object-cover shadow-xl hover:scale-105 transition-transform duration-300">
                 </div>
                 <div class="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-emerald-500/10 text-emerald-800 border border-emerald-500/20 text-xs font-medium mb-6">
-                    <span>✨ DjangoAdmin.JS v1.0.4 is officially released!</span>
+                    <span>✨ DjangoAdmin.JS v1.0.5 is officially released!</span>
                 </div>
                 <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight font-outfit mb-6 text-slate-900">
                     Redesign your <span class="bg-gradient-to-r from-emerald-500 to-teal-500 bg-clip-text text-transparent">Django Admin</span> experience.
@@ -261,6 +261,19 @@
                             Run Python commands in real-time. Armored with console-provisioned Time-based One-Time Password (TOTP 2FA) to block unauthorized execution.
                         </p>
                     </div>
+
+                    <!-- Feature 11: Secure File Manager -->
+                    <div class="p-6 rounded-2xl bg-white border border-slate-200/85 hover:border-indigo-500/50 hover:shadow-lg transition-all duration-300 group">
+                        <div class="w-12 h-12 rounded-xl bg-indigo-500/10 flex items-center justify-center text-indigo-650 mb-4 group-hover:scale-110 transition-transform">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-bold mb-2 font-outfit text-slate-900">Secure File Manager</h3>
+                        <p class="text-sm text-slate-650 leading-relaxed">
+                            Explore, read, write, download, and delete system files securely with Monaco Editor syntax highlighting and VS Code file-type icons.
+                        </p>
+                    </div>
                 </div>
             </div>
         </section>
@@ -297,6 +310,9 @@
                         </button>
                         <button onclick="switchShowcase('webshell', this)" class="showcase-tab px-4 py-2 text-xs sm:text-sm font-semibold rounded-lg transition-all text-slate-600 hover:text-slate-900">
                             Interactive Web Shell
+                        </button>
+                        <button onclick="switchShowcase('filemanager', this)" class="showcase-tab px-4 py-2 text-xs sm:text-sm font-semibold rounded-lg transition-all text-slate-600 hover:text-slate-900">
+                            File Manager
                         </button>
                     </div>
 
@@ -337,6 +353,8 @@
                         img.src = 'assets/admin_tabular_inline.png';
                     } else if (view === 'webshell') {
                         img.src = 'assets/admin_web_shell.png';
+                    } else if (view === 'filemanager') {
+                        img.src = 'assets/admin_file_manager.png';
                     }
                     img.style.opacity = '1';
                 }, 150);

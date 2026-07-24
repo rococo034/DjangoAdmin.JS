@@ -29,6 +29,7 @@ Features a beautifully redesigned UI, customizable graphic styles (glassmorphism
   - `minimalist`: High-contrast, borders-first layout with focused input outlines.
 - 🔍 **Raycast/Spotlight Command Palette (`Ctrl+K` / `Cmd+K`)**: Live search bar with instant actions, styled command triggers (e.g. `/style glassmorphism`, `/color emerald`, `/mode dark`), and quick view routes.
 - 💻 **Secure Interactive Web Shell**: A sandboxed Python command-line console directly inside your admin dashboard. Exclusively accessible by authorized superusers and armored with native Time-based One-Time Password (2FA) verification setup securely via SSH.
+- 📂 **Secure File Manager**: Explore, read, edit, download, and delete system files securely with Monaco Editor syntax highlighting, VS Code file-type icons, and a strict directory sandbox.
 
 ---
 
@@ -135,11 +136,17 @@ DJANGO_ADMIN_JS = {
     # Enable/Disable the Interactive Python Web Shell (defaults to False)
     "DJANGO_WEB_SHELL": False,
 
-    # Lifespan duration in seconds for the Web Shell 2FA verified session (defaults to 3600 / 1 hour)
+    # Lifespan duration in seconds for the Web Shell / File Manager 2FA verified session (defaults to 3600 / 1 hour)
     "DJANGO_WEB_SHELL_2FA_LIFESPAN": 3600,
 
     # Enable/Disable the Web Shell 2FA model visibility inside the Django Admin panel (defaults to False)
     "DJANGO_WEB_SHELL_ADMIN": False,
+
+    # Enable/Disable the File Manager (defaults to False)
+    "DJANGO_FILE_MANAGER": False,
+
+    # Sandboxed directory path for File Manager (defaults to settings.BASE_DIR)
+    "DJANGO_FILE_MANAGER_ROOT": None,
 
     # Custom links to show in the sidebar.
     # If the key matches an existing app label (e.g. "auth"), links are appended to that app.

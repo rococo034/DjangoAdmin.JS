@@ -99,6 +99,15 @@
                 </a>
             {% endif %}
 
+            <!-- File Manager (Icon only with Tooltip) -->
+            {% if js_settings.django_file_manager and user.is_superuser %}
+                <a href="/admin/file-manager/" class="p-2 rounded-xl hover:bg-white/80 dark:hover:bg-zinc-800 text-zinc-650 dark:text-zinc-350 dark:hover:text-white transition-all duration-150 flex items-center justify-center {% if '/admin/file-manager/' in request.path %}bg-white/90 dark:bg-zinc-800 text-zinc-950 dark:text-white border border-slate-250 dark:border-zinc-850{% endif %} relative" data-tooltip="{% translate 'File Manager' %}">
+                  <svg class="w-5 h-5 shrink-0 text-zinc-500 dark:text-zinc-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
+                  </svg>
+                </a>
+            {% endif %}
+
             <!-- Unified User Profile + Tools Pill -->
             <div class="flex items-center gap-4 px-4 py-2 bg-white/80 dark:bg-zinc-900/40 backdrop-blur-md rounded-2xl border border-slate-250/60 dark:border-zinc-800 shadow-[0_4px_20px_rgba(0,0,0,0.03)] dark:shadow-none ml-2 transition-all hover:border-indigo-500/30 dark:hover:border-indigo-500/20">
               <!-- Avatar & Name -->

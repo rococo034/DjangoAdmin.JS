@@ -14,7 +14,7 @@ import django_admin_js
 
 @register.simple_tag
 def django_admin_js_version():
-    return getattr(django_admin_js, "__version__", "1.0.4")
+    return getattr(django_admin_js, "__version__", "1.0.5")
 
 @register.simple_tag
 def django_admin_js_settings():
@@ -117,6 +117,7 @@ def django_admin_js_settings():
         "site_logo": config.get("SITE_LOGO", None),
         "django_debug": settings.DEBUG,
         "django_web_shell": config.get("DJANGO_WEB_SHELL", False),
+        "django_file_manager": config.get("DJANGO_FILE_MANAGER", False),
     }
 
 

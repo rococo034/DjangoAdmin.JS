@@ -141,7 +141,12 @@
   .fm-item-icon {
     width: 16px;
     height: 16px;
+    font-size: 16px;
+    line-height: 16px;
     flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
   }
   .fm-item-name {
     overflow: hidden;
@@ -273,6 +278,7 @@
     width: 400px;
     padding: 20px;
     box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+    color: #c9d1d9;
   }
   .fm-modal-title {
     font-size: 16px;
@@ -367,7 +373,26 @@
 <div class="fm-modal-backdrop" id="modal-backdrop">
   <div class="fm-modal">
     <div class="fm-modal-title" id="modal-title">Crea nuovo elemento</div>
+    
+    <div id="modal-file-creation-mode" style="display: none; margin-bottom: 16px; font-size: 13px; display: flex; gap: 16px;">
+      <label style="cursor: pointer; display: flex; align-items: center; gap: 4px;">
+        <input type="radio" name="file-mode" id="file-mode-empty" checked> File vuoto
+      </label>
+      <label style="cursor: pointer; display: flex; align-items: center; gap: 4px;">
+        <input type="radio" name="file-mode" id="file-mode-upload"> Carica file
+      </label>
+    </div>
+
     <input type="text" class="fm-modal-input" id="modal-input" placeholder="Nome elemento">
+    
+    <div id="modal-file-upload-wrapper" style="display: none; margin-bottom: 20px;">
+      <button type="button" class="fm-btn" id="btn-trigger-upload" style="width: 100%; justify-content: center; padding: 10px;">
+        Scegli file...
+      </button>
+      <div id="selected-file-name" style="margin-top: 8px; font-size: 12px; color: #8b949e; text-align: center; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Nessun file selezionato</div>
+      <input type="file" id="modal-file-upload-input" style="display: none;">
+    </div>
+
     <div class="fm-modal-buttons">
       <button class="fm-btn" id="btn-modal-cancel">Annulla</button>
       <button class="fm-btn fm-btn-primary" id="btn-modal-submit">Crea</button>
@@ -398,6 +423,9 @@
     const modalInput = document.getElementById('modal-input');
     const btnModalCancel = document.getElementById('btn-modal-cancel');
     const btnModalSubmit = document.getElementById('btn-modal-submit');
+    const fileUploadWrapper = document.getElementById('modal-file-upload-wrapper');
+    const btnTriggerUpload = document.getElementById('btn-trigger-upload');
+    const selectedFileName = document.getElementById('selected-file-name');
 
     // CSRF Token Helper
     const csrfToken = '{{ csrf_token }}';
@@ -474,46 +502,40 @@
           left.className = 'fm-item-left';
 
           // Render Icon
-          const icon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-          icon.setAttribute('class', 'fm-item-icon');
-          icon.setAttribute('fill', 'none');
-          icon.setAttribute('stroke', 'currentColor');
-          icon.setAttribute('stroke-width', '2');
-          icon.setAttribute('viewBox', '0 0 24 24');
-
-          const pathElement = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+          const icon = document.createElement('i');
+          icon.className = 'fm-item-icon';
           if (item.is_dir) {
-            pathElement.setAttribute('d', 'M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z');
+            icon.className += ' fa-solid fa-folder';
             icon.style.color = '#e3b341'; // Yellow folder
           } else {
             const ext = item.name.split('.').pop().toLowerCase();
             switch (ext) {
               case 'py':
-                pathElement.setAttribute('d', 'M12 2c-2.7 0-4.8 2-4.8 4.7v2.3h4.8v1h-7C2.7 10 1 12.2 1 14.8c0 2.7 2 4.7 4.8 4.7h2.4v-2.3c0-2.7 2-4.8 4.8-4.8h4.8v-1h-4.8c-2.7 0-4.8-2-4.8-4.7V6.7h4.8c2.7 0 4.8-2.1 4.8-4.7 0-2.7-2-4.8-4.8-4.8z');
+                icon.className += ' fa-brands fa-python';
                 icon.style.color = '#3776ab'; // Python Blue
                 break;
               case 'js':
-                pathElement.setAttribute('d', 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z');
+                icon.className += ' fa-brands fa-js';
                 icon.style.color = '#f7df1e'; // JS Yellow
                 break;
               case 'ts':
-                pathElement.setAttribute('d', 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z');
+                icon.className += ' fa-solid fa-file-code';
                 icon.style.color = '#3178c6'; // TS Blue
                 break;
               case 'html':
-                pathElement.setAttribute('d', 'M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4');
+                icon.className += ' fa-brands fa-html5';
                 icon.style.color = '#e34c26'; // HTML Orange
                 break;
               case 'css':
-                pathElement.setAttribute('d', 'M9.53 16.122l.88 4.195a.497.497 0 00.957.064l1.37-3.415m0 0l.73-1.828a.5.5 0 01.815-.224l3.187 2.833a.5.5 0 00.82-.38l.685-6.848m-8.624 9.773l-1.377-5.508a.5.5 0 01.353-.604l8.265-2.066a.5.5 0 01.604.353l.366 1.467');
+                icon.className += ' fa-brands fa-css3-alt';
                 icon.style.color = '#563d7c'; // CSS Purple
                 break;
               case 'json':
-                pathElement.setAttribute('d', 'M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z');
+                icon.className += ' fa-regular fa-file-code';
                 icon.style.color = '#cbcb41'; // JSON Gold
                 break;
               case 'md':
-                pathElement.setAttribute('d', 'M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25');
+                icon.className += ' fa-brands fa-markdown';
                 icon.style.color = '#0086b3'; // Markdown Blue
                 break;
               case 'png':
@@ -521,22 +543,27 @@
               case 'jpeg':
               case 'gif':
               case 'svg':
-                pathElement.setAttribute('d', 'M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z');
+                icon.className += ' fa-regular fa-file-image';
                 icon.style.color = '#4caf50'; // Image Green
                 break;
               case 'zip':
               case 'tar':
               case 'gz':
               case 'rar':
-                pathElement.setAttribute('d', 'M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z');
+                icon.className += ' fa-regular fa-file-zipper';
                 icon.style.color = '#ff9800'; // Zip Orange
                 break;
+              case 'db':
+              case 'sqlite':
+              case 'sqlite3':
+                icon.className += ' fa-solid fa-database';
+                icon.style.color = '#4e73df'; // Database Blue
+                break;
               default:
-                pathElement.setAttribute('d', 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z');
+                icon.className += ' fa-regular fa-file';
                 icon.style.color = '#8b949e'; // Default Gray
             }
           }
-          icon.appendChild(pathElement);
           left.appendChild(icon);
 
           const nameSpan = document.createElement('span');
@@ -752,32 +779,91 @@
     }
 
 
+    const modeContainer = document.getElementById('modal-file-creation-mode');
+    const fileModeEmpty = document.getElementById('file-mode-empty');
+    const fileModeUpload = document.getElementById('file-mode-upload');
+    const fileUploadInput = document.getElementById('modal-file-upload-input');
+
+    fileModeEmpty.addEventListener('change', () => {
+      modalInput.style.display = 'block';
+      fileUploadWrapper.style.display = 'none';
+      btnModalSubmit.textContent = 'Crea';
+    });
+
+    fileModeUpload.addEventListener('change', () => {
+      modalInput.style.display = 'none';
+      fileUploadWrapper.style.display = 'block';
+      btnModalSubmit.textContent = 'Carica';
+    });
+
+    btnTriggerUpload.addEventListener('click', () => {
+      fileUploadInput.click();
+    });
+
+    fileUploadInput.addEventListener('change', () => {
+      if (fileUploadInput.files.length > 0) {
+        selectedFileName.textContent = `Selezionato: ${fileUploadInput.files[0].name}`;
+      } else {
+        selectedFileName.textContent = 'Nessun file selezionato';
+      }
+    });
+
     // Modal helpers
     function showModal(action) {
       modalAction = action;
       modalTitle.textContent = action === 'file' ? 'Crea nuovo File' : 'Crea nuova Cartella';
       modalInput.placeholder = action === 'file' ? 'nome_file.py' : 'nome_cartella';
       modalInput.value = '';
+      fileUploadInput.value = '';
+      selectedFileName.textContent = 'Nessun file selezionato';
+      
+      fileModeEmpty.checked = true;
+      modalInput.style.display = 'block';
+      fileUploadWrapper.style.display = 'none';
+      btnModalSubmit.textContent = action === 'file' ? 'Crea' : 'Crea';
+
+      if (action === 'file') {
+        modeContainer.style.display = 'flex';
+      } else {
+        modeContainer.style.display = 'none';
+      }
+
       modalBackdrop.style.display = 'flex';
-      modalInput.focus();
+      if (action === 'folder' || fileModeEmpty.checked) {
+        modalInput.focus();
+      }
     }
 
     function hideModal() {
       modalBackdrop.style.display = 'none';
+      fileUploadInput.value = '';
+      selectedFileName.textContent = 'Nessun file selezionato';
     }
 
     async function handleModalSubmit() {
       const name = modalInput.value.trim();
-      if (!name) return;
+      const isUploadMode = modalAction === 'file' && fileModeUpload.checked;
+      const uploadedFile = fileUploadInput.files[0];
+
+      if (!isUploadMode && !name) return;
+      if (isUploadMode && !uploadedFile) {
+        showStatus('Seleziona un file da caricare.', true);
+        return;
+      }
 
       try {
         if (modalAction === 'file') {
-          await makeRequest({
+          const requestData = {
             action: 'create_file',
-            parent_path: currentPath,
-            name: name
-          });
-          showStatus('File creato!');
+            parent_path: currentPath
+          };
+          if (isUploadMode) {
+            requestData.file = uploadedFile;
+          } else {
+            requestData.name = name;
+          }
+          await makeRequest(requestData);
+          showStatus(isUploadMode ? 'File caricato!' : 'File creato!');
         } else {
           await makeRequest({
             action: 'create_dir',

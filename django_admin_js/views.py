@@ -397,8 +397,13 @@ def file_manager_api(request):
     elif action == "create_file":
         parent_path = request.POST.get("parent_path", "")
         file_name = request.POST.get("name", "").strip()
+        uploaded_file = request.FILES.get("file")
+        
+        if not file_name and uploaded_file:
+            file_name = uploaded_file.name
+            
         if not parent_path or not file_name:
-            return JsonResponse({"error": "Missing parameters."}, status=400)
+            return JsonResponse({"error": "Parametri mancanti."}, status=400)
             
         file_name = os.path.basename(file_name)
         if not file_name or file_name in (".", ".."):
@@ -408,12 +413,21 @@ def file_manager_api(request):
         if not is_path_in_sandbox(target_file):
             return JsonResponse({"error": "Accesso negato: percorso esterno alla sandbox."}, status=403)
             
+        if uploaded_file and uploaded_file.size > 10 * 1024 * 1024:
+            return JsonResponse({"error": "Il file caricato supera il limite di 10MB."}, status=400)
+            
         try:
-            with open(target_file, "x", encoding="utf-8") as f:
-                pass
+            if os.path.exists(target_file):
+                return JsonResponse({"error": "Il file esiste già."}, status=400)
+                
+            if uploaded_file:
+                with open(target_file, "wb") as f:
+                    for chunk in uploaded_file.chunks():
+                        f.write(chunk)
+            else:
+                with open(target_file, "x", encoding="utf-8") as f:
+                    pass
             return JsonResponse({"success": True, "path": target_file})
-        except FileExistsError:
-            return JsonResponse({"error": "Il file esiste già."}, status=400)
         except Exception as e:
             return JsonResponse({"error": f"Errore durante la creazione del file: {str(e)}"}, status=500)
             

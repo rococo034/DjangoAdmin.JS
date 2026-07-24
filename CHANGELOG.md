@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.6] - 2026-07-24
+### Added
+- Local file upload functionality inside the file creation modal dialog.
+- FontAwesome file-type icons integration for accurate, robust vector icon rendering.
+- Database file extension icon mapping for .sqlite3, .sqlite, and .db files.
+- Modal text contrast styling adjustments for light-theme compatibility.
+
 ## [1.0.5] - 2026-07-24
 ### Added
 - Secure File Manager featuring Monaco Editor, inline download/delete actions, folder navigation, creation, and VS Code file-type icons.

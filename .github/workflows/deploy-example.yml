@@ -47,11 +47,9 @@ jobs:
     name: Deploy to VPS
     needs: build-and-push
     runs-on: ubuntu-latest
-    # This job will run only if VPS secrets are configured.
-    # To enable this, add VPS_HOST, VPS_USERNAME, and VPS_SSH_KEY to your GitHub repository secrets.
-    if: "${{ secrets.VPS_HOST != '' }}"
     steps:
       - name: Deploy to VPS via SSH
+        if: "${{ secrets.VPS_HOST != '' }}"
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.VPS_HOST }}

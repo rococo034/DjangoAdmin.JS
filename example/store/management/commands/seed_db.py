@@ -2,6 +2,7 @@ import random
 import datetime
 from django.core.management.base import BaseCommand
 from django.utils import timezone
+from django.contrib.auth.models import User
 from store.models import Category, Product, Customer, Order, OrderItem
 from management.models import TeamMember, Project, Task
 
@@ -18,6 +19,33 @@ class Command(BaseCommand):
         Task.objects.all().delete()
         Project.objects.all().delete()
         TeamMember.objects.all().delete()
+        User.objects.all().delete()
+
+        self.stdout.write('Seeding Django Users (Superuser & Staff)...')
+        # Create superuser
+        User.objects.create_superuser(
+            username='admin',
+            email='admin@example.com',
+            password='admin'
+        )
+        self.stdout.write('Created superuser: admin/admin')
+
+        # Create staff users
+        staff_users = [
+            ('mario', 'mario.rossi@example.com'),
+            ('giulia', 'giulia.bianchi@example.com'),
+            ('luca', 'luca.verdi@example.com'),
+            ('francesca', 'francesca.neri@example.com'),
+        ]
+        for username, email in staff_users:
+            User.objects.create_user(
+                username=username,
+                email=email,
+                password='admin',
+                is_staff=True
+            )
+            self.stdout.write(f'Created staff user: {username}/admin')
+
 
         self.stdout.write('Seeding Team Members...')
         roles = ['Frontend Dev', 'Backend Dev', 'UI/UX Designer', 'Product Manager', 'QA Specialist', 'DevOps Engineer']

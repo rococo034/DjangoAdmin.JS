@@ -59,19 +59,6 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
           port: ${{ secrets.VPS_PORT || 22 }}
           script: |
-            # Pull the latest image
-            docker pull rococo34/djangoadmin.js-site:latest
-            
-            # Stop and remove the old container if it exists
-            docker stop djangoadminjs-site || true
-            docker rm djangoadminjs-site || true
-            
-            # Run the new container
-            docker run -d \
-              --name djangoadminjs-site \
-              --restart always \
-              -p 8000:8000 \
-              -e SECRET_KEY="${{ secrets.DJANGO_SECRET_KEY }}" \
-              -e DEBUG="False" \
-              -e ALLOWED_HOSTS="djangoadminjs.info,www.djangoadminjs.info" \
-              rococo34/djangoadmin.js-site:latest
+            cd /root/docker/djangoadmin.js-site
+            docker compose pull
+            docker compose up -d

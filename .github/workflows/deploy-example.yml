@@ -1,0 +1,77 @@
+name: Deploy Example Site
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build-and-push:
+    name: Build & Push Docker Image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: rococo34/djangoadmin.js-site
+          tags: |
+            type=semver,pattern={{version}}
+            type=raw,value=latest,enable=true
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: example/Dockerfile
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+
+  deploy:
+    name: Deploy to VPS
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    # This job will run only if VPS secrets are configured.
+    # To enable this, add VPS_HOST, VPS_USERNAME, and VPS_SSH_KEY to your GitHub repository secrets.
+    if: "${{ secrets.VPS_HOST != '' }}"
+    steps:
+      - name: Deploy to VPS via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USERNAME }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: ${{ secrets.VPS_PORT || 22 }}
+          script: |
+            # Pull the latest image
+            docker pull rococo34/djangoadmin.js-site:latest
+            
+            # Stop and remove the old container if it exists
+            docker stop djangoadminjs-site || true
+            docker rm djangoadminjs-site || true
+            
+            # Run the new container
+            docker run -d \
+              --name djangoadminjs-site \
+              --restart always \
+              -p 8000:8000 \
+              -e SECRET_KEY="${{ secrets.DJANGO_SECRET_KEY }}" \
+              -e DEBUG="False" \
+              -e ALLOWED_HOSTS="djangoadminjs.info,www.djangoadminjs.info" \
+              rococo34/djangoadmin.js-site:latest

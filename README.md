@@ -10,7 +10,7 @@
 A modern, responsive, and gorgeous Django Admin experience built with Tailwind CSS and progressive JavaScript enhancements.
 Features a beautifully redesigned UI, customizable graphic styles (glassmorphism/minimalist), seamless AJAX page loads (no full page reloads), asynchronous form actions, and a Spotlight-like interactive Command Palette.
 
-👉 **[Launch the Live Interactive Demo Page](https://rococo034.github.io/DjangoAdmin.JS/)** to experience it directly in your browser!
+👉 **[Launch the Live Interactive Demo Page](https://djangoadminjs.info/admin/)** (Credentials: `admin` / `admin`) to experience it directly in your browser!
 
 ![DjangoAdmin.JS Showcase](docs/assets/admin_screenshot.png)
 

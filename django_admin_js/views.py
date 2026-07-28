@@ -486,3 +486,60 @@ def file_manager_api(request):
             
     return JsonResponse({"error": "Unsupported action."}, status=400)
 
+
+from django.contrib.auth import get_user_model
+from django.shortcuts import get_object_or_404, redirect
+from django.core.exceptions import PermissionDenied
+from django.utils.translation import gettext as _
+
+def impersonate_start(request, user_id):
+    config = getattr(settings, "DJANGO_ADMIN_JS", {})
+    if not config.get("IMPERSONIFICATION", True):
+        raise PermissionDenied(_("Personification functionality is disabled."))
+        
+    if not request.user.is_authenticated:
+        raise PermissionDenied(_("You must be authenticated."))
+    
+    is_impersonating = "impersonator_user_id" in request.session
+    if is_impersonating:
+        raise PermissionDenied(_("You already have an active personification session. Stop it before starting another."))
+        
+    if not request.user.is_superuser:
+        raise PermissionDenied(_("Only superusers can personify other users."))
+    original_user = request.user
+        
+    User = get_user_model()
+    target_user = get_object_or_404(User, pk=user_id)
+    
+    if target_user.pk == original_user.pk:
+        messages.warning(request, _("You cannot personify yourself."))
+        return redirect(reverse("admin:index"))
+        
+    request.session["impersonator_user_id"] = original_user.pk
+    request.session["impersonate_user_id"] = target_user.pk
+    
+    messages.success(request, _("You are personifying user: %(username)s") % {"username": target_user.username})
+    
+    redirect_url = config.get("IMPERSONIFICATION_REDIRECT", "")
+    if redirect_url:
+        return redirect(redirect_url)
+        
+    referer = request.META.get('HTTP_REFERER')
+    if referer:
+        return redirect(referer)
+    return redirect(reverse("admin:index"))
+
+def impersonate_stop(request):
+    config = getattr(settings, "DJANGO_ADMIN_JS", {})
+    if not config.get("IMPERSONIFICATION", True):
+        raise PermissionDenied(_("Personification functionality is disabled."))
+        
+    if "impersonate_user_id" in request.session:
+        request.session.pop("impersonator_user_id", None)
+        request.session.pop("impersonate_user_id", None)
+        messages.success(request, _("Personification stopped. You have returned to your account."))
+        return redirect(reverse("admin:auth_user_changelist"))
+    
+    return redirect(reverse("admin:index"))
+
+

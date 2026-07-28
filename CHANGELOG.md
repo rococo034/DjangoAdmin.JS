@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2026-07-28
+### Added
+- **User Personification ("Login As")**: Allows superusers to securely personify any user from the user list actions.
+  - Implemented secure backend views (`impersonate_start`, `impersonate_stop`) and middleware wrapping `request.user` lazily using `SimpleLazyObject`.
+  - Added continuous security check fetching the original superuser database record on every request to handle mid-session revocation.
+  - Built a floating, high-contrast liquid glass HUD toast at `top: 24px` and `left: 24px` with a collapsible toggle button to minimize it into a compact badge.
+  - Disables the personification button in the user list dynamically if the row represents the logged-in superuser or if another personification session is active, showing informative tooltips.
+  - Integrated PJAX navigation support by synchronizing body CSS classes on page update.
+  - Added configuration keys `IMPERSONIFICATION` and `IMPERSONIFICATION_REDIRECT` inside the `DJANGO_ADMIN_JS` settings dictionary.
+  - Full internationalization support with English source strings and compiled Italian translations (`locale/it/LC_MESSAGES/django.po`).
+  - Added comprehensive test suite verifying redirections, security checks, and middleware wrappers.
+
 ## [1.0.9] - 2026-07-27
 ### Added
 - Created Dockerfile in `./example` to containerize the DjangoAdmin.JS demonstration site.

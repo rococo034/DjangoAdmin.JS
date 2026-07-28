@@ -61,9 +61,16 @@
       document.documentElement.style.setProperty('--card-light', activeTheme.card_light);
       document.documentElement.style.setProperty('--card-dark', activeTheme.card_dark);
     }
-  })();
 </script>
 <script>
+  window.CURRENT_USER_ID = "{{ request.user.pk }}";
+  window.IS_IMPERSONATED = {{ request.is_impersonated|default:False|yesno:"true,false" }};
+  window.IMPERSONATION_ENABLED = {{ js_settings.impersonation_enabled|yesno:"true,false" }};
+  window.IMPERSONATE_TRANSLATIONS = {
+      impersonate: "{% translate 'Personifies'|escapejs %}",
+      cannot_impersonate_self: "{% translate 'You cannot personify yourself'|escapejs %}",
+      already_impersonating: "{% translate 'Stop the current personification before starting another'|escapejs %}"
+  };
   tailwind.config = {
     darkMode: 'class',
     theme: {

@@ -507,3 +507,36 @@ msgstr ""
 #: templates/registration/logged_out.html:86
 msgid "Log in again"
 msgstr ""
+
+msgid "Personification functionality is disabled."
+msgstr "La funzionalità di impersonificazione è disabilitata."
+
+msgid "You must be authenticated."
+msgstr "Devi essere autenticato."
+
+msgid "You already have an active personification session. Stop it before starting another."
+msgstr "Hai già un'impersonificazione attiva. Terminala prima di iniziarne un'altra."
+
+msgid "Only superusers can personify other users."
+msgstr "Solo i superuser possono impersonificare altri utenti."
+
+msgid "You cannot personify yourself."
+msgstr "Non puoi impersonificare te stesso."
+
+msgid "You are personifying user: %(username)s"
+msgstr "Stai impersonificando l'utente: %(username)s"
+
+msgid "Personification stopped. You have returned to your account."
+msgstr "Impersonazione terminata. Sei tornato al tuo account."
+
+msgid "Personifying"
+msgstr "Impersonificando"
+
+msgid "Stop"
+msgstr "Termina"
+
+msgid "Personifies"
+msgstr "Impersonifica"
+
+msgid "Stop the current personification before starting another"
+msgstr "Termina l'impersonificazione corrente prima di avviarne un'altra"

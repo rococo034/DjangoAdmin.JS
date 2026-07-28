@@ -124,6 +124,10 @@
               document.title = doc.title;
             }
 
+            if (doc.body) {
+              document.body.className = doc.body.className;
+            }
+
             const newSidebar = doc.getElementById('nav-sidebar') || doc.querySelector('.nav-sidebar');
             const currentSidebar = document.getElementById('nav-sidebar') || document.querySelector('.nav-sidebar');
             if (newSidebar && currentSidebar) {
@@ -228,7 +232,14 @@
       const href = link.getAttribute('href');
       if (!href || href.startsWith('#') || href.startsWith('javascript:')) return;
 
-      if (href.includes('/logout/') || href.includes('/login/') || href.includes('/password_change/') || href.includes('/web-shell')) {
+      if (
+        href.includes('/logout/') ||
+        href.includes('/login/') ||
+        href.includes('/password_change/') ||
+        href.includes('/web-shell') ||
+        href.includes('/impersonate/') ||
+        link.getAttribute('data-pjax') === 'false'
+      ) {
         return;
       }
 

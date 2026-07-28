@@ -30,6 +30,7 @@ Features a beautifully redesigned UI, customizable graphic styles (glassmorphism
 - 🔍 **Raycast/Spotlight Command Palette (`Ctrl+K` / `Cmd+K`)**: Live search bar with instant actions, styled command triggers (e.g. `/style glassmorphism`, `/color emerald`, `/mode dark`), and quick view routes.
 - 💻 **Secure Interactive Web Shell**: A sandboxed Python command-line console directly inside your admin dashboard. Exclusively accessible by authorized superusers and armored with native Time-based One-Time Password (2FA) verification setup securely via SSH.
 - 📂 **Secure File Manager**: Explore, read, edit, download, and delete system files securely with Monaco Editor syntax highlighting, VS Code file-type icons, and a strict directory sandbox.
+- 🎭 **User Personification ("Login As")**: Safely personify any user from the user list actions with a floating liquid glass control HUD to switch back easily. Prevented against nested session loops, and fully respect security authorization lifecycles.
 
 ---
 
@@ -142,11 +143,11 @@ DJANGO_ADMIN_JS = {
     # Enable/Disable the Web Shell 2FA model visibility inside the Django Admin panel (defaults to False)
     "DJANGO_WEB_SHELL_ADMIN": False,
 
-    # Enable/Disable the File Manager (defaults to False)
-    "DJANGO_FILE_MANAGER": False,
+    # Enable/Disable User Personification / Login As feature (defaults to True)
+    "IMPERSONIFICATION": True,
 
-    # Sandboxed directory path for File Manager (defaults to settings.BASE_DIR)
-    "DJANGO_FILE_MANAGER_ROOT": None,
+    # Custom redirect path upon starting personification (defaults to empty/index admin)
+    "IMPERSONIFICATION_REDIRECT": "",
 
     # Custom links to show in the sidebar.
     # If the key matches an existing app label (e.g. "auth"), links are appended to that app.

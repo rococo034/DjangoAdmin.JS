@@ -275,6 +275,19 @@
                             Explore, read, write, download, and delete system files securely with Monaco Editor syntax highlighting and VS Code file-type icons.
                         </p>
                     </div>
+
+                    <!-- Feature 12: User Personification -->
+                    <div class="p-6 rounded-2xl bg-white border border-slate-200/85 hover:border-emerald-500/50 hover:shadow-lg transition-all duration-300 group">
+                        <div class="w-12 h-12 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-650 mb-4 group-hover:scale-110 transition-transform">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-bold mb-2 font-outfit text-slate-900">User Personification ("Login As")</h3>
+                        <p class="text-sm text-slate-655 leading-relaxed">
+                            Safely personify any user from the user list. Includes a modern, collapsible floating HUD with active session indicators, and native anti-loop security.
+                        </p>
+                    </div>
                 </div>
             </div>
         </section>
@@ -442,6 +455,8 @@ DJANGO_ADMIN_JS = {
     "SIDEBAR_COLLAPSED_DEFAULT": False, # Collapse all sidebar sections by default
     "SITE_HEADER": "My Custom Admin", # Custom brand header text
     "SITE_LOGO": "/static/my_app/logo.png", # Custom brand logo image path
+    "IMPERSONIFICATION": True,   # Enable/disable user personification (Login As)
+    "IMPERSONIFICATION_REDIRECT": "", # Custom redirect path upon starting personification
     "CUSTOM_LINKS": {            # Add custom links to existing apps or create new sections
         "store": [
             {

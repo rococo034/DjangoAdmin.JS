@@ -118,6 +118,7 @@ def django_admin_js_settings():
         "django_debug": settings.DEBUG,
         "django_web_shell": config.get("DJANGO_WEB_SHELL", False),
         "django_file_manager": config.get("DJANGO_FILE_MANAGER", False),
+        "impersonation_enabled": config.get("IMPERSONIFICATION", True),
     }
 
 

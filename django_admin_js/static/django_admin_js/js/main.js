@@ -89,6 +89,39 @@
         deleteBtn.innerHTML = `
           <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" /></svg>
         `;
+
+        // Add Impersonation button if on User model list (placed BEFORE pencil)
+        const isUserAdmin = document.body.classList.contains('model-user');
+        const match = detailUrl.match(/\/(\d+)\/change\//);
+        const userId = match ? match[1] : null;
+        if (isUserAdmin && userId && window.IMPERSONATION_ENABLED === true) {
+          const impersonateBtn = document.createElement('a');
+          const isSelf = userId === window.CURRENT_USER_ID;
+          const isImpersonatingActive = window.IS_IMPERSONATED === true;
+          
+          if (isSelf || isImpersonatingActive) {
+            impersonateBtn.className = 'action-btn opacity-40 cursor-not-allowed pointer-events-none filter grayscale bg-slate-100 dark:bg-zinc-800/40 text-slate-400 dark:text-zinc-500 border border-slate-200 dark:border-zinc-800';
+            
+            const tooltipText = isImpersonatingActive
+              ? (window.IMPERSONATE_TRANSLATIONS ? window.IMPERSONATE_TRANSLATIONS.already_impersonating : "Termina l'impersonificazione corrente prima di avviarne un'altra")
+              : (window.IMPERSONATE_TRANSLATIONS ? window.IMPERSONATE_TRANSLATIONS.cannot_impersonate_self : "Non puoi impersonificare te stesso");
+              
+            impersonateBtn.setAttribute('data-tooltip', tooltipText);
+            impersonateBtn.href = '#';
+            impersonateBtn.onclick = (e) => e.preventDefault();
+          } else {
+            impersonateBtn.href = `/admin/impersonate/${userId}/`;
+            impersonateBtn.className = 'action-btn action-btn-success';
+            const tooltipText = window.IMPERSONATE_TRANSLATIONS ? window.IMPERSONATE_TRANSLATIONS.impersonate : "Impersonifica";
+            impersonateBtn.setAttribute('data-tooltip', tooltipText);
+            impersonateBtn.setAttribute('data-pjax', 'false');
+          }
+          
+          impersonateBtn.innerHTML = `
+            <i class="fa-solid fa-user-secret text-xs"></i>
+          `;
+          actionsCell.appendChild(impersonateBtn);
+        }
         
         actionsCell.appendChild(detailBtn);
         actionsCell.appendChild(deleteBtn);

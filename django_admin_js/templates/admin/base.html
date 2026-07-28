@@ -151,7 +151,7 @@
         {% endblock %}
       {% endif %}
       
-      <main id="content-start" class="content flex-1 min-w-0 pt-4 pb-8 px-0 overflow-y-auto space-y-6" tabindex="-1">
+      <main id="content-start" class="content flex-1 min-w-0 pt-4 pb-8 px-0 overflow-y-auto space-y-6 transition-all duration-300 transform-gpu ease-out" tabindex="-1">
         {% if not is_popup %}
           {% block nav-breadcrumbs %}
             <nav aria-label="{% translate 'Breadcrumbs' %}" class="w-full">

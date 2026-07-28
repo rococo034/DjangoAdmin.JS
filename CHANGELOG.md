@@ -16,6 +16,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Added configuration keys `IMPERSONIFICATION` and `IMPERSONIFICATION_REDIRECT` inside the `DJANGO_ADMIN_JS` settings dictionary.
   - Full internationalization support with English source strings and compiled Italian translations (`locale/it/LC_MESSAGES/django.po`).
   - Added comprehensive test suite verifying redirections, security checks, and middleware wrappers.
+- **Smooth Page Transitions & Scroll-to-Top**:
+  - Added CSS transition and transform classes to the main layout tag `#content-start`.
+  - Integrated hooks in the PJAX navigation flow (`navigation.js`) to apply a visual fade-out/slide-down before page swapping, and scroll the content area back to the top (`scrollTo(0,0)`) before fading back in.
 
 ## [1.0.9] - 2026-07-27
 ### Added

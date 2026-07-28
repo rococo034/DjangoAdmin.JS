@@ -108,53 +108,63 @@
           ];
 
           loadScriptsSequentially(externalScripts).then(() => {
-            contentStart.innerHTML = newContentStart.innerHTML;
-
-            contentStart.querySelectorAll('script:not([src])').forEach(oldScript => {
-              const newScript = document.createElement('script');
-              Array.from(oldScript.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value));
-              newScript.textContent = oldScript.textContent;
-              oldScript.parentNode.replaceChild(newScript, oldScript);
-            });
-
-            window.dispatchEvent(new Event('DOMContentLoaded'));
-            window.dispatchEvent(new Event('load'));
-
-            if (doc.title) {
-              document.title = doc.title;
-            }
-
-            if (doc.body) {
-              document.body.className = doc.body.className;
-            }
-
-            const newSidebar = doc.getElementById('nav-sidebar') || doc.querySelector('.nav-sidebar');
-            const currentSidebar = document.getElementById('nav-sidebar') || document.querySelector('.nav-sidebar');
-            if (newSidebar && currentSidebar) {
-              currentSidebar.innerHTML = newSidebar.innerHTML;
-            }
-
-            if (pushToHistory) {
-              window.history.pushState({ pjax: true, url: url }, '', url);
-            }
-
-            if (typeof window.reinitializePageComponents === 'function') {
-              window.reinitializePageComponents();
-            }
-
-            if (restoreState && restoreState.searchbarActive) {
-              const newSearchbar = document.getElementById('searchbar');
-              if (newSearchbar) {
-                newSearchbar.value = restoreState.value;
-                newSearchbar.focus();
-                newSearchbar.setSelectionRange(restoreState.cursorStart, restoreState.cursorEnd);
-              }
-            }
-
-            document.dispatchEvent(new CustomEvent('page:updated', { detail: { url: url } }));
+            // Apply fade-out and slide-down transition classes
+            contentStart.classList.add('opacity-0', 'translate-y-2');
             
-            contentStart.classList.remove('opacity-50', 'pointer-events-none');
-            hideProgressBar();
+            setTimeout(() => {
+              contentStart.innerHTML = newContentStart.innerHTML;
+              contentStart.scrollTo(0, 0);
+
+              contentStart.querySelectorAll('script:not([src])').forEach(oldScript => {
+                const newScript = document.createElement('script');
+                Array.from(oldScript.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value));
+                newScript.textContent = oldScript.textContent;
+                oldScript.parentNode.replaceChild(newScript, oldScript);
+              });
+
+              window.dispatchEvent(new Event('DOMContentLoaded'));
+              window.dispatchEvent(new Event('load'));
+
+              if (doc.title) {
+                document.title = doc.title;
+              }
+
+              if (doc.body) {
+                document.body.className = doc.body.className;
+              }
+
+              const newSidebar = doc.getElementById('nav-sidebar') || doc.querySelector('.nav-sidebar');
+              const currentSidebar = document.getElementById('nav-sidebar') || document.querySelector('.nav-sidebar');
+              if (newSidebar && currentSidebar) {
+                currentSidebar.innerHTML = newSidebar.innerHTML;
+              }
+
+              if (pushToHistory) {
+                window.history.pushState({ pjax: true, url: url }, '', url);
+              }
+
+              if (typeof window.reinitializePageComponents === 'function') {
+                window.reinitializePageComponents();
+              }
+
+              if (restoreState && restoreState.searchbarActive) {
+                const newSearchbar = document.getElementById('searchbar');
+                if (newSearchbar) {
+                  newSearchbar.value = restoreState.value;
+                  newSearchbar.focus();
+                  newSearchbar.setSelectionRange(restoreState.cursorStart, restoreState.cursorEnd);
+                }
+              }
+
+              document.dispatchEvent(new CustomEvent('page:updated', { detail: { url: url } }));
+              
+              // Animate back in smoothly
+              setTimeout(() => {
+                contentStart.classList.remove('opacity-0', 'translate-y-2');
+                contentStart.classList.remove('opacity-50', 'pointer-events-none');
+              }, 50);
+              hideProgressBar();
+            }, 150);
           }).catch(err => {
             console.error('Script load error, falling back:', err);
             window.location.href = url;
@@ -414,33 +424,41 @@
             ];
 
             loadScriptsSequentially(externalScripts).then(() => {
-              currentContentStart.innerHTML = newContentStart.innerHTML;
+              // Apply fade-out and slide-down transition before swap
+              currentContentStart.classList.add('opacity-0', 'translate-y-2');
+              
+              setTimeout(() => {
+                currentContentStart.innerHTML = newContentStart.innerHTML;
 
-              currentContentStart.querySelectorAll('script:not([src])').forEach(oldScript => {
-                const newScript = document.createElement('script');
-                Array.from(oldScript.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value));
-                newScript.textContent = oldScript.textContent;
-                oldScript.parentNode.replaceChild(newScript, oldScript);
-              });
+                currentContentStart.querySelectorAll('script:not([src])').forEach(oldScript => {
+                  const newScript = document.createElement('script');
+                  Array.from(oldScript.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value));
+                  newScript.textContent = oldScript.textContent;
+                  oldScript.parentNode.replaceChild(newScript, oldScript);
+                });
 
-              window.dispatchEvent(new Event('DOMContentLoaded'));
-              window.dispatchEvent(new Event('load'));
+                window.dispatchEvent(new Event('DOMContentLoaded'));
+                window.dispatchEvent(new Event('load'));
 
-              if (doc.title) {
-                document.title = doc.title;
-              }
+                if (doc.title) {
+                  document.title = doc.title;
+                }
 
-              const newSidebar = doc.getElementById('nav-sidebar') || doc.querySelector('.nav-sidebar');
-              const currentSidebar = document.getElementById('nav-sidebar') || document.querySelector('.nav-sidebar');
-              if (newSidebar && currentSidebar) {
-                currentSidebar.innerHTML = newSidebar.innerHTML;
-              }
+                const newSidebar = doc.getElementById('nav-sidebar') || doc.querySelector('.nav-sidebar');
+                const currentSidebar = document.getElementById('nav-sidebar') || document.querySelector('.nav-sidebar');
+                if (newSidebar && currentSidebar) {
+                  currentSidebar.innerHTML = newSidebar.innerHTML;
+                }
 
-              window.history.pushState({ pjax: true, url: url }, '', url);
+                window.history.pushState({ pjax: true, url: url }, '', url);
 
-              if (typeof window.reinitializePageComponents === 'function') {
-                window.reinitializePageComponents();
-              }
+                if (typeof window.reinitializePageComponents === 'function') {
+                  window.reinitializePageComponents();
+                }
+
+                // Animate back in
+                currentContentStart.classList.remove('opacity-0', 'translate-y-2');
+              }, 150);
             }).catch(err => {
               console.error('Post-submit script loading error, falling back:', err);
               window.location.href = url;
